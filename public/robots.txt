@@ -3,4 +3,4 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://9r-dev.com/sitemap.xml 
+Sitemap: https://aetherrp.com/sitemap.xml

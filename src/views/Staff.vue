@@ -17,7 +17,7 @@ const teamMembers = ref([
   {
     id: 1,
     name: 'Rysiu201',
-    role: 'Server Owner & Lead Developer',
+    role: 'Właściciel Serwera i Główny Developer',
     bio: 'Typ od wszystkiego — od pisania kodu, przez poprawki bugów, po tworzenie eventów i ogarnianie całego serwera. Głowa projektu, która nie śpi, bo zawsze coś trzeba dopisać albo zoptymalizować. Lubi jak działa szybko, stabilnie i z klimatem. Na serwerze dba o jakość, balans i to, żeby graczom się po prostu dobrze grało.',
     image: logoImage,
     status: 'Online',
@@ -31,8 +31,8 @@ const teamMembers = ref([
   {
     id: 2,
     name: '9K',
-    role: 'Community Manager',
-    bio: 'Handles community relations, event planning and ensures a positive experience for all players on the server.',
+    role: 'Opiekun Społeczności',
+    bio: 'Odpowiada za relacje ze społecznością, planowanie eventów i dba o pozytywne doświadczenia graczy.',
     image: logoImage,
     status: 'Online',
     discord: 'Sarah.W#5678',
@@ -44,8 +44,8 @@ const teamMembers = ref([
   {
     id: 3,
     name: '9K',
-    role: 'Senior Administrator',
-    bio: 'Oversees server moderation, handles player reports and ensures server rules are followed for a fair gameplay experience.',
+    role: 'Starszy Administrator',
+    bio: 'Nadzoruje moderację, przyjmuje zgłoszenia graczy i pilnuje przestrzegania zasad dla uczciwej rozgrywki.',
     image: logoImage,
     status: 'Away',
     discord: 'MikeC#9012',
@@ -111,7 +111,7 @@ const teamMembers = ref([
             <div class="status-indicator" :class="member.status.toLowerCase()"></div>
             
             <div class="member-image">
-              <img :src="member.image" alt="Team member">
+              <img :src="member.image" alt="Członek zespołu">
             </div>
             
             <div class="member-info">
@@ -128,7 +128,7 @@ const teamMembers = ref([
                 <a v-if="member.socialLinks.instagram" href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
               </div>
               <button class="contact-button">
-                <i class="fa-solid fa-message"></i> Contact
+                <i class="fa-solid fa-message"></i> Skontaktuj się
               </button>
             </div>
           </div>
@@ -152,7 +152,7 @@ const teamMembers = ref([
           </div>
           
           <div class="philosophy-image" data-aos="fade-left" data-aos-delay="200">
-            <img src="../assets/Banner.jpg" alt="Team philosophy">
+            <img src="../assets/Banner.jpg" alt="Filozofia zespołu">
           </div>
         </div>
       </div>

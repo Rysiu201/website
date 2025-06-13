@@ -10,14 +10,14 @@ const isLoaded = ref(false);
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "9r-Developments",
-  "url": "https://9r-dev.com",
-  "logo": "https://9r-dev.com/logo.png",
-  "description": "Premium FiveM roleplay server offering an immersive GTA5 roleplaying experience with custom scripts and active community.",
+  "name": "AetherRP",
+  "url": "https://aetherrp.com",
+  "logo": "https://aetherrp.com/logo.png",
+  "description": "Polski serwer FiveM oferujący klimatyczny roleplay, autorskie skrypty i aktywną społeczność.",
   "sameAs": [
-    "https://discord.gg/9r-developments",
-    "https://twitter.com/9r_developments",
-    "https://www.youtube.com/channel/9r-developments"
+    "https://discord.gg/aetherrp",
+    "https://twitter.com/aetherrp",
+    "https://www.youtube.com/@AetherRP"
   ]
 };
 
