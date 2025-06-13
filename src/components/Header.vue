@@ -12,6 +12,7 @@
           <li><router-link to="/staff" class="nav-link" active-class="active"><i class="fa-solid fa-users"></i> Zespół</router-link></li>
           <li><router-link to="/rules" class="nav-link" active-class="active"><i class="fa-solid fa-file-contract"></i> Zasady</router-link></li>
           <li><router-link to="/join" class="nav-link" active-class="active"><i class="fa-solid fa-book"></i> Jak dołączyć</router-link></li>
+          <li><router-link to="/apply" class="nav-link" active-class="active"><i class="fa-solid fa-file-signature"></i> Złóż podanie</router-link></li>
         </ul>
       </nav>
       <div class="header-actions">
@@ -19,6 +20,13 @@
         <div class="social-icons">
           <a href="#" class="social-icon"><i class="fa-brands fa-discord"></i></a>
           <a href="#" class="social-icon"><i class="fa-brands fa-tiktok"></i></a>
+        </div>
+        <div class="auth-area">
+          <template v-if="user">
+            <span class="username">{{ user.username }}</span>
+            <button class="logout-btn" @click="logout">Wyloguj</button>
+          </template>
+          <button v-else class="login-btn" @click="login"><i class="fa-brands fa-discord"></i> Zaloguj</button>
         </div>
         <button class="menu-toggle" aria-label="Menu" @click="toggleMenu">
           <span></span>
@@ -34,6 +42,7 @@
         <li><router-link to="/staff" @click="closeMenu"><i class="fa-solid fa-users"></i> Zespół</router-link></li>
         <li><router-link to="/rules" @click="closeMenu"><i class="fa-solid fa-file-contract"></i> Zasady</router-link></li>
         <li><router-link to="/join" @click="closeMenu"><i class="fa-solid fa-book"></i> Jak dołączyć</router-link></li>
+        <li><router-link to="/apply" @click="closeMenu"><i class="fa-solid fa-file-signature"></i> Złóż podanie</router-link></li>
       </ul>
       <div class="mobile-social-icons">
         <a href="#" class="social-icon"><i class="fa-brands fa-discord"></i></a>
@@ -51,6 +60,23 @@ const menuOpen = ref(false);
 const mobileNav = ref<HTMLElement | null>(null);
 const mobileNavLinks = ref<HTMLUListElement | null>(null);
 const contactBtn = ref<HTMLButtonElement | null>(null);
+const user = ref<any>(null);
+
+function fetchUser() {
+  fetch('/api/user')
+    .then(res => res.json())
+    .then(data => {
+      user.value = data.user;
+    });
+}
+
+function login() {
+  window.location.href = '/auth/discord';
+}
+
+function logout() {
+  window.location.href = '/auth/logout';
+}
 
 // 导航菜单动画
 function toggleMenu() {
@@ -91,6 +117,7 @@ function closeMenu() {
 
 // 按钮悬停动画
 onMounted(() => {
+  fetchUser();
   // 初始设置
   gsap.set('.header', { y: -20, opacity: 0 });
   
@@ -259,6 +286,27 @@ onMounted(() => {
   color: #e0e0e0;
   font-size: 1.2rem;
   /* 移除过渡效果，使用GSAP代替 */
+}
+
+.auth-area {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #e0e0e0;
+}
+
+.login-btn, .logout-btn {
+  background: transparent;
+  border: 1px solid #8A2BE2;
+  color: #e0e0e0;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.username {
+  font-weight: bold;
 }
 
 .menu-toggle {

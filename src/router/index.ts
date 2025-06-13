@@ -4,6 +4,7 @@ import Features from '../views/Features.vue'
 import Staff from '../views/Staff.vue'
 import Rules from '../views/Rules.vue'
 import JoinUs from '../views/Join.vue'
+import Apply from '../views/Apply.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -57,6 +58,16 @@ const router = createRouter({
         description: 'Dowiedz się, jak dołączyć do AetherRP i zacząć grę na naszym serwerze FiveM.',
         keywords: 'jak dołączyć, połączenie z FiveM, aplikacja'
       }
+    },
+    {
+      path: '/apply',
+      name: 'apply',
+      component: Apply,
+      meta: {
+        title: 'Złóż podanie - AetherRP',
+        description: 'Wypełnij formularz, aby dołączyć do zespołu AetherRP.',
+        keywords: 'podanie, rekrutacja, aetherrp'
+      }
     }
   ]
 })
@@ -80,4 +91,4 @@ router.beforeEach((to, _from, next) => {
   next();
 });
 
-export default router 
+export default router
