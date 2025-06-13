@@ -4,4 +4,3 @@ Allow: /
 
 # Sitemap location
 Sitemap: https://aetherrp.com/sitemap.xml
-
