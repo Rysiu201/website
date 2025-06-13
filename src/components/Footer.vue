@@ -40,7 +40,7 @@ onMounted(() => {
         <!-- Logo and brand info -->
         <div class="footer-brand" data-aos="fade-up" data-aos-delay="100">
           <h2 class="footer-logo">Aether<span>RP</span></h2>
-          <p class="footer-tagline">Fivem Server RolePlay</p>
+          <p class="footer-tagline">Serwer FiveM RolePlay</p>
           <div class="footer-social">
             <a href="#" class="social-link" aria-label="Discord">
               <i class="fa-brands fa-discord"></i>
@@ -75,7 +75,7 @@ onMounted(() => {
         
         <!-- 服务器特性 -->
         <div class="footer-services" data-aos="fade-up" data-aos-delay="300">
-          <h3 class="footer-title">Server Features</h3>
+          <h3 class="footer-title">Funkcje Serwera</h3>
           <ul class="footer-nav">
             <li><a href="#"><span class="nav-dot"></span>Prace</a></li>
             <li><a href="#"><span class="nav-dot"></span>System Ekonomii</a></li>
@@ -92,7 +92,7 @@ onMounted(() => {
                 <i class="fa-solid fa-envelope"></i>
               </div>
               <div class="contact-details">
-                <span>Email Us</span>
+                <span>E-mail</span>
                 <a href="mailto:contact@9r-developments.com">kontakt@aetherrp.com</a>
               </div>
             </li>
@@ -101,7 +101,7 @@ onMounted(() => {
                 <i class="fa-brands fa-discord"></i>
               </div>
               <div class="contact-details">
-                <span>Discord Server</span>
+                <span>Serwer Discord</span>
                 <a href="#">Dołącz do naszego community</a>
               </div>
             </li>
@@ -110,7 +110,7 @@ onMounted(() => {
                 <i class="fa-solid fa-headset"></i>
               </div>
               <div class="contact-details">
-                <span>Support</span>
+                <span>Wsparcie</span>
                 <p>24/7 Pomoc Administracyjna</p>
               </div>
             </li>
