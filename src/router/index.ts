@@ -4,6 +4,7 @@ import Features from '../views/Features.vue'
 import Staff from '../views/Staff.vue'
 import Rules from '../views/Rules.vue'
 import JoinUs from '../views/Join.vue'
+import Apply from '../views/Apply.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -13,9 +14,9 @@ const router = createRouter({
       name: 'home',
       component: Home,
       meta: {
-        title: '9r-Developments - Premium FiveM Roleplay Server',
-        description: 'Join 9r-Developments, a premium FiveM roleplay server offering an immersive GTA5 roleplaying experience with custom scripts and active community.',
-        keywords: 'FiveM, Roleplay Server, GTA5 RP, 9r-Developments'
+        title: 'AetherRP - Polski Serwer FiveM Roleplay',
+        description: 'Dołącz do AetherRP, polskiego serwera FiveM z klimatycznym roleplay, autorskimi skryptami i aktywną społecznością.',
+        keywords: 'FiveM, Serwer Roleplay, GTA5 RP, AetherRP'
       }
     },
     {
@@ -23,9 +24,9 @@ const router = createRouter({
       name: 'features',
       component: Features,
       meta: {
-        title: 'Features - 9r-Developments',
-        description: 'Explore all the amazing features offered by 9r-Developments FiveM roleplay server, including custom scripts, vehicles and roleplay opportunities.',
-        keywords: 'FiveM features, server features, roleplay functions, custom scripts'
+        title: 'Funkcje - AetherRP',
+        description: 'Poznaj funkcje oferowane przez serwer AetherRP: autorskie skrypty, pojazdy i możliwości rozgrywki.',
+        keywords: 'funkcje FiveM, funkcje serwera, skrypty'
       }
     },
     {
@@ -33,9 +34,9 @@ const router = createRouter({
       name: 'staff',
       component: Staff,
       meta: {
-        title: 'Our Team - 9r-Developments',
-        description: 'Meet the professional team behind 9r-Developments FiveM roleplay server, dedicated to providing the best roleplaying experience.',
-        keywords: 'server staff, admin team, development team, moderators'
+        title: 'Nasz Zespół - AetherRP',
+        description: 'Poznaj ludzi odpowiedzialnych za AetherRP i ich pasję do tworzenia najlepszej rozgrywki.',
+        keywords: 'ekipa serwera, administracja, zespół'
       }
     },
     {
@@ -43,9 +44,9 @@ const router = createRouter({
       name: 'rules',
       component: Rules,
       meta: {
-        title: 'Server Rules - 9r-Developments',
-        description: 'Guidelines and rules for 9r-Developments FiveM roleplay server to ensure all players have the best experience possible.',
-        keywords: 'server rules, community guidelines, roleplay rules, terms of service'
+        title: 'Zasady Serwera - AetherRP',
+        description: 'Przeczytaj regulamin AetherRP, aby wspólnie tworzyć przyjazną i uczciwą rozgrywkę.',
+        keywords: 'regulamin serwera, zasady społeczności, roleplay'
       }
     },
     {
@@ -53,9 +54,19 @@ const router = createRouter({
       name: 'join',
       component: JoinUs,
       meta: {
-        title: 'Join Us - 9r-Developments',
-        description: 'Learn how to join 9r-Developments FiveM roleplay server and become part of our growing community.',
-        keywords: 'join server, connect to FiveM, server application, join community'
+        title: 'Dołącz - AetherRP',
+        description: 'Dowiedz się, jak dołączyć do AetherRP i zacząć grę na naszym serwerze FiveM.',
+        keywords: 'jak dołączyć, połączenie z FiveM, aplikacja'
+      }
+    },
+    {
+      path: '/apply',
+      name: 'apply',
+      component: Apply,
+      meta: {
+        title: 'Złóż podanie - AetherRP',
+        description: 'Wypełnij formularz, aby dołączyć do zespołu AetherRP.',
+        keywords: 'podanie, rekrutacja, aetherrp'
       }
     }
   ]
@@ -64,7 +75,7 @@ const router = createRouter({
 // Global navigation guard to set page title and metadata
 router.beforeEach((to, _from, next) => {
   // Update page title
-  document.title = to.meta.title as string || '9r-Developments';
+  document.title = to.meta.title as string || 'AetherRP';
   
   // Update meta tags
   const metaDescription = document.querySelector('meta[name="description"]');
@@ -80,4 +91,4 @@ router.beforeEach((to, _from, next) => {
   next();
 });
 
-export default router 
+export default router

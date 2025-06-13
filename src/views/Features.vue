@@ -17,59 +17,59 @@ onMounted(() => {
 
 // Categories for filtering
 const categories = [
-  { id: 'all', name: 'All Features', icon: 'fa-solid fa-star' },
-  { id: 'jobs', name: 'Jobs & Economy', icon: 'fa-solid fa-briefcase' },
-  { id: 'vehicles', name: 'Custom Vehicles', icon: 'fa-solid fa-car' },
-  { id: 'housing', name: 'Housing System', icon: 'fa-solid fa-home' },
-  { id: 'gameplay', name: 'Gameplay Features', icon: 'fa-solid fa-gamepad' }
+  { id: 'all', name: 'Wszystkie Funkcje', icon: 'fa-solid fa-star' },
+  { id: 'jobs', name: 'Prace i Ekonomia', icon: 'fa-solid fa-briefcase' },
+  { id: 'vehicles', name: 'Pojazdy Dostępne', icon: 'fa-solid fa-car' },
+  { id: 'housing', name: 'System Mieszkań', icon: 'fa-solid fa-home' },
+  { id: 'gameplay', name: 'Funkcje Rozgrywki', icon: 'fa-solid fa-gamepad' }
 ];
 
 // Features data
 const products = ref([
   {
     id: 1,
-    title: 'Advanced Job System',
-    description: 'Multiple legal and illegal career paths with progression systems, unique missions and custom gameplay mechanics.',
+    title: 'Zaawansowany System Pracy',
+    description: 'Wiele legalnych i nielegalnych ścieżek kariery z systemem awansu, unikalnymi misjami i autorskimi mechanikami.',
     category: 'jobs',
     image: bannerImage,
     icon: 'fa-solid fa-briefcase'
   },
   {
     id: 2,
-    title: 'Custom Vehicle Collection',
-    description: 'Over 200 custom vehicles including cars, motorcycles, boats and aircraft with realistic handling and damage models.',
+    title: 'Bogata Kolekcja Pojazdów',
+    description: 'Ponad 200 pojazdów – auta, motocykle, łodzie i samoloty – z realistycznym prowadzeniem i uszkodzeniami.',
     category: 'vehicles',
     image: bannerImage,
     icon: 'fa-solid fa-car-side'
   },
   {
     id: 3,
-    title: 'Property Ownership',
-    description: 'Buy and customize apartments, houses, businesses and warehouses across the map with interior decoration options.',
+    title: 'Nieruchomości',
+    description: 'Kupuj i personalizuj mieszkania, domy, biznesy oraz magazyny z możliwością urządzania wnętrz.',
     category: 'housing',
     image: bannerImage,
     icon: 'fa-solid fa-building'
   },
   {
     id: 4,
-    title: 'Advanced Phone System',
-    description: 'Fully functional smartphone with apps, messaging, banking, job listings, social media and more.',
+    title: 'Rozbudowany System Telefonu',
+    description: 'Pełnoprawny smartfon z aplikacjami, wiadomościami, bankiem, ogłoszeniami o pracę i mediami społecznościowymi.',
     category: 'gameplay',
     image: bannerImage,
     icon: 'fa-solid fa-mobile-screen'
   },
   {
     id: 5,
-    title: 'Dynamic Economy',
-    description: 'Player-driven economy with stock market, business ownership, item crafting, and trading systems.',
+    title: 'Dynamiczna Ekonomia',
+    description: 'Ekonomia tworzona przez graczy z giełdą, biznesami, craftingiem i systemem handlu.',
     category: 'jobs',
     image: bannerImage,
     icon: 'fa-solid fa-chart-line'
   },
   {
     id: 6,
-    title: 'Custom Car Dealerships',
-    description: 'Multiple dealerships across the city offering different vehicle brands with financing options and customization.',
+    title: 'Salon Samochodowy',
+    description: 'Wiele salonów w mieście oferujących różne marki pojazdów wraz z finansowaniem i personalizacją.',
     category: 'vehicles',
     image: bannerImage,
     icon: 'fa-solid fa-store'
@@ -98,13 +98,13 @@ const filteredProducts = computed(() => {
       <div class="feature-hero-content" :class="{ 'animate-in': isLoaded }">
         <div class="hero-badge" data-aos="fade-down">
           <i class="fa-solid fa-server badge-icon"></i> 
-          <span>Server Features</span>
+          <span>Funkcje Serwera</span>
         </div>
-        <h1 class="feature-title" data-aos="fade-up" data-aos-delay="100">Premium <span class="accent">Roleplay Features</span></h1>
-        <p class="feature-subtitle" data-aos="fade-up" data-aos-delay="200">Discover the unique features that make our FiveM roleplay server stand out from the rest</p>
+        <h1 class="feature-title" data-aos="fade-up" data-aos-delay="100">Najlepsze <span class="accent">Funkcje Roleplay</span></h1>
+        <p class="feature-subtitle" data-aos="fade-up" data-aos-delay="200">Poznaj unikalne rozwiązania, dzięki którym nasz serwer FiveM wyróżnia się na tle innych</p>
         
         <div class="scroll-indicator" data-aos="fade-up" data-aos-delay="300">
-          <span>Explore Features</span>
+          <span>Zobacz Funkcje</span>
           <i class="fa-solid fa-chevron-down"></i>
         </div>
       </div>
@@ -113,7 +113,7 @@ const filteredProducts = computed(() => {
     <!-- Filters Section -->
     <div class="filters-section">
       <div class="container">
-        <h2 class="section-title" data-aos="fade-up">Browse Our <span class="accent">Server Features</span></h2>
+        <h2 class="section-title" data-aos="fade-up">Przeglądaj <span class="accent">Funkcje Serwera</span></h2>
         <div class="filter-buttons" data-aos="fade-up" data-aos-delay="100">
           <button 
             v-for="(category, index) in categories" 
@@ -156,7 +156,7 @@ const filteredProducts = computed(() => {
                 <p class="product-description">{{ product.description }}</p>
                 <div class="product-footer">
                   <button class="cta-button primary">
-                    <i class="fa-solid fa-info-circle"></i> Learn More
+                    <i class="fa-solid fa-info-circle"></i> Dowiedz się więcej
                   </button>
                 </div>
               </div>
@@ -169,10 +169,10 @@ const filteredProducts = computed(() => {
     <!-- 特色功能展示 -->
     <div class="showcase-section">
       <div class="container">
-        <h2 class="section-title" data-aos="fade-up">Experience Our <span class="accent">Premium Features</span></h2>
+        <h2 class="section-title" data-aos="fade-up">Poznaj Nasze <span class="accent">Najlepsze Funkcje</span></h2>
         <div class="showcase-content">
           <div class="showcase-image" data-aos="fade-right">
-            <img src="../assets/Banner.jpg" alt="Feature showcase">
+            <img src="../assets/Banner.jpg" alt="Prezentacja funkcji">
             <div class="image-overlay">
               <div class="play-button">
                 <i class="fa-solid fa-play"></i>
@@ -180,16 +180,16 @@ const filteredProducts = computed(() => {
             </div>
           </div>
           <div class="showcase-info" data-aos="fade-left" data-aos-delay="100">
-            <h3>Immersive Roleplay Experience</h3>
-            <p>Our server is designed to provide the most immersive roleplay experience possible, with attention to every detail and a focus on player engagement and community building.</p>
+            <h3>Wciągające Doświadczenie RP</h3>
+            <p>Nasz serwer został zaprojektowany, by maksymalnie wciągnąć w świat RP, z dbałością o detale i zaangażowanie społeczności.</p>
             <ul class="feature-list">
-              <li data-aos="fade-left" data-aos-delay="150"><i class="fa-solid fa-check"></i> Custom scripts and resources</li>
-              <li data-aos="fade-left" data-aos-delay="200"><i class="fa-solid fa-check"></i> Active admin and support team</li>
-              <li data-aos="fade-left" data-aos-delay="250"><i class="fa-solid fa-check"></i> Regular events and activities</li>
-              <li data-aos="fade-left" data-aos-delay="300"><i class="fa-solid fa-check"></i> Constant updates and improvements</li>
+              <li data-aos="fade-left" data-aos-delay="150"><i class="fa-solid fa-check"></i> Własne skrypty i zasoby</li>
+              <li data-aos="fade-left" data-aos-delay="200"><i class="fa-solid fa-check"></i> Aktywny zespół administracji i wsparcia</li>
+              <li data-aos="fade-left" data-aos-delay="250"><i class="fa-solid fa-check"></i> Regularne eventy i aktywności</li>
+              <li data-aos="fade-left" data-aos-delay="300"><i class="fa-solid fa-check"></i> Ciągłe aktualizacje i usprawnienia</li>
             </ul>
             <button class="cta-button secondary" data-aos="zoom-in" data-aos-delay="350">
-              <i class="fa-solid fa-play"></i> Watch Server Trailer
+              <i class="fa-solid fa-play"></i> Zobacz Zwiastun Serwera
             </button>
           </div>
         </div>
@@ -200,14 +200,14 @@ const filteredProducts = computed(() => {
     <div class="join-section">
       <div class="container">
         <div class="join-content" data-aos="fade-up">
-          <h2 data-aos="fade-up">Ready to <span class="accent">Join Our Server?</span></h2>
-          <p data-aos="fade-up" data-aos-delay="100">Experience all these amazing features and become part of our growing community today!</p>
+          <h2 data-aos="fade-up">Gotowy, aby <span class="accent">dołączyć do serwera?</span></h2>
+          <p data-aos="fade-up" data-aos-delay="100">Poznaj wszystkie funkcje i zostań częścią naszej rozwijającej się społeczności!</p>
           <div class="join-buttons" data-aos="fade-up" data-aos-delay="200">
             <button class="cta-button primary" data-aos="zoom-in-right" data-aos-delay="250">
-              <i class="fa-solid fa-play"></i> Join Server Now
+              <i class="fa-solid fa-play"></i> Dołącz teraz
             </button>
             <button class="cta-button outline" data-aos="zoom-in-left" data-aos-delay="300">
-              <i class="fa-brands fa-discord"></i> Join Discord
+              <i class="fa-brands fa-discord"></i> Dołącz na Discorda
             </button>
           </div>
         </div>
