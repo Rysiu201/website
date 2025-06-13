@@ -13,6 +13,12 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
     },
   },
+  server: {
+    proxy: {
+      '/auth': 'http://localhost:8080',
+      '/api': 'http://localhost:8080'
+    }
+  },
   build: {
     rollupOptions: {
       output: {

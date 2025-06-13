@@ -63,7 +63,7 @@ const contactBtn = ref<HTMLButtonElement | null>(null);
 const user = ref<any>(null);
 
 function fetchUser() {
-  fetch('/api/user')
+  fetch('/api/user', { credentials: 'include' })
     .then(res => res.json())
     .then(data => {
       user.value = data.user;
@@ -295,14 +295,25 @@ onMounted(() => {
   color: #e0e0e0;
 }
 
-.login-btn, .logout-btn {
-  background: transparent;
-  border: 1px solid #8A2BE2;
-  color: #e0e0e0;
+
+.login-btn,
+.logout-btn {
   padding: 0.4rem 0.8rem;
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9rem;
+}
+
+.login-btn {
+  background: transparent;
+  border: 1px solid #8A2BE2;
+  color: #e0e0e0;
+}
+
+.logout-btn {
+  background: #e63946;
+  border: 1px solid #e63946;
+  color: #fff;
 }
 
 .username {

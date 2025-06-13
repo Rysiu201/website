@@ -11,13 +11,13 @@ const structuredData = {
   "@context": "https://schema.org",
   "@type": "Organization",
   "name": "AetherRP",
-  "url": "https://9r-dev.com",
-  "logo": "https://9r-dev.com/logo.png",
+  "url": "https://aetherrp.com",
+  "logo": "https://aetherrp.com/logo.png",
   "description": "Polski serwer FiveM oferujący klimatyczny roleplay, autorskie skrypty i aktywną społeczność.",
   "sameAs": [
-    "https://discord.gg/9r-developments",
-    "https://twitter.com/9r_developments",
-    "https://www.youtube.com/channel/9r-developments"
+    "https://discord.gg/aetherrp",
+    "https://twitter.com/aetherrp",
+    "https://www.youtube.com/@AetherRP"
   ]
 };
 

@@ -93,7 +93,7 @@ onMounted(() => {
               </div>
               <div class="contact-details">
                 <span>E-mail</span>
-                <a href="mailto:contact@9r-developments.com">kontakt@aetherrp.com</a>
+                <a href="mailto:contact@aetherrp.com">kontakt@aetherrp.com</a>
               </div>
             </li>
             <li>
