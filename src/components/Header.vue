@@ -63,7 +63,7 @@ const contactBtn = ref<HTMLButtonElement | null>(null);
 const user = ref<any>(null);
 
 function fetchUser() {
-  fetch('/api/user')
+  fetch('/api/user', { credentials: 'include' })
     .then(res => res.json())
     .then(data => {
       user.value = data.user;
