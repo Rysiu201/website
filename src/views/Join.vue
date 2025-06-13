@@ -84,7 +84,7 @@
             <p data-aos="fade-up" data-aos-delay="100">Skopiuj poniższy link FiveM lub wyszukaj "AetherRP" w przeglądarce serwerów FiveM</p>
             
             <div class="server-link" data-aos="fade-up" data-aos-delay="200">
-              <code>fivem://connect/9r-dev.com</code>
+              <code>fivem://connect/aetherrp.com</code>
               <button class="copy-button">
                 <i class="fa-regular fa-copy"></i>
               </button>
