@@ -2,7 +2,7 @@
   <div class="rules-page">
     <div class="hero-section">
       <div class="hero-content">
-        <div class="hero-badge" data-aos="fade-down"><i class="fa-solid fa-scale-balanced"></i> Guidelines</div>
+        <div class="hero-badge" data-aos="fade-down"><i class="fa-solid fa-scale-balanced"></i> Regulamin</div>
         <h1 data-aos="fade-up" data-aos-delay="100">Zasady <span class="accent">Serwera</span></h1>
         <p class="subtitle" data-aos="fade-up" data-aos-delay="200">Przestrzegaj tych zasad, żeby wszystkim grało się dobrze i z klimatem.Razem dbamy o to, żeby serwer był miejscem, do którego chce się wracać.</p>
       </div>
@@ -83,20 +83,20 @@
       </div>
       
       <div class="rules-updates" data-aos="fade-up" data-aos-delay="200">
-        <h3 data-aos="fade-right"><i class="fa-solid fa-clock-rotate-left"></i> Recent Updates</h3>
+        <h3 data-aos="fade-right"><i class="fa-solid fa-clock-rotate-left"></i> Ostatnie Aktualizacje</h3>
         <div class="update-list">
           <div class="update-item" data-aos="fade-left" data-aos-delay="250">
             <div class="update-date">Czerwiec 13, 2025</div>
             <div class="update-content">
-              <h4>Added Vehicle Rules</h4>
-              <p>New rules about vehicle usage and realistic driving have been added.</p>
+              <h4>Dodano zasady pojazdów</h4>
+              <p>Wprowadziliśmy nowe zasady dotyczące korzystania z pojazdów i realistycznej jazdy.</p>
             </div>
           </div>
           <div class="update-item" data-aos="fade-left" data-aos-delay="300">
             <div class="update-date">May 22, 2025</div>
             <div class="update-content">
-              <h4>Updated Roleplay Guidelines</h4>
-              <p>Clarified expectations for in-character behavior and value of life rules.</p>
+              <h4>Zaktualizowano wytyczne RP</h4>
+              <p>Doprecyzowaliśmy oczekiwania co do zachowań w postaci i zasady wartości życia.</p>
             </div>
           </div>
         </div>
@@ -143,74 +143,74 @@ function handleScroll() {
 const ruleSections = [
   {
     id: 'general',
-    title: 'General Rules',
+    title: 'Zasady Ogólne',
     icon: 'fa-solid fa-users',
     rules: [
       {
-        title: 'Respect All Players',
-        description: 'Treat all players with respect. Harassment, discrimination, hate speech, or bullying of any kind will not be tolerated.',
-        penalty: 'Warning to permanent ban, depending on severity',
+        title: 'Szanuj Wszystkich Graczy',
+        description: 'Traktuj wszystkich z szacunkiem. Nękanie, dyskryminacja czy mowa nienawiści są zabronione.',
+        penalty: 'Ostrzeżenie lub ban, zależnie od przewinienia',
         important: true
       },
       {
-        title: 'Stay In Character',
-        description: 'Maintain roleplay at all times. Out-of-character (OOC) chat should be kept to a minimum and only used when necessary.',
-        penalty: 'Verbal warning to temporary ban'
+        title: 'Pozostań w Postaci',
+        description: 'Odgrywaj rolę przez cały czas. Rozmowy OOC ogranicz do minimum i tylko w razie potrzeby.',
+        penalty: 'Upomnienie lub tymczasowy ban'
       },
       {
-        title: 'No Metagaming',
-        description: 'Do not use information your character wouldn\'t know in-game. This includes information from Discord, streams, or other external sources.',
-        penalty: 'Temporary ban (1-7 days)'
+        title: 'Zakaz Metagamingu',
+        description: 'Nie wykorzystuj informacji spoza gry. Dotyczy to Discorda, streamów i innych źródeł.',
+        penalty: 'Tymczasowy ban (1-7 dni)'
       },
       {
-        title: 'No Powergaming',
-        description: 'Don\'t force scenarios on other players. Allow others to react and respond to your actions naturally.',
-        penalty: 'Warning to temporary ban'
+        title: 'Zakaz Powergamingu',
+        description: 'Nie wymuszaj scenariuszy na innych. Pozwól graczom naturalnie reagować na twoje działania.',
+        penalty: 'Ostrzeżenie lub tymczasowy ban'
       },
       {
-        title: 'Value Your Life',
-        description: 'Act as you would in real life when faced with dangerous situations. Your character should fear death and injury.',
-        penalty: 'Warning to temporary ban'
+        title: 'Szanuj Własne Życie',
+        description: 'W niebezpiecznych sytuacjach zachowuj się tak, jak w prawdziwym życiu. Twoja postać powinna bać się śmierci i obrażeń.',
+        penalty: 'Ostrzeżenie lub tymczasowy ban'
       }
     ]
   },
   {
     id: 'gameplay',
-    title: 'Gameplay Rules',
+    title: 'Zasady Rozgrywki',
     icon: 'fa-solid fa-gamepad',
     rules: [
       {
-        title: 'No Exploiting',
-        description: 'Using bugs, glitches, or exploits to gain advantages is strictly prohibited.',
-        penalty: 'Immediate permanent ban',
+        title: 'Zakaz Wykorzystywania Błędów',
+        description: 'Korzystanie z bugów lub exploitów w celu uzyskania przewagi jest surowo zabronione.',
+        penalty: 'Natychmiastowy permanentny ban',
         important: true
       },
       {
-        title: 'Realistic Driving',
-        description: 'Drive realistically and follow traffic laws when not in emergency situations. No unnecessary ramming or vehicle abuse.',
-        penalty: 'Warning to temporary ban'
+        title: 'Realistyczna Jazda',
+        description: 'Poruszaj się zgodnie z przepisami, gdy nie ma sytuacji awaryjnej. Unikaj taranowania i nadużywania pojazdów.',
+        penalty: 'Ostrzeżenie lub tymczasowy ban'
       },
       {
-        title: 'Criminal Activities',
-        description: 'All criminal activities must have proper roleplay behind them. Random killings or robberies without roleplay context are not allowed.',
-        penalty: 'Temporary to permanent ban'
+        title: 'Działalność Przestępcza',
+        description: 'Każda akcja przestępcza musi być odpowiednio odegrana. Zabójstwa czy rabunki bez kontekstu RP są zabronione.',
+        penalty: 'Tymczasowy lub permanentny ban'
       }
     ]
   },
   {
     id: 'administrative',
-    title: 'Administrative',
+    title: 'Administracja',
     icon: 'fa-solid fa-shield',
     rules: [
       {
-        title: 'Staff Decisions',
-        description: 'Staff decisions are final. If you disagree with a decision, you may appeal through the proper channels on our Discord.',
-        penalty: 'Not applicable'
+        title: 'Decyzje Administracji',
+        description: 'Decyzje administracji są ostateczne. W razie wątpliwości możesz się odwołać poprzez odpowiednie kanały na Discordzie.',
+        penalty: 'Nie dotyczy'
       },
       {
-        title: 'Rule Updates',
-        description: 'Rules may be updated at any time. It\'s your responsibility to stay informed about current server rules.',
-        penalty: 'Not applicable'
+        title: 'Aktualizacje Zasad',
+        description: 'Regulamin może się zmieniać w każdej chwili. Twoim obowiązkiem jest być na bieżąco z aktualnymi zasadami.',
+        penalty: 'Nie dotyczy'
       }
     ]
   }

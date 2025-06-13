@@ -80,8 +80,8 @@
       <div class="container">
         <div class="connection-content">
           <div class="connection-info" data-aos="fade-right">
-            <h2 data-aos="fade-up">Server <span class="accent">Connection Details</span></h2>
-            <p data-aos="fade-up" data-aos-delay="100">Copy the FiveM link below or search for "9r-Developments" in the FiveM server browser</p>
+            <h2 data-aos="fade-up">Dane <span class="accent">Połączenia</span></h2>
+            <p data-aos="fade-up" data-aos-delay="100">Skopiuj poniższy link FiveM lub wyszukaj "AetherRP" w przeglądarce serwerów FiveM</p>
             
             <div class="server-link" data-aos="fade-up" data-aos-delay="200">
               <code>fivem://connect/9r-dev.com</code>
@@ -101,7 +101,7 @@
             </div>
           </div>
           <div class="connection-image" data-aos="fade-left" data-aos-delay="200">
-            <img src="../assets/Banner.jpg" alt="Server screenshot">
+            <img src="../assets/Banner.jpg" alt="Zrzut ekranu serwera">
           </div>
         </div>
       </div>
@@ -110,8 +110,8 @@
     <!-- FAQ Section -->
     <div class="faq-section">
       <div class="container">
-        <h2 class="section-title" data-aos="fade-up">Frequently <span class="accent">Asked Questions</span></h2>
-        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Find answers to common questions about joining our server</p>
+        <h2 class="section-title" data-aos="fade-up">Najczęściej <span class="accent">Zadawane Pytania</span></h2>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Znajdziesz tu odpowiedzi na najczęstsze pytania dotyczące dołączenia</p>
         
         <div class="faq-list">
           <div 
@@ -146,14 +146,14 @@
     <div class="community-section">
       <div class="container">
         <div class="community-content" data-aos="fade-up">
-          <h2 data-aos="fade-up">Ready to Begin Your <span class="accent">Roleplay Journey?</span></h2>
-          <p data-aos="fade-up" data-aos-delay="100">Join hundreds of players already enjoying our unique FiveM roleplay experience</p>
+          <h2 data-aos="fade-up">Gotowy, by rozpocząć <span class="accent">przygodę z RP?</span></h2>
+          <p data-aos="fade-up" data-aos-delay="100">Dołącz do setek graczy cieszących się naszą unikalną rozgrywką FiveM</p>
           <div class="cta-buttons" data-aos="fade-up" data-aos-delay="200">
             <button class="cta-button primary" data-aos="zoom-in-right" data-aos-delay="300">
-              <i class="fa-solid fa-play"></i> Join Now
+              <i class="fa-solid fa-play"></i> Dołącz Teraz
             </button>
             <button class="cta-button outline" data-aos="zoom-in-left" data-aos-delay="350">
-              <i class="fa-solid fa-book"></i> Read Server Guide
+              <i class="fa-solid fa-book"></i> Przeczytaj Poradnik
             </button>
           </div>
         </div>
@@ -191,29 +191,29 @@ const serverStats = ref({
 const joinSteps = ref([
   {
     id: 1,
-    title: 'Join Our Discord',
-    description: 'Connect with our community and get the latest updates by joining our Discord server.',
+    title: 'Dołącz na Discord',
+    description: 'Połącz się z naszą społecznością i otrzymuj najnowsze informacje na Discordzie.',
     icon: 'fa-brands fa-discord',
     link: '#'
   },
   {
     id: 2,
-    title: 'Create Your Character',
-    description: 'Follow our character creation guide to set up your roleplay identity on the server.',
+    title: 'Stwórz Swoją Postać',
+    description: 'Skorzystaj z poradnika tworzenia postaci i przygotuj swoją tożsamość na serwerze.',
     icon: 'fa-solid fa-user-plus',
     link: '#'
   },
   {
     id: 3,
-    title: 'Read the Rules',
-    description: 'Familiarize yourself with our server rules and guidelines to ensure a positive experience.',
+    title: 'Przeczytaj Zasady',
+    description: 'Zapoznaj się z regulaminem serwera, by zapewnić sobie i innym dobrą rozgrywkę.',
     icon: 'fa-solid fa-book',
     link: '#'
   },
   {
     id: 4,
-    title: 'Connect to the Server',
-    description: 'Use FiveM client to connect to our server using the connection details provided in Discord.',
+    title: 'Połącz się z Serwerem',
+    description: 'Użyj klienta FiveM i danych z Discorda, aby wejść na nasz serwer.',
     icon: 'fa-solid fa-server',
     link: '#'
   }
@@ -223,28 +223,28 @@ const joinSteps = ref([
 const faqs = ref([
   {
     id: 1,
-    question: 'Do I need to own GTA V to play on your FiveM server?',
-    answer: 'Yes, you need to own a legitimate copy of Grand Theft Auto V on PC to play on any FiveM server, including ours. FiveM is a modification framework that requires the base game files.'
+    question: 'Czy muszę mieć GTA V, by grać na serwerze FiveM?',
+    answer: 'Tak, potrzebujesz legalnej kopii GTA V na PC. FiveM to modyfikacja wymagająca plików podstawowej gry.'
   },
   {
     id: 2,
-    question: 'Is there an application process to join the server?',
-    answer: 'Yes, we have a simple application process to ensure quality roleplay on our server. Visit our Discord server and follow the instructions in the #applications channel to get started.'
+    question: 'Czy trzeba składać podanie, aby dołączyć do serwera?',
+    answer: 'Tak, posiadamy prosty proces rekrutacji. Wejdź na Discord i postępuj zgodnie z instrukcjami w kanale #applications.'
   },
   {
     id: 3,
-    question: 'What kind of roleplay does your server focus on?',
-    answer: 'Our server focuses on realistic city roleplay with emphasis on character development, interactions, and storytelling. We offer a variety of both legal and illegal career paths, businesses, and activities.'
+    question: 'Na jakim typie roleplay koncentruje się serwer?',
+    answer: 'Stawiamy na realistyczne miejskie RP z naciskiem na rozwój postaci, interakcje i opowiadanie historii. Oferujemy wiele legalnych i nielegalnych ścieżek kariery, biznesy oraz aktywności.'
   },
   {
     id: 4,
-    question: 'Are there custom scripts and vehicles on the server?',
-    answer: 'Yes, our server features numerous custom scripts, vehicles, maps, and gameplay mechanics that enhance the roleplay experience beyond vanilla GTA V capabilities.'
+    question: 'Czy na serwerze są autorskie skrypty i pojazdy?',
+    answer: 'Tak, mamy wiele własnych skryptów, pojazdów, map i mechanik rozszerzających możliwości podstawowego GTA V.'
   },
   {
     id: 5,
-    question: 'How can I report issues or players breaking rules?',
-    answer: 'We have an in-game report system accessible via F2, and you can also report issues directly in our Discord server in the #support channel. Our staff team is available to assist with any concerns.'
+    question: 'Jak mogę zgłosić problemy lub graczy łamiących zasady?',
+    answer: 'Dostępny jest system zgłoszeń w grze pod F2, a także kanał #support na Discordzie. Nasz zespół służy pomocą.'
   }
 ]);
 
