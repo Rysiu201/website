@@ -44,10 +44,6 @@
         Doświadczenie w RP
         <textarea v-model="form.ooc.experience" required placeholder="Twoje doświadczenie w RP..."></textarea>
       </label>
-      <label class="checkbox">
-        <input type="checkbox" v-model="form.ooc.knowsRules" required />
-        Znam zasady RP i regulamin serwera
-      </label>
 
       <!-- Sekcja 3 -->
       <h2>3. Pytania sytuacyjne</h2>
@@ -64,7 +60,7 @@
       </label>
       <label class="checkbox">
         <input type="checkbox" v-model="form.consents.rules" required />
-        Akceptuję regulamin serwera
+        Znam zasady RP i Akceptuję regulamin serwera
       </label>
       <label class="checkbox">
         <input type="checkbox" v-model="form.consents.truth" required />
