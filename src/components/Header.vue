@@ -189,6 +189,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex-shrink: 0;
 }
 
 .admin-link {
@@ -215,7 +216,9 @@ onMounted(() => {
 }
 
 .nav-center {
-  justify-self: center;
+  flex: 1;
+  display: flex;
+  justify-content: center;
 }
 
 .nav-links {
