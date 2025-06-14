@@ -11,11 +11,11 @@
       <h2>1. Informacje ogólne (IC)</h2>
       <label>
         Imię i nazwisko postaci
-        <input v-model="form.ic.name" required placeholder="Jan Kowalski" />
+        <input v-model="form.ic.name" required placeholder="Cezary Soplica" />
       </label>
       <label>
         Wiek postaci
-        <input type="number" v-model.number="form.ic.age" required placeholder="25" />
+        <input type="number" v-model.number="form.ic.age" required placeholder="26" />
       </label>
       <label>
         Krótki opis postaci / Historia
@@ -31,7 +31,7 @@
       </label>
       <label>
         Motywacja przyjazdu do miasta
-        <textarea v-model="form.ic.motivation" required placeholder="Dlaczego przyjechała do miasta?"></textarea>
+        <textarea v-model="form.ic.motivation" required placeholder="Co Cię skłoniło do przyjazdu?"></textarea>
       </label>
 
       <!-- Sekcja 2 -->
