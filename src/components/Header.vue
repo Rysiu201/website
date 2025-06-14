@@ -24,6 +24,7 @@
         <div class="auth-area" :class="{ 'logged-in': user }">
           <template v-if="user">
             <span class="username">{{ user.username }}</span>
+            <router-link v-if="isAdmin" to="/admin" class="admin-link">Administrowanie</router-link>
             <button class="logout-btn" @click="logout">Wyloguj</button>
           </template>
           <button v-else class="login-btn" @click="login"><i class="fa-brands fa-discord"></i> Zaloguj</button>
@@ -270,7 +271,6 @@ onMounted(() => {
   flex-direction: column;
   align-items: flex-end;
 }
-
 
 .login-btn,
 .logout-btn {
