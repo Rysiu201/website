@@ -16,14 +16,14 @@
         </ul>
       </nav>
       <div class="header-actions">
-        <button class="contact-btn" ref="contactBtn"><i class="fa-solid fa-play"></i> Dołącz do serwera</button>
         <div class="social-icons">
           <a href="#" class="social-icon"><i class="fa-brands fa-discord"></i></a>
           <a href="#" class="social-icon"><i class="fa-brands fa-tiktok"></i></a>
         </div>
-        <div class="auth-area">
+        <div class="auth-area" :class="{ 'logged-in': user }">
           <template v-if="user">
             <span class="username">{{ user.username }}</span>
+            <router-link v-if="isAdmin" to="/admin" class="admin-link">Administrowanie</router-link>
             <button class="logout-btn" @click="logout">Wyloguj</button>
           </template>
           <button v-else class="login-btn" @click="login"><i class="fa-brands fa-discord"></i> Zaloguj</button>
@@ -43,6 +43,7 @@
         <li><router-link to="/rules" @click="closeMenu"><i class="fa-solid fa-file-contract"></i> Zasady</router-link></li>
         <li><router-link to="/join" @click="closeMenu"><i class="fa-solid fa-book"></i> Jak dołączyć</router-link></li>
         <li><router-link to="/apply" @click="closeMenu"><i class="fa-solid fa-file-signature"></i> Złóż podanie</router-link></li>
+        <li v-if="isAdmin"><router-link to="/admin" @click="closeMenu"><i class="fa-solid fa-screwdriver-wrench"></i> Administrowanie</router-link></li>
       </ul>
       <div class="mobile-social-icons">
         <a href="#" class="social-icon"><i class="fa-brands fa-discord"></i></a>
@@ -59,14 +60,15 @@ import gsap from 'gsap';
 const menuOpen = ref(false);
 const mobileNav = ref<HTMLElement | null>(null);
 const mobileNavLinks = ref<HTMLUListElement | null>(null);
-const contactBtn = ref<HTMLButtonElement | null>(null);
 const user = ref<any>(null);
+const isAdmin = ref(false);
 
 function fetchUser() {
   fetch('/api/user', { credentials: 'include' })
     .then(res => res.json())
     .then(data => {
       user.value = data.user;
+      isAdmin.value = data.isAdmin;
     });
 }
 
@@ -121,24 +123,7 @@ onMounted(() => {
   // 初始设置
   gsap.set('.header', { y: -20, opacity: 0 });
   
-  // 购买按钮悬停效果
-  if (contactBtn.value) {
-    contactBtn.value.addEventListener('mouseenter', () => {
-      gsap.to(contactBtn.value, {
-        scale: 1.05,
-        duration: 0.3,
-        ease: 'power2.out'
-      });
-    });
-    
-    contactBtn.value.addEventListener('mouseleave', () => {
-      gsap.to(contactBtn.value, {
-        scale: 1,
-        duration: 0.3,
-        ease: 'power2.out'
-      });
-    });
-  }
+  // 购买按钮悬停效果已移除
   
   // 社交图标悬停效果
   const socialIcons = document.querySelectorAll('.social-icon');
@@ -262,20 +247,6 @@ onMounted(() => {
   gap: 1.5rem;
 }
 
-.contact-btn {
-  background: linear-gradient(90deg, #8A2BE2, #4B0082);
-  color: white;
-  border: none;
-  padding: 0.7rem 1.5rem;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  /* 移除过渡效果，使用GSAP代替 */
-  box-shadow: 0 4px 8px rgba(138, 43, 226, 0.2);
-}
 
 .social-icons {
   display: flex;
@@ -293,6 +264,21 @@ onMounted(() => {
   align-items: center;
   gap: 0.5rem;
   color: #e0e0e0;
+}
+
+.auth-area.logged-in {
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.admin-link {
+  color: #e0e0e0;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.admin-link:hover {
+  text-decoration: underline;
 }
 
 
@@ -414,7 +400,7 @@ onMounted(() => {
     display: flex;
   }
   
-  .contact-btn, .social-icons {
+  .social-icons {
     display: none;
   }
 }
