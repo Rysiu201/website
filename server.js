@@ -66,8 +66,43 @@ app.get('/auth/logout', (req, res, next) => {
   });
 });
 
-app.get('/api/user', (req, res) => {
-  res.json({ user: req.user || null });
+app.get('/api/user', async (req, res) => {
+  if (!req.user) {
+    return res.json({ user: null, isAdmin: false });
+  }
+
+  const user = {
+    id: req.user.id,
+    username: req.user.username,
+    avatar: req.user.avatar
+  };
+
+  let roles = [];
+  let isAdmin = false;
+
+  if (process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID) {
+    try {
+      const response = await fetch(
+        `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${user.id}`,
+        {
+          headers: {
+            Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`
+          }
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        roles = data.roles || [];
+        isAdmin =
+          roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
+          roles.includes(process.env.STAFF_ROLE_ID || '');
+      }
+    } catch (err) {
+      console.error('Failed to fetch roles', err);
+    }
+  }
+
+  res.json({ user, roles, isAdmin });
 });
 
 // Serve static files
