@@ -2,7 +2,7 @@
   <header class="header">
     <div class="container">
       <div class="left-group">
-        <router-link v-if="isAdmin" to="/admin" class="nav-link admin-link" active-class="active"><i class="fa-solid fa-desktop"></i></router-link>
+        <router-link v-if="isAdmin" to="/admin" class="nav-link admin-link" active-class="active"><i class="fa-solid fa-user-tie"></i></router-link>
         <div class="logo">
           <span class="logo-text">Aether</span>
           <span class="logo-accent">RP</span>
