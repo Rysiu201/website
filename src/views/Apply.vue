@@ -87,6 +87,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import backgroundImage from '../assets/background.jpg'
 const backgroundImageUrl = ref(backgroundImage)
 
@@ -119,6 +120,7 @@ interface FormData {
 
 const questions = ref<string[]>([])
 const success = ref(false)
+const router = useRouter()
 
 const form = ref<FormData>({
   ic: {
@@ -172,6 +174,7 @@ async function submitForm() {
   })
   if (response.ok) {
     success.value = true
+    router.push('/status')
   }
 }
 </script>

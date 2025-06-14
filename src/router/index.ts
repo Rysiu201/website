@@ -6,6 +6,7 @@ import Rules from '../views/Rules.vue'
 import JoinUs from '../views/Join.vue'
 import Apply from '../views/Apply.vue'
 import Admin from '../views/Admin.vue'
+import ApplicationStatus from '../views/ApplicationStatus.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -68,6 +69,15 @@ const router = createRouter({
         title: 'Złóż podanie - AetherRP',
         description: 'Wypełnij formularz, aby dołączyć do zespołu AetherRP.',
         keywords: 'podanie, rekrutacja, aetherrp',
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/status',
+      name: 'status',
+      component: ApplicationStatus,
+      meta: {
+        title: 'Status Podania - AetherRP',
         requiresAuth: true
       }
     },
