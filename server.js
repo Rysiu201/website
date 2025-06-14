@@ -5,11 +5,34 @@ import { Strategy as DiscordStrategy } from 'passport-discord';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+import fs from 'fs';
 
 dotenv.config();
 
 // In-memory storage of question sets assigned to users
 const userQuestions = new Map();
+
+const STATUS = {
+  SENT: 'Wysłane',
+  PENDING: 'Przyjęte, oczekuje na rozpatrzenie',
+  IN_REVIEW: 'W trakcie rozpatrywania',
+  APPROVED: 'Rozpatrzone Pozytywnie',
+  REJECTED: 'Rozpatrzone negatywnie (Napisz nowe podanie w ciągu 24/48h)'
+};
+
+const DB_FILE = path.join(process.cwd(), 'database.json');
+
+function loadDb() {
+  try {
+    return JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
+  } catch (err) {
+    return { applications: [] };
+  }
+}
+
+function saveDb(db) {
+  fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2));
+}
 
 // Pool of possible scenario questions
 const allQuestions = [
@@ -195,6 +218,17 @@ app.get('/api/questions', (req, res) => {
   res.json({ questions: userQuestions.get(req.user.id) });
 });
 
+// Return application status for the logged in user
+app.get('/api/status', (req, res) => {
+  if (!req.user) {
+    return res.json({ status: null });
+  }
+
+  const db = loadDb();
+  const appEntry = db.applications.find(a => a.userId === req.user.id);
+  res.json({ status: appEntry ? appEntry.status : null });
+});
+
 // Handle application submissions
 app.post('/api/apply', async (req, res) => {
   const webhook = process.env.WEBHOOK_URL;
@@ -224,8 +258,19 @@ app.post('/api/apply', async (req, res) => {
   } else {
     console.log('Application:', req.body);
   }
+  // Save application with initial status
+  if (req.user) {
+    const db = loadDb();
+    db.applications.push({
+      id: Date.now().toString(),
+      userId: req.user.id,
+      data: req.body,
+      status: STATUS.SENT
+    });
+    saveDb(db);
+  }
 
-  res.json({ success: true });
+  res.json({ success: true, status: STATUS.SENT });
 });
 
 // Serve static files
