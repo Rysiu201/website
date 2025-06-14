@@ -178,9 +178,9 @@ onMounted(() => {
 }
 
 .header .container {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 1rem 2rem;
   max-width: 1400px;
   margin: 0 auto;
@@ -190,6 +190,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex-shrink: 0;
 }
 
 .admin-link {
@@ -216,7 +217,9 @@ onMounted(() => {
 }
 
 .nav-center {
-  justify-self: center;
+  flex: 1;
+  display: flex;
+  justify-content: center;
 }
 
 .nav-links {
@@ -415,7 +418,7 @@ onMounted(() => {
 
 @media (max-width: 1024px) {
   .header .container {
-    grid-template-columns: 1fr 1fr;
+    justify-content: space-between;
   }
   
   .nav-center {
