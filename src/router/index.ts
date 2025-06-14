@@ -5,6 +5,7 @@ import Staff from '../views/Staff.vue'
 import Rules from '../views/Rules.vue'
 import JoinUs from '../views/Join.vue'
 import Apply from '../views/Apply.vue'
+import Admin from '../views/Admin.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -67,6 +68,16 @@ const router = createRouter({
         title: 'Złóż podanie - AetherRP',
         description: 'Wypełnij formularz, aby dołączyć do zespołu AetherRP.',
         keywords: 'podanie, rekrutacja, aetherrp'
+      }
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: Admin,
+      meta: {
+        title: 'Panel Administracyjny - AetherRP',
+        description: 'Panel do zarządzania serwerem.',
+        keywords: 'admin, panel'
       }
     }
   ]
