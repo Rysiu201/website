@@ -95,29 +95,47 @@ passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
 
-passport.use(
-  new DiscordStrategy(
-    {
-      clientID: process.env.DISCORD_CLIENT_ID || '',
-      clientSecret: process.env.DISCORD_CLIENT_SECRET || '',
-      callbackURL: process.env.DISCORD_CALLBACK_URL || '',
-      scope: ['identify']
-    },
-    (_accessToken, _refreshToken, profile, done) => {
-      return done(null, profile);
+const discordEnabled =
+  process.env.DISCORD_CLIENT_ID &&
+  process.env.DISCORD_CLIENT_SECRET &&
+  process.env.DISCORD_CALLBACK_URL;
+
+if (discordEnabled) {
+  passport.use(
+    new DiscordStrategy(
+      {
+        clientID: process.env.DISCORD_CLIENT_ID,
+        clientSecret: process.env.DISCORD_CLIENT_SECRET,
+        callbackURL: process.env.DISCORD_CALLBACK_URL,
+        scope: ['identify']
+      },
+      (_accessToken, _refreshToken, profile, done) => {
+        return done(null, profile);
+      }
+    )
+  );
+} else {
+  console.warn('Discord OAuth not configured, authentication disabled');
+}
+
+if (discordEnabled) {
+  app.get('/auth/discord', passport.authenticate('discord'));
+
+  app.get(
+    '/auth/discord/callback',
+    passport.authenticate('discord', { failureRedirect: '/' }),
+    (req, res) => {
+      res.redirect('/');
     }
-  )
-);
-
-app.get('/auth/discord', passport.authenticate('discord'));
-
-app.get(
-  '/auth/discord/callback',
-  passport.authenticate('discord', { failureRedirect: '/' }),
-  (req, res) => {
+  );
+} else {
+  app.get('/auth/discord', (_req, res) => {
+    res.status(501).send('OAuth disabled');
+  });
+  app.get('/auth/discord/callback', (_req, res) => {
     res.redirect('/');
-  }
-);
+  });
+}
 
 app.get('/auth/logout', (req, res, next) => {
   req.logout(err => {
