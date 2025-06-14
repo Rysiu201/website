@@ -2,14 +2,7 @@
   <header class="header">
     <div class="container">
       <div class="left-group">
-        <router-link
-          v-if="isAdmin"
-          to="/admin"
-          class="nav-link admin-link"
-          active-class="active"
-        >
-          <li><i class="fa-solid fa-file-contract"></i> Administrowanie</li>
-        </router-link>
+        <router-link v-if="isAdmin" to="/admin" class="nav-link admin-link" active-class="active"><i class="fa-solid fa-desktop"></i></router-link>
         <div class="logo">
           <span class="logo-text">Aether</span>
           <span class="logo-accent">RP</span>
@@ -185,15 +178,29 @@ onMounted(() => {
   margin: 0 auto;
 }
 
-.left-group {
+.header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.left-group,
+.right-group {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
+}
+
+.right-group {
+  margin-left: auto;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .admin-link {
   white-space: nowrap;
+  margin-right: auto;
 }
 
 .logo {
