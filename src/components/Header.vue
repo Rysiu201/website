@@ -1,9 +1,19 @@
 <template>
   <header class="header">
     <div class="container">
-      <div class="logo">
-        <span class="logo-text">Aether</span>
-        <span class="logo-accent">RP</span>
+      <div class="left-group">
+        <router-link
+          v-if="isAdmin"
+          to="/admin"
+          class="nav-link admin-link"
+          active-class="active"
+        >
+          <i class="fa-solid fa-screwdriver-wrench"></i> Administrowanie
+        </router-link>
+        <div class="logo">
+          <span class="logo-text">Aether</span>
+          <span class="logo-accent">RP</span>
+        </div>
       </div>
       <nav class="nav-center">
         <ul class="nav-links">
@@ -23,6 +33,7 @@
         </div>
         <div class="auth-area" :class="{ 'logged-in': user }">
           <template v-if="user">
+            <img :src="avatarUrl" alt="avatar" class="avatar" />
             <span class="username">{{ user.username }}</span>
             <router-link v-if="isAdmin" to="/admin" class="admin-link">Administrowanie</router-link>
             <button class="logout-btn" @click="logout">Wyloguj</button>
@@ -55,7 +66,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import gsap from 'gsap';
 
 const menuOpen = ref(false);
@@ -63,6 +74,9 @@ const mobileNav = ref<HTMLElement | null>(null);
 const mobileNavLinks = ref<HTMLUListElement | null>(null);
 const user = ref<any>(null);
 const isAdmin = ref(false);
+const avatarUrl = computed(() =>
+  user.value ? `https://cdn.discordapp.com/avatars/${user.value.id}/${user.value.avatar}.png?size=64` : ''
+);
 
 function fetchUser() {
   fetch('/api/user', { credentials: 'include' })
@@ -170,6 +184,16 @@ onMounted(() => {
   padding: 1rem 2rem;
   max-width: 1400px;
   margin: 0 auto;
+}
+
+.left-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-link {
+  white-space: nowrap;
 }
 
 .logo {
@@ -294,6 +318,12 @@ onMounted(() => {
 
 .username {
   font-weight: bold;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
 }
 
 .menu-toggle {
