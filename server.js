@@ -261,6 +261,14 @@ app.post('/api/apply', async (req, res) => {
   // Save application with initial status
   if (req.user) {
     const db = loadDb();
+    const existing = db.applications.find(
+      a => a.userId === req.user.id && a.status !== STATUS.REJECTED
+    );
+    if (existing) {
+      return res
+        .status(400)
+        .json({ success: false, status: existing.status });
+    }
     db.applications.push({
       id: Date.now().toString(),
       userId: req.user.id,
