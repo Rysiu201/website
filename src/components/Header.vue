@@ -25,7 +25,7 @@
         <div class="auth-area" :class="{ 'logged-in': user }">
           <template v-if="user">
             <div class="user-info">
-              <span class="username">{{ user.username }}</span>
+              <span class="username">{{ user.displayname }}</span>
               <img :src="avatarUrl" alt="avatar" class="avatar" />
               <button class="logout-btn" @click="logout">Wyloguj</button>
             </div>
