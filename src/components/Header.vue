@@ -179,7 +179,7 @@ onMounted(() => {
 
 .header .container {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
   padding: 1rem 2rem;
   max-width: 1400px;
@@ -292,8 +292,8 @@ onMounted(() => {
 }
 
 .auth-area.logged-in {
-  flex-direction: column;
-  align-items: flex-end;
+  flex-direction: row;
+  align-items: center;
 }
 
 .user-info {
