@@ -35,8 +35,8 @@
             <div class="user-info">
               <span class="username">{{ user.username }}</span>
               <img :src="avatarUrl" alt="avatar" class="avatar" />
+              <button class="logout-btn" @click="logout">Wyloguj</button>
             </div>
-            <button class="logout-btn" @click="logout">Wyloguj</button>
           </template>
           <button v-else class="login-btn" @click="login"><i class="fa-brands fa-discord"></i> Zaloguj</button>
         </div>
