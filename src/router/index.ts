@@ -67,7 +67,8 @@ const router = createRouter({
       meta: {
         title: 'Złóż podanie - AetherRP',
         description: 'Wypełnij formularz, aby dołączyć do zespołu AetherRP.',
-        keywords: 'podanie, rekrutacja, aetherrp'
+        keywords: 'podanie, rekrutacja, aetherrp',
+        requireNoRoles: true
       }
     },
     {
@@ -84,7 +85,7 @@ const router = createRouter({
 })
 
 // Global navigation guard to set page title and metadata
-router.beforeEach((to, _from, next) => {
+router.beforeEach(async (to, _from, next) => {
   // Update page title
   document.title = to.meta.title as string || 'AetherRP';
   
@@ -98,7 +99,15 @@ router.beforeEach((to, _from, next) => {
   if (metaKeywords) {
     metaKeywords.setAttribute('content', to.meta.keywords as string || '');
   }
-  
+
+  if (to.meta.requireNoRoles) {
+    const res = await fetch('/api/user', { credentials: 'include' });
+    const data = await res.json();
+    if (!data.user || (data.roles && data.roles.length > 0)) {
+      return next('/');
+    }
+  }
+
   next();
 });
 
