@@ -17,6 +17,7 @@
       </div>
       <nav class="nav-center">
         <ul class="nav-links">
+          <li v-if="isAdmin"><router-link to="/admin" class="nav-link" active-class="active"><i class="fa-solid fa-screwdriver-wrench"></i> Administrowanie</router-link></li>
           <li><router-link to="/" class="nav-link" active-class="active"><i class="fa-solid fa-house"></i> Strona Domowa</router-link></li>
           <li><router-link to="/features" class="nav-link" active-class="active"><i class="fa-solid fa-server"></i> Co oferujemy</router-link></li>
           <li><router-link to="/staff" class="nav-link" active-class="active"><i class="fa-solid fa-users"></i> Zespół</router-link></li>
@@ -34,6 +35,7 @@
           <template v-if="user">
             <img :src="avatarUrl" alt="avatar" class="avatar" />
             <span class="username">{{ user.username }}</span>
+            <router-link v-if="isAdmin" to="/admin" class="admin-link">Administrowanie</router-link>
             <button class="logout-btn" @click="logout">Wyloguj</button>
           </template>
           <button v-else class="login-btn" @click="login"><i class="fa-brands fa-discord"></i> Zaloguj</button>
@@ -293,7 +295,6 @@ onMounted(() => {
   flex-direction: column;
   align-items: flex-end;
 }
-
 
 .login-btn,
 .logout-btn {
