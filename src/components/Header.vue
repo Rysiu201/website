@@ -15,7 +15,7 @@
           <li><router-link to="/staff" class="nav-link" active-class="active"><i class="fa-solid fa-users"></i> Zespół</router-link></li>
           <li><router-link to="/rules" class="nav-link" active-class="active"><i class="fa-solid fa-file-contract"></i> Zasady</router-link></li>
           <li><router-link to="/join" class="nav-link" active-class="active"><i class="fa-solid fa-book"></i> Jak dołączyć</router-link></li>
-          <li v-if="canApply"><router-link to="/apply" class="nav-link" active-class="active"><i class="fa-solid fa-file-signature"></i> Złóż podanie</router-link></li>
+          <li v-if="isLoggedIn"><router-link to="/apply" class="nav-link" active-class="active"><i class="fa-solid fa-file-signature"></i> Złóż podanie</router-link></li>
         </ul>
       </nav>
       <div class="header-actions">
@@ -25,7 +25,7 @@
         <div class="auth-area" :class="{ 'logged-in': user }">
           <template v-if="user">
             <div class="user-info">
-              <span class="username">{{ user.username }}</span>
+              <span class="username">{{ user.displayname }}</span>
               <img :src="avatarUrl" alt="avatar" class="avatar" />
               <button class="logout-btn" @click="logout">Wyloguj</button>
             </div>
@@ -46,7 +46,7 @@
         <li><router-link to="/staff" @click="closeMenu"><i class="fa-solid fa-users"></i> Zespół</router-link></li>
         <li><router-link to="/rules" @click="closeMenu"><i class="fa-solid fa-file-contract"></i> Zasady</router-link></li>
         <li><router-link to="/join" @click="closeMenu"><i class="fa-solid fa-book"></i> Jak dołączyć</router-link></li>
-        <li v-if="canApply"><router-link to="/apply" @click="closeMenu"><i class="fa-solid fa-file-signature"></i> Złóż podanie</router-link></li>
+        <li v-if="isLoggedIn"><router-link to="/apply" @click="closeMenu"><i class="fa-solid fa-file-signature"></i> Złóż podanie</router-link></li>
         <li v-if="isAdmin"><router-link to="/admin" @click="closeMenu"><i class="fa-solid fa-screwdriver-wrench"></i> Administrowanie</router-link></li>
       </ul>
       <div class="mobile-social-icons">
@@ -70,7 +70,7 @@ const isAdmin = ref(false);
 const avatarUrl = computed(() =>
   user.value ? `https://cdn.discordapp.com/avatars/${user.value.id}/${user.value.avatar}.png?size=32` : ''
 );
-const canApply = computed(() => !!user.value && roles.value.length === 0);
+const isLoggedIn = computed(() => !!user.value);
 
 function fetchUser() {
   fetch('/api/user', { credentials: 'include' })

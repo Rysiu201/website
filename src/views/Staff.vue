@@ -168,7 +168,7 @@ const teamMembers = ref([
             <h3>Wymagania</h3>
             <ul class="req-list">
               <li><i class="fa-solid fa-circle-check"></i> Minimum 16 lat</li>
-              <li><i class="fa-solid fa-circle-check"></i> Wcześniejsze doswiadczenie z serwerami RP</li>
+              <li><i class="fa-solid fa-circle-check"></i> Doświadczenie z serwerami RP</li>
               <li><i class="fa-solid fa-circle-check"></i> Mocne umiejętnosci komunikacyjne</li>
               <li><i class="fa-solid fa-circle-check"></i> Umiejętność pracy w zespole</li>
             </ul>

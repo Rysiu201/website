@@ -68,7 +68,7 @@ const router = createRouter({
         title: 'Złóż podanie - AetherRP',
         description: 'Wypełnij formularz, aby dołączyć do zespołu AetherRP.',
         keywords: 'podanie, rekrutacja, aetherrp',
-        requireNoRoles: true
+        requiresAuth: true
       }
     },
     {
@@ -100,12 +100,14 @@ router.beforeEach(async (to, _from, next) => {
     metaKeywords.setAttribute('content', to.meta.keywords as string || '');
   }
 
-  if (to.meta.requireNoRoles) {
+  let userData: any = null;
+  if (to.meta.requiresAuth) {
     const res = await fetch('/api/user', { credentials: 'include' });
-    const data = await res.json();
-    if (!data.user || (data.roles && data.roles.length > 0)) {
-      return next('/');
-    }
+    userData = await res.json();
+  }
+
+  if (to.meta.requiresAuth && (!userData || !userData.user)) {
+    return next('/');
   }
 
   next();
