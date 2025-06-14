@@ -15,6 +15,9 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+// Parse JSON bodies
+app.use(express.json());
+
 // Session and authentication setup
 app.use(
   session({
@@ -103,6 +106,39 @@ app.get('/api/user', async (req, res) => {
   }
 
   res.json({ user, roles, isAdmin });
+});
+
+// Handle application submissions
+app.post('/api/apply', async (req, res) => {
+  const webhook = process.env.WEBHOOK_URL;
+  const payload = {
+    content: 'Nowe podanie',
+    embeds: [
+      {
+        title: 'Podanie o whitelist',
+        description: 'Nowe podanie z formularza',
+        fields: [
+          { name: 'Discord', value: req.body.ooc?.discord || 'brak', inline: false }
+        ]
+      }
+    ]
+  };
+
+  if (webhook) {
+    try {
+      await fetch(webhook, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (err) {
+      console.error('Failed to send webhook', err);
+    }
+  } else {
+    console.log('Application:', req.body);
+  }
+
+  res.json({ success: true });
 });
 
 // Serve static files
