@@ -8,7 +8,7 @@
           class="nav-link admin-link"
           active-class="active"
         >
-          <i class="fa-solid fa-screwdriver-wrench"></i> Administrowanie
+          <li><i class="fa-solid fa-file-contract"></i> Administrowanie</li>
         </router-link>
         <div class="logo">
           <span class="logo-text">Aether</span>
@@ -28,15 +28,14 @@
       <div class="header-actions">
         <div class="social-icons">
           <a href="#" class="social-icon"><i class="fa-brands fa-discord"></i></a>
-          <a href="#" class="social-icon"><i class="fa-brands fa-tiktok"></i></a>
         </div>
         <div class="auth-area" :class="{ 'logged-in': user }">
           <template v-if="user">
             <div class="user-info">
               <span class="username">{{ user.username }}</span>
               <img :src="avatarUrl" alt="avatar" class="avatar" />
+              <button class="logout-btn" @click="logout">Wyloguj</button>
             </div>
-            <button class="logout-btn" @click="logout">Wyloguj</button>
           </template>
           <button v-else class="login-btn" @click="login"><i class="fa-brands fa-discord"></i> Zaloguj</button>
         </div>
@@ -75,7 +74,7 @@ const mobileNavLinks = ref<HTMLUListElement | null>(null);
 const user = ref<any>(null);
 const isAdmin = ref(false);
 const avatarUrl = computed(() =>
-  user.value ? `https://cdn.discordapp.com/avatars/${user.value.id}/${user.value.avatar}.png?size=64` : ''
+  user.value ? `https://cdn.discordapp.com/avatars/${user.value.id}/${user.value.avatar}.png?size=32` : ''
 );
 
 function fetchUser() {
@@ -178,9 +177,9 @@ onMounted(() => {
 }
 
 .header .container {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 1rem 2rem;
   max-width: 1400px;
   margin: 0 auto;
@@ -292,8 +291,8 @@ onMounted(() => {
 }
 
 .auth-area.logged-in {
-  flex-direction: column;
-  align-items: flex-end;
+  flex-direction: row;
+  align-items: center;
 }
 
 .user-info {
@@ -415,7 +414,7 @@ onMounted(() => {
 
 @media (max-width: 1024px) {
   .header .container {
-    grid-template-columns: 1fr 1fr;
+    justify-content: space-between;
   }
   
   .nav-center {
