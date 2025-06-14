@@ -1,5 +1,7 @@
 <template>
-  <div class="apply-container">
+  <main class="apply-page" :style="{ backgroundImage: `url(${backgroundImageUrl})` }">
+    <div class="apply-overlay"></div>
+    <div class="apply-container">
     <h1>Złóż podanie</h1>
     <p class="intro">
       Przed wypełnieniem formularza zapoznaj się z poniższymi wskazówkami. Odpowiadaj wyczerpująco i zgodnie z zasadami roleplay. Pamiętaj, aby unikać informacji OOC w części IC.
@@ -9,27 +11,27 @@
       <h2>1. Informacje ogólne (IC)</h2>
       <label>
         Imię i nazwisko postaci
-        <input v-model="form.ic.name" required />
+        <input v-model="form.ic.name" required placeholder="Jan Kowalski" />
       </label>
       <label>
         Wiek postaci
-        <input type="number" v-model.number="form.ic.age" required />
+        <input type="number" v-model.number="form.ic.age" required placeholder="25" />
       </label>
       <label>
         Krótki opis postaci / Historia
-        <textarea v-model="form.ic.story" required></textarea>
+        <textarea v-model="form.ic.story" required placeholder="Krótka historia postaci..."></textarea>
       </label>
       <label>
         Charakter / cechy osobowości
-        <textarea v-model="form.ic.personality" required></textarea>
+        <textarea v-model="form.ic.personality" required placeholder="Opis cech charakteru..."></textarea>
       </label>
       <label>
         Umiejętności, zawód, hobby
-        <textarea v-model="form.ic.skills" required></textarea>
+        <textarea v-model="form.ic.skills" required placeholder="Np. mechanik, granie na gitarze..."></textarea>
       </label>
       <label>
         Motywacja przyjazdu do miasta
-        <textarea v-model="form.ic.motivation" required></textarea>
+        <textarea v-model="form.ic.motivation" required placeholder="Dlaczego przyjechała do miasta?"></textarea>
       </label>
 
       <!-- Sekcja 2 -->
@@ -40,14 +42,14 @@
       </label>
       <label>
         Doświadczenie w RP
-        <textarea v-model="form.ooc.experience" required></textarea>
+        <textarea v-model="form.ooc.experience" required placeholder="Twoje doświadczenie w RP..."></textarea>
       </label>
 
       <!-- Sekcja 3 -->
       <h2>3. Pytania sytuacyjne</h2>
       <div v-for="(q, index) in questions" :key="index" class="question-block">
         <p class="question">{{ q }}</p>
-        <textarea v-model="form.scenarios[index]" required></textarea>
+        <textarea v-model="form.scenarios[index]" required placeholder="Twoja odpowiedź..."></textarea>
       </div>
 
       <!-- Sekcja 4 -->
@@ -69,21 +71,24 @@
       <h2>5. Dodatkowo (opcjonalnie)</h2>
       <label>
         Link do portfolio RP
-        <input v-model="form.extra.portfolio" />
+        <input v-model="form.extra.portfolio" placeholder="URL do portfolio" />
       </label>
       <label>
         Preferowana frakcja lub rola
-        <input v-model="form.extra.faction" />
+        <input v-model="form.extra.faction" placeholder="Np. EMS, cywil..." />
       </label>
 
       <button type="submit" class="submit-btn">Wyślij podanie</button>
     </form>
     <p v-if="success" class="success-message">Dziękujemy za wysłanie podania!</p>
-  </div>
+    </div>
+  </main>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import backgroundImage from '../assets/background.jpg'
+const backgroundImageUrl = ref(backgroundImage)
 
 interface FormData {
   ic: {
@@ -197,10 +202,34 @@ async function submitForm() {
 </script>
 
 <style scoped>
+.apply-page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.apply-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1;
+}
+
 .apply-container {
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
+  position: relative;
+  z-index: 2;
 }
 
 .intro {
