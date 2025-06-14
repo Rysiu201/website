@@ -20,6 +20,17 @@ const STATUS = {
   REJECTED: 'Rozpatrzone negatywnie (Napisz nowe podanie w ciągu 24/48h)'
 };
 
+// Configurable cooldown settings
+const REAPPLY_COOLDOWN_HOURS = parseInt(
+  process.env.REAPPLY_COOLDOWN_HOURS || '24'
+);
+const EXTRA_COOLDOWN_HOURS = parseInt(
+  process.env.EXTRA_COOLDOWN_HOURS || '24'
+);
+const REJECTION_HISTORY_WINDOW_HOURS = parseInt(
+  process.env.REJECTION_HISTORY_WINDOW_HOURS || '168'
+);
+
 const DB_FILE = path.join(process.cwd(), 'database.json');
 
 function loadDb() {
@@ -32,6 +43,22 @@ function loadDb() {
 
 function saveDb(db) {
   fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2));
+}
+
+function computeReapplyAfter(history) {
+  const rejections = (history || []).filter(h => h.status === STATUS.REJECTED);
+  if (rejections.length === 0) return null;
+  const last = rejections[rejections.length - 1];
+  const prev = rejections[rejections.length - 2];
+
+  let cooldown = REAPPLY_COOLDOWN_HOURS;
+  if (
+    prev &&
+    last.timestamp - prev.timestamp < REJECTION_HISTORY_WINDOW_HOURS * 3600 * 1000
+  ) {
+    cooldown += EXTRA_COOLDOWN_HOURS;
+  }
+  return last.timestamp + cooldown * 3600 * 1000;
 }
 
 // Pool of possible scenario questions
@@ -226,7 +253,13 @@ app.get('/api/status', (req, res) => {
 
   const db = loadDb();
   const appEntry = db.applications.find(a => a.userId === req.user.id);
-  res.json({ status: appEntry ? appEntry.status : null });
+  res.json({
+    status: appEntry ? appEntry.status : null,
+    history: appEntry ? appEntry.history || [] : [],
+    reapplyAfter: appEntry ? appEntry.reapplyAfter || null : null,
+    baseCooldownHours: REAPPLY_COOLDOWN_HOURS,
+    extraCooldownHours: EXTRA_COOLDOWN_HOURS
+  });
 });
 
 // Handle application submissions
@@ -261,24 +294,90 @@ app.post('/api/apply', async (req, res) => {
   // Save application with initial status
   if (req.user) {
     const db = loadDb();
-    const existing = db.applications.find(
-      a => a.userId === req.user.id && a.status !== STATUS.REJECTED
-    );
-    if (existing) {
+    const userApps = db.applications.filter(a => a.userId === req.user.id);
+    const latest = userApps[userApps.length - 1];
+    if (latest && latest.status !== STATUS.REJECTED) {
       return res
         .status(400)
-        .json({ success: false, status: existing.status });
+        .json({ success: false, status: latest.status });
     }
-    db.applications.push({
+    if (latest && latest.status === STATUS.REJECTED) {
+      const reapplyAfter = latest.reapplyAfter || 0;
+      if (Date.now() < reapplyAfter) {
+        return res
+          .status(400)
+          .json({ success: false, status: latest.status, reapplyAfter });
+      }
+    }
+
+    const newApp = {
       id: Date.now().toString(),
       userId: req.user.id,
       data: req.body,
-      status: STATUS.SENT
-    });
+      status: STATUS.SENT,
+      history: [{ status: STATUS.SENT, timestamp: Date.now() }]
+    };
+    db.applications.push(newApp);
     saveDb(db);
   }
 
   res.json({ success: true, status: STATUS.SENT });
+});
+
+// Endpoint for administrators to update application status
+app.post('/api/admin/status', async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ success: false });
+  }
+
+  const { userId, status } = req.body || {};
+  if (!userId || !status) {
+    return res.status(400).json({ success: false });
+  }
+
+  let isAdmin = false;
+  if (process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID) {
+    try {
+      const response = await fetch(
+        `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${req.user.id}`,
+        {
+          headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` }
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        const roles = data.roles || [];
+        isAdmin =
+          roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
+          roles.includes(process.env.STAFF_ROLE_ID || '');
+      }
+    } catch (err) {
+      console.error('Failed to check admin roles', err);
+    }
+  }
+
+  if (!isAdmin) {
+    return res.status(403).json({ success: false });
+  }
+
+  const db = loadDb();
+  const appEntry = db.applications.find(a => a.userId === userId);
+  if (!appEntry) {
+    return res.status(404).json({ success: false });
+  }
+
+  appEntry.status = status;
+  appEntry.history = appEntry.history || [];
+  appEntry.history.push({ status, timestamp: Date.now() });
+
+  if (status === STATUS.REJECTED) {
+    appEntry.reapplyAfter = computeReapplyAfter(appEntry.history);
+  } else {
+    delete appEntry.reapplyAfter;
+  }
+
+  saveDb(db);
+  res.json({ success: true });
 });
 
 // Serve static files
