@@ -127,7 +127,11 @@ router.beforeEach(async (to, _from, next) => {
   if (to.path === '/apply') {
     const statusRes = await fetch('/api/status', { credentials: 'include' });
     const statusData = await statusRes.json();
-    if (statusData.status && statusData.status !== STATUS.REJECTED) {
+    if (
+      statusData.status &&
+      (statusData.status !== STATUS.REJECTED ||
+        (statusData.reapplyAfter && Date.now() < statusData.reapplyAfter))
+    ) {
       return next('/status');
     }
   }
