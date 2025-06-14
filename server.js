@@ -6,6 +6,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import fs from 'fs';
+import config from './config.js';
 
 dotenv.config();
 
@@ -20,16 +21,13 @@ const STATUS = {
   REJECTED: 'Rozpatrzone negatywnie (Napisz nowe podanie w ciągu 24/48h)'
 };
 
-// Configurable cooldown settings
-const REAPPLY_COOLDOWN_HOURS = parseInt(
-  process.env.REAPPLY_COOLDOWN_HOURS || '24'
-);
-const EXTRA_COOLDOWN_HOURS = parseInt(
-  process.env.EXTRA_COOLDOWN_HOURS || '24'
-);
-const REJECTION_HISTORY_WINDOW_HOURS = parseInt(
-  process.env.REJECTION_HISTORY_WINDOW_HOURS || '168'
-);
+// Configurable cooldown settings loaded from config.js
+const {
+  REAPPLY_COOLDOWN_HOURS,
+  EXTRA_COOLDOWN_HOURS,
+  REJECTION_HISTORY_WINDOW_HOURS,
+  REJECTIONS_BEFORE_EXTRA_COOLDOWN
+} = config;
 
 const DB_FILE = path.join(process.cwd(), 'database.json');
 
@@ -49,13 +47,12 @@ function computeReapplyAfter(history) {
   const rejections = (history || []).filter(h => h.status === STATUS.REJECTED);
   if (rejections.length === 0) return null;
   const last = rejections[rejections.length - 1];
-  const prev = rejections[rejections.length - 2];
+  const recent = rejections.filter(
+    r => last.timestamp - r.timestamp <= REJECTION_HISTORY_WINDOW_HOURS * 3600 * 1000
+  );
 
   let cooldown = REAPPLY_COOLDOWN_HOURS;
-  if (
-    prev &&
-    last.timestamp - prev.timestamp < REJECTION_HISTORY_WINDOW_HOURS * 3600 * 1000
-  ) {
+  if (recent.length >= REJECTIONS_BEFORE_EXTRA_COOLDOWN) {
     cooldown += EXTRA_COOLDOWN_HOURS;
   }
   return last.timestamp + cooldown * 3600 * 1000;
@@ -258,7 +255,16 @@ app.get('/api/status', (req, res) => {
     history: appEntry ? appEntry.history || [] : [],
     reapplyAfter: appEntry ? appEntry.reapplyAfter || null : null,
     baseCooldownHours: REAPPLY_COOLDOWN_HOURS,
-    extraCooldownHours: EXTRA_COOLDOWN_HOURS
+    extraCooldownHours: EXTRA_COOLDOWN_HOURS,
+    recentRejections: appEntry
+      ? appEntry.history.filter(
+          h =>
+            h.status === STATUS.REJECTED &&
+            Date.now() - h.timestamp <=
+              REJECTION_HISTORY_WINDOW_HOURS * 3600 * 1000
+        ).length
+      : 0,
+    rejectionsBeforeExtra: REJECTIONS_BEFORE_EXTRA_COOLDOWN
   });
 });
 
