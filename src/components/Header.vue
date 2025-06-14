@@ -302,7 +302,6 @@ onMounted(() => {
   gap: 0.5rem;
 }
 
-
 .login-btn,
 .logout-btn {
   padding: 0.4rem 0.8rem;
