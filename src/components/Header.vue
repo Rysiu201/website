@@ -7,6 +7,7 @@
       </div>
       <nav class="nav-center">
         <ul class="nav-links">
+          <li v-if="isAdmin"><router-link to="/admin" class="nav-link" active-class="active"><i class="fa-solid fa-screwdriver-wrench"></i> Administrowanie</router-link></li>
           <li><router-link to="/" class="nav-link" active-class="active"><i class="fa-solid fa-house"></i> Strona Domowa</router-link></li>
           <li><router-link to="/features" class="nav-link" active-class="active"><i class="fa-solid fa-server"></i> Co oferujemy</router-link></li>
           <li><router-link to="/staff" class="nav-link" active-class="active"><i class="fa-solid fa-users"></i> Zespół</router-link></li>
@@ -270,17 +271,6 @@ onMounted(() => {
   flex-direction: column;
   align-items: flex-end;
 }
-
-.admin-link {
-  color: #e0e0e0;
-  font-size: 0.9rem;
-  text-decoration: none;
-}
-
-.admin-link:hover {
-  text-decoration: underline;
-}
-
 
 .login-btn,
 .logout-btn {
