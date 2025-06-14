@@ -17,7 +17,6 @@
       </div>
       <nav class="nav-center">
         <ul class="nav-links">
-          <li v-if="isAdmin"><router-link to="/admin" class="nav-link" active-class="active"><i class="fa-solid fa-screwdriver-wrench"></i> Administrowanie</router-link></li>
           <li><router-link to="/" class="nav-link" active-class="active"><i class="fa-solid fa-house"></i> Strona Domowa</router-link></li>
           <li><router-link to="/features" class="nav-link" active-class="active"><i class="fa-solid fa-server"></i> Co oferujemy</router-link></li>
           <li><router-link to="/staff" class="nav-link" active-class="active"><i class="fa-solid fa-users"></i> Zespół</router-link></li>
@@ -35,7 +34,6 @@
           <template v-if="user">
             <img :src="avatarUrl" alt="avatar" class="avatar" />
             <span class="username">{{ user.username }}</span>
-            <router-link v-if="isAdmin" to="/admin" class="admin-link">Administrowanie</router-link>
             <button class="logout-btn" @click="logout">Wyloguj</button>
           </template>
           <button v-else class="login-btn" @click="login"><i class="fa-brands fa-discord"></i> Zaloguj</button>
@@ -55,7 +53,6 @@
         <li><router-link to="/rules" @click="closeMenu"><i class="fa-solid fa-file-contract"></i> Zasady</router-link></li>
         <li><router-link to="/join" @click="closeMenu"><i class="fa-solid fa-book"></i> Jak dołączyć</router-link></li>
         <li><router-link to="/apply" @click="closeMenu"><i class="fa-solid fa-file-signature"></i> Złóż podanie</router-link></li>
-        <li v-if="isAdmin"><router-link to="/admin" @click="closeMenu"><i class="fa-solid fa-screwdriver-wrench"></i> Administrowanie</router-link></li>
       </ul>
       <div class="mobile-social-icons">
         <a href="#" class="social-icon"><i class="fa-brands fa-discord"></i></a>
