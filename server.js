@@ -8,6 +8,63 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+// In-memory storage of question sets assigned to users
+const userQuestions = new Map();
+
+// Pool of possible scenario questions
+const allQuestions = [
+  'Co zrobisz, jeśli zobaczysz gracza łamiącego zasady roleplayu (np. powergaming)?',
+  'Jak zareagujesz, gdy Twój znajomy z OOC przekaże Ci informacje IC?',
+  'Podaj przykład, jak prawidłowo użyć komendy /me w sytuacji przeszukania.',
+  'Co wpiszesz w /do, gdy Twoja postać zostaje zatrzymana do kontroli przez policję?',
+  'Twoja postać została postrzelona – jak odgrywasz taką sytuację IC?',
+  'Co oznacza skrót NVL i jak rozumiesz jego zastosowanie?',
+  'Gracz ucieka z miejsca zdarzenia po wypadku – jak powinieneś się zachować jako świadek?',
+  'Jak wygląda różnica między IC a OOC i dlaczego ważne jest ich oddzielenie?',
+  'Kto podejmuje decyzję w sytuacji konfliktowej – IC czy administracja OOC?',
+  'Czy Twoja postać może wiedzieć, kto ją zabił, jeśli została zastrzelona z zaskoczenia? Uzasadnij.',
+  'Gracz używa voice chatu, by przekazać coś spoza gry – jak powinieneś zareagować?',
+  'Czy możesz napisać na czacie OOC "dlaczego mnie zabiłeś?"? Jeśli nie, to gdzie to zgłosić?',
+  'Twoja postać traci przytomność – jakie działania podejmujesz jako gracz?',
+  'Podaj przykład zachowania, które uznajesz za powergaming.',
+  'Czy Twoja postać może znać lokalizację kogoś, kogo nie widziała od kilku dni? Wyjaśnij.',
+  'Masz 3 osoby celujące do Ciebie z broni – co robisz i jak to odgrywasz?',
+  'Czy możesz zmienić postać i kontynuować zemstę na kimś, kto zabił Twoją poprzednią? (nawiązanie do new life rule)',
+  'Jakie są konsekwencje odgrywania scen, które są niezgodne z lore/realizmem serwera?',
+  'Podaj przykład poprawnego odgrywania sceny handlu narkotykami.',
+  'Czy masz obowiązek zapisać swoją postać po śmierci permanentnej? Co to oznacza?',
+  'Czy Twoja postać może mieć wspomnienia po śmierci permanentnej?',
+  'Jakie znasz zasady związane z porwaniami innych graczy?',
+  'Czy można napaść na LSPD bez zaplanowanej akcji IC? Dlaczego tak/nie?',
+  'Czy można wjechać na teren frakcji bez uzasadnienia IC?',
+  'Podaj przykład metagamingu w rozmowie głosowej.',
+  'Czy Twoja postać może wiedzieć, że ktoś handluje narkotykami, jeśli nikt jej tego nie powiedział IC?',
+  'W jaki sposób zgłaszasz łamanie zasad, jeśli nie chcesz eskalować konfliktu?',
+  'Podczas RP ktoś używa obraźliwego języka OOC – co robisz?',
+  'Twoja postać jest świadkiem napadu – czy możesz to od razu zgłosić IC? Jak?',
+  'Czy Twoja postać może znać cenę broni, jeśli nie była w sklepie IC?',
+  'Podaj przykład łamania zasady Fail RP.',
+  'Co oznacza skrót VDM?',
+  'Czy Twoja postać może rozpoznać kogoś tylko po ubraniu i masce?',
+  'Czy odgrywanie choroby psychicznej wymaga zgody administracji?',
+  'Jakie zachowania są niedozwolone w scenach z udziałem medyków?',
+  'Czy możesz rozłączyć się z gry w trakcie aresztowania? Co jeśli to przypadek?',
+  'Masz 2 postacie – czy mogą się znać lub współpracować?',
+  'Jakich działań nie wolno podejmować, by uniknąć konsekwencji IC?',
+  'Czy możesz przywrócić swoją postać po permie, jeśli „umarła przypadkiem”?',
+  'Co robisz, jeśli przez przypadek złamiesz zasadę, np. przypadkowy metagaming?',
+  'Podaj przykład dobrze rozegranego napadu IC.',
+  'W jaki sposób Twoja postać może poznać członka gangu?',
+  'Czy możesz przeprowadzić transakcję bronią przy komendzie LSPD?',
+  'Jak należy odgrywać użycie broni palnej w miejscu publicznym?',
+  'Czy zemsta OOC na kimś IC jest dozwolona?',
+  'Czy można stosować szantaż OOC? Jeśli nie – co robić, gdy się to zdarzy?',
+  'Twoja postać została pobita, ale nie zgłosiła tego – czy może później się mścić IC?',
+  'Czy każda postać musi mieć unikalną historię? Dlaczego?',
+  'Jaki wpływ ma realność RP na immersję graczy?',
+  'Czy możesz prowadzić grupę przestępczą bez zgody administracji?'
+];
+
 // Get the directory path of the current file
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -57,7 +114,6 @@ if (discordEnabled) {
       }
     )
   );
-
   app.get('/auth/discord', passport.authenticate('discord'));
 
   app.get(
@@ -121,6 +177,22 @@ app.get('/api/user', async (req, res) => {
   }
 
   res.json({ user, roles, isAdmin });
+});
+
+// Provide a consistent set of questions for each authenticated user
+app.get('/api/questions', (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ questions: [] });
+  }
+
+  // Check if the user already has questions assigned
+  if (!userQuestions.has(req.user.id)) {
+    // Shuffle and assign 5 questions
+    const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
+    userQuestions.set(req.user.id, shuffled.slice(0, 5));
+  }
+
+  res.json({ questions: userQuestions.get(req.user.id) });
 });
 
 // Handle application submissions
