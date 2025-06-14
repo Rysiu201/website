@@ -32,8 +32,10 @@
         </div>
         <div class="auth-area" :class="{ 'logged-in': user }">
           <template v-if="user">
-            <img :src="avatarUrl" alt="avatar" class="avatar" />
-            <span class="username">{{ user.username }}</span>
+            <div class="user-info">
+              <span class="username">{{ user.username }}</span>
+              <img :src="avatarUrl" alt="avatar" class="avatar" />
+            </div>
             <button class="logout-btn" @click="logout">Wyloguj</button>
           </template>
           <button v-else class="login-btn" @click="login"><i class="fa-brands fa-discord"></i> Zaloguj</button>
@@ -53,6 +55,7 @@
         <li><router-link to="/rules" @click="closeMenu"><i class="fa-solid fa-file-contract"></i> Zasady</router-link></li>
         <li><router-link to="/join" @click="closeMenu"><i class="fa-solid fa-book"></i> Jak dołączyć</router-link></li>
         <li><router-link to="/apply" @click="closeMenu"><i class="fa-solid fa-file-signature"></i> Złóż podanie</router-link></li>
+        <li v-if="isAdmin"><router-link to="/admin" @click="closeMenu"><i class="fa-solid fa-screwdriver-wrench"></i> Administrowanie</router-link></li>
       </ul>
       <div class="mobile-social-icons">
         <a href="#" class="social-icon"><i class="fa-brands fa-discord"></i></a>
@@ -291,6 +294,12 @@ onMounted(() => {
 .auth-area.logged-in {
   flex-direction: column;
   align-items: flex-end;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .login-btn,
