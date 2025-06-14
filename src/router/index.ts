@@ -68,7 +68,6 @@ const router = createRouter({
         title: 'Złóż podanie - AetherRP',
         description: 'Wypełnij formularz, aby dołączyć do zespołu AetherRP.',
         keywords: 'podanie, rekrutacja, aetherrp',
-        requireNoRoles: true,
         requiresAuth: true
       }
     },
@@ -102,7 +101,7 @@ router.beforeEach(async (to, _from, next) => {
   }
 
   let userData: any = null;
-  if (to.meta.requiresAuth || to.meta.requireNoRoles) {
+  if (to.meta.requiresAuth) {
     const res = await fetch('/api/user', { credentials: 'include' });
     userData = await res.json();
   }
@@ -111,13 +110,8 @@ router.beforeEach(async (to, _from, next) => {
     return next('/');
   }
 
-  if (to.meta.requireNoRoles) {
-    if (!userData || !userData.user || (userData.roles && userData.roles.length > 0)) {
-      return next('/');
-    }
-  }
-
   next();
 });
 
 export default router
+
