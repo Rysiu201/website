@@ -114,11 +114,6 @@ if (discordEnabled) {
       }
     )
   );
-} else {
-  console.warn('Discord OAuth not configured, authentication disabled');
-}
-
-if (discordEnabled) {
   app.get('/auth/discord', passport.authenticate('discord'));
 
   app.get(
@@ -129,6 +124,7 @@ if (discordEnabled) {
     }
   );
 } else {
+  console.warn('Discord OAuth not configured, authentication disabled');
   app.get('/auth/discord', (_req, res) => {
     res.status(501).send('OAuth disabled');
   });
