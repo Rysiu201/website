@@ -156,6 +156,13 @@ onMounted(async () => {
     form.value.ooc.discord = `${data.user.username}#${data.user.id}`
   }
 
+  const statusRes = await fetch('/api/status', { credentials: 'include' })
+  const statusData = await statusRes.json()
+  if (statusData.status && statusData.status !== 'Negatywnie (Napisz nowe podanie w ciągu 24/48h)') {
+    router.push('/status')
+    return
+  }
+
   // Odbierz przypisane do użytkownika pytania
   const qRes = await fetch('/api/questions', { credentials: 'include' })
   const qData = await qRes.json()
@@ -174,6 +181,8 @@ async function submitForm() {
   })
   if (response.ok) {
     success.value = true
+    router.push('/status')
+  } else if (response.status === 400) {
     router.push('/status')
   }
 }

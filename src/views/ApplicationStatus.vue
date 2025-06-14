@@ -1,6 +1,6 @@
 <template>
   <main class="status-page">
-    <h1>Twoje podanie zostało Wysłane</h1>
+    <h1>{{ headerText }}</h1>
     <h1>Obecny status twojego zgłoszenia: <b><span :class="statusClass">{{ status }}</span></b></h1>
     <p v-if="status === statuses.APPROVED" class="approved-msg">
       Twoje podanie zostało rozpatrzone {{ status }}.
@@ -22,12 +22,16 @@ const statuses = {
 }
 
 const status = ref('')
+const headerText = ref('Twoje podanie zostało Wysłane')
 const discordLink = 'https://discord.gg/your-waiting-room'
 
 onMounted(async () => {
   const res = await fetch('/api/status', { credentials: 'include' })
   const data = await res.json()
   status.value = data.status || ''
+  if (status.value === statuses.APPROVED) {
+    headerText.value = 'Posiadasz już zaakceptowane podanie'
+  }
 })
 
 const statusClass = computed(() => {

@@ -8,6 +8,10 @@ import Apply from '../views/Apply.vue'
 import Admin from '../views/Admin.vue'
 import ApplicationStatus from '../views/ApplicationStatus.vue'
 
+const STATUS = {
+  REJECTED: 'Rozpatrzone negatywnie (Napisz nowe podanie w ciągu 24/48h)'
+}
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -118,6 +122,14 @@ router.beforeEach(async (to, _from, next) => {
 
   if (to.meta.requiresAuth && (!userData || !userData.user)) {
     return next('/');
+  }
+
+  if (to.path === '/apply') {
+    const statusRes = await fetch('/api/status', { credentials: 'include' });
+    const statusData = await statusRes.json();
+    if (statusData.status && statusData.status !== STATUS.REJECTED) {
+      return next('/status');
+    }
   }
 
   next();
