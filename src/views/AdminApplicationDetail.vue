@@ -4,7 +4,7 @@
       <i class="fa-solid fa-arrow-left"></i> Powrót
     </RouterLink>
     <div v-if="app" class="detail-container">
-      <h1 class="detail-title">Podanie użytkownika {{ cleanDiscord(app.data.ooc.discord) }}</h1>
+      <h1 class="detail-title">Podanie użytkownika <span class="logo-accent discord-name">{{ cleanDiscord(app.data.ooc.discord) }}</span></h1>
       <table class="app-table">
         <tr>
           <th>Status</th>
@@ -13,6 +13,10 @@
         <tr>
           <th>Data zgłoszenia</th>
           <td>{{ formatDate(ts) }}</td>
+        </tr>
+        <tr v-if="decisionInfo">
+          <th>Decyzja</th>
+          <td>{{ decisionInfo }}</td>
         </tr>
       </table>
       <h2>Informacje IC</h2>
@@ -39,16 +43,32 @@
       </table>
       <h2>Pytania sytuacyjne</h2>
       <table class="app-table">
-        <tr v-for="(qa, idx) in scenarioPairs" :key="idx">
-          <th>{{ qa.question }}</th>
-          <td>{{ qa.answer }}</td>
-        </tr>
+        <template v-for="(qa, idx) in scenarioPairs" :key="idx">
+          <tr>
+            <th colspan="2" class="question-cell">{{ qa.question }}</th>
+          </tr>
+          <tr>
+            <td colspan="2" class="answer-cell">{{ qa.answer }}</td>
+          </tr>
+        </template>
       </table>
       <h2>Dodatkowo</h2>
       <table class="app-table">
         <tr><th>Portfolio</th><td>{{ app.data.extra.portfolio }}</td></tr>
         <tr><th>Frakcja</th><td>{{ app.data.extra.faction }}</td></tr>
       </table>
+      <div class="decision-box">
+        <label>
+          Decyzja:
+          <select v-model="selectedStatus">
+            <option :value="app.status">{{ app.status }}</option>
+            <option v-for="(label, key) in decisionOptions" :key="key" :value="label">
+              {{ label }}
+            </option>
+          </select>
+        </label>
+        <button @click="updateStatus" class="update-btn">Zmień status</button>
+      </div>
     </div>
     <p v-else>Ładowanie...</p>
   </main>
@@ -60,19 +80,48 @@ import { useRoute, RouterLink } from 'vue-router'
 
 interface Application {
   id: string
+  userId: string
   status: string
   data: any
-  history?: { status: string; timestamp: number }[]
+  history?: { status: string; timestamp: number; by?: string }[]
 }
 
 const route = useRoute()
 const app = ref<Application | null>(null)
+const currentUser = ref<any>(null)
+const selectedStatus = ref('')
+
+const statuses = {
+  SENT: 'Wysłane',
+  PENDING: 'Przyjęte, oczekuje na rozpatrzenie',
+  IN_REVIEW: 'W trakcie rozpatrywania',
+  APPROVED: 'Pozytywnie',
+  REJECTED: 'Negatywnie (Napisz nowe podanie w ciągu 24/48h)'
+}
+
+const decisionOptions = {
+  IN_REVIEW: statuses.IN_REVIEW,
+  APPROVED: statuses.APPROVED,
+  REJECTED: statuses.REJECTED
+}
 
 onMounted(async () => {
+  const userRes = await fetch('/api/user', { credentials: 'include' })
+  if (userRes.ok) {
+    const userData = await userRes.json()
+    currentUser.value = userData.user
+  }
   const res = await fetch(`/api/admin/applications/${route.params.id}`, { credentials: 'include' })
   if (res.ok) {
     const data = await res.json()
     app.value = data.application || null
+    if (app.value) {
+      selectedStatus.value = app.value.status
+      if (app.value.status === statuses.SENT) {
+        await updateStatusInternal(statuses.PENDING)
+        selectedStatus.value = statuses.PENDING
+      }
+    }
   }
 })
 
@@ -114,6 +163,40 @@ function formatDate(t: number) {
 function cleanDiscord(d: string) {
   return d.split('#')[0]
 }
+
+async function updateStatusInternal(newStatus: string) {
+  if (!app.value) return
+  await fetch('/api/admin/status', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ userId: app.value.userId, status: newStatus })
+  })
+  app.value.status = newStatus
+  if (!app.value.history) app.value.history = []
+  app.value.history.push({
+    status: newStatus,
+    timestamp: Date.now(),
+    by: currentUser.value?.username || 'Admin'
+  })
+}
+
+function updateStatus() {
+  if (!selectedStatus.value || !app.value) return
+  if (selectedStatus.value !== app.value.status) {
+    updateStatusInternal(selectedStatus.value)
+  }
+}
+
+const decisionInfo = computed(() => {
+  if (!app.value || !app.value.history) return ''
+  const latest = [...app.value.history]
+    .reverse()
+    .find(h => h.status === statuses.APPROVED || h.status === statuses.REJECTED)
+  if (!latest) return ''
+  const date = new Date(latest.timestamp).toLocaleString()
+  return `${latest.status} przez ${latest.by || 'Admin'} - ${date}`
+})
 </script>
 
 <style scoped>
@@ -139,10 +222,7 @@ function cleanDiscord(d: string) {
 }
 
 .status-text {
-  background: linear-gradient(90deg, #8A2BE2, #00FFFF);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-weight: bold;
 }
 
 .detail-container {
@@ -154,12 +234,15 @@ function cleanDiscord(d: string) {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.05);
 }
 .app-table th,
 .app-table td {
   border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 0.5rem;
   vertical-align: top;
+  word-wrap: break-word;
+  white-space: pre-wrap;
 }
 .gray {
   color: gray;
@@ -175,5 +258,37 @@ function cleanDiscord(d: string) {
 }
 .red {
   color: #dd0000;
+}
+
+.decision-box {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.update-btn {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid transparent;
+  background: var(--gradient-accent);
+  color: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.back-link {
+  border: 1px solid transparent;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  color: #fff;
+  border-image: var(--gradient-accent) 1;
+}
+
+.question-cell {
+  font-weight: 600;
+}
+
+.answer-cell {
+  white-space: pre-wrap;
 }
 </style>
