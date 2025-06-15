@@ -175,11 +175,22 @@ async function updateStatusInternal(newStatus: string) {
   })
   app.value.status = newStatus
   if (!app.value.history) app.value.history = []
-  app.value.history.push({
+  const idx = app.value.history.findIndex(h => h.status === newStatus)
+  const entry = {
     status: newStatus,
     timestamp: Date.now(),
     by: currentUser.value?.username || 'Admin'
-  })
+  }
+  if (idx >= 0) {
+    app.value.history[idx] = entry
+  } else {
+    app.value.history.push(entry)
+  }
+  if (newStatus === statuses.APPROVED) {
+    app.value.history = app.value.history.filter(
+      h => h.status !== statuses.REJECTED
+    )
+  }
 }
 
 function updateStatus() {
