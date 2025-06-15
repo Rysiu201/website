@@ -3,10 +3,14 @@
     <h1>Panel Administracyjny</h1>
     <div class="admin-layout">
       <div class="sections">
-        <div class="admin-section" v-if="canViewWhitelist">
+        <RouterLink
+          class="admin-section"
+          v-if="canViewWhitelist"
+          to="/admin/applications"
+        >
           <i class="fa-solid fa-clipboard-check"></i>
           <span>Sprawdź podania na WhiteListe</span>
-        </div>
+        </RouterLink>
         <div class="admin-section" v-if="canViewWhitelistChecker">
           <i class="fa-solid fa-user-check"></i>
           <span>Sprawdź podania na WhiteListCheckera</span>
@@ -33,6 +37,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
+import { RouterLink } from 'vue-router'
 
 const roles = ref<string[]>([])
 

@@ -7,6 +7,7 @@ import JoinUs from '../views/Join.vue'
 import Apply from '../views/Apply.vue'
 import Admin from '../views/Admin.vue'
 import ApplicationStatus from '../views/ApplicationStatus.vue'
+import AdminApplications from '../views/AdminApplications.vue'
 
 const STATUS = {
   REJECTED: 'Rozpatrzone negatywnie (Napisz nowe podanie w ciągu 24/48h)'
@@ -93,6 +94,15 @@ const router = createRouter({
         title: 'Panel Administracyjny - AetherRP',
         description: 'Panel do zarządzania serwerem.',
         keywords: 'admin, panel'
+      }
+    },
+    {
+      path: '/admin/applications',
+      name: 'applications',
+      component: AdminApplications,
+      meta: {
+        title: 'Lista Podań - AetherRP',
+        requiresAuth: true
       }
     }
   ]
