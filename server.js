@@ -17,8 +17,8 @@ const STATUS = {
   SENT: 'Wysłane',
   PENDING: 'Przyjęte, oczekuje na rozpatrzenie',
   IN_REVIEW: 'W trakcie rozpatrywania',
-  APPROVED: 'Rozpatrzone Pozytywnie',
-  REJECTED: 'Rozpatrzone negatywnie (Napisz nowe podanie w ciągu 24/48h)'
+  APPROVED: 'Pozytywnie',
+  REJECTED: 'Negatywnie'
 };
 
 // Configurable cooldown settings loaded from config.js
@@ -321,7 +321,13 @@ app.post('/api/apply', async (req, res) => {
       userId: req.user.id,
       data: req.body,
       status: STATUS.SENT,
-      history: [{ status: STATUS.SENT, timestamp: Date.now() }]
+      history: [
+        {
+          status: STATUS.SENT,
+          timestamp: Date.now(),
+          by: req.user.username
+        }
+      ]
     };
     db.applications.push(newApp);
     saveDb(db);
@@ -374,7 +380,7 @@ app.post('/api/admin/status', async (req, res) => {
 
   appEntry.status = status;
   appEntry.history = appEntry.history || [];
-  appEntry.history.push({ status, timestamp: Date.now() });
+  appEntry.history.push({ status, timestamp: Date.now(), by: req.user.username });
 
   if (status === STATUS.REJECTED) {
     appEntry.reapplyAfter = computeReapplyAfter(appEntry.history);

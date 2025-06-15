@@ -17,9 +17,9 @@
           <p class="app-time"><b>Data:</b> {{ formatDate(app.timestamp) }}</p>
           <p class="app-status"><b>Status:</b> <span :class="['status-text', statusClass(app.status)]">{{ app.status }}</span></p>
           <p class="app-number"><b>Numer:</b> {{ app.number }}</p>
-          <RouterLink :to="`/admin/applications/${app.id}`" class="preview-btn">
+          <button class="preview-btn" @click="openDetail(app)">
             <i class="fa-solid fa-eye"></i> Podgląd
-          </RouterLink>
+          </button>
         </div>
       </div>
     </div>
@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { RouterLink } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 interface Application {
   id: string
@@ -40,6 +40,7 @@ interface Application {
 }
 
 const applications = ref<Application[]>([])
+const router = useRouter()
 
 onMounted(async () => {
   const res = await fetch('/api/admin/applications', {
@@ -92,12 +93,27 @@ function statusClass(status: string) {
     case statuses.IN_REVIEW:
       return 'blue'
     case statuses.APPROVED:
+    case 'Rozpatrzone Pozytywnie':
       return 'green'
     case statuses.REJECTED:
+    case 'Rozpatrzone negatywnie':
       return 'red'
     default:
       return ''
   }
+}
+
+async function openDetail(app: Application) {
+  if (app.status === statuses.SENT) {
+    await fetch('/api/admin/status', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ userId: app.userId, status: statuses.PENDING })
+    })
+    app.status = statuses.PENDING
+  }
+  router.push(`/admin/applications/${app.id}`)
 }
 </script>
 
@@ -156,6 +172,8 @@ function statusClass(status: string) {
   padding: 0.75rem;
   margin-bottom: 0.75rem;
   font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .app-card p {
@@ -163,10 +181,7 @@ function statusClass(status: string) {
 }
 
 .status-text {
-  background: linear-gradient(90deg, #8A2BE2, #00FFFF);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-weight: bold;
 }
 .gray {
   color: gray;
@@ -187,14 +202,16 @@ function statusClass(status: string) {
 .preview-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.3rem;
-  margin-top: 0.4rem;
+  margin-top: auto;
   font-size: 0.85rem;
   color: #fff;
   background: rgba(138, 43, 226, 0.3);
   padding: 0.3rem 0.6rem;
   border-radius: 6px;
   transition: background 0.2s ease;
+  align-self: center;
 }
 
 .preview-btn:hover {
