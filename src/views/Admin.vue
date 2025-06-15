@@ -1,21 +1,31 @@
 <template>
   <main class="admin-page">
     <h1>Panel Administracyjny</h1>
-    <div class="sections">
-      <div class="admin-section" v-if="canViewWhitelist">
-        <h2>Sprawdź podania na WhiteListe</h2>
+    <div class="admin-layout">
+      <div class="sections">
+        <div class="admin-section" v-if="canViewWhitelist">
+          <i class="fa-solid fa-clipboard-check"></i>
+          <span>Sprawdź podania na WhiteListe</span>
+        </div>
+        <div class="admin-section" v-if="canViewWhitelistChecker">
+          <i class="fa-solid fa-user-check"></i>
+          <span>Sprawdź podania na WhiteListCheckera</span>
+        </div>
+        <div class="admin-section" v-if="canViewModerator">
+          <i class="fa-solid fa-shield"></i>
+          <span>Sprawdź podania na Moderatora</span>
+        </div>
+        <div class="admin-section" v-if="canViewAdministrator">
+          <i class="fa-solid fa-user-shield"></i>
+          <span>Sprawdź podania na Administratora</span>
+        </div>
+        <div class="admin-section" v-if="canViewDeveloper">
+          <i class="fa-solid fa-code"></i>
+          <span>Sprawdź podania na Developera</span>
+        </div>
       </div>
-      <div class="admin-section" v-if="canViewWhitelistChecker">
-        <h2>Sprawdź podania na WhiteListCheckera</h2>
-      </div>
-      <div class="admin-section" v-if="canViewModerator">
-        <h2>Sprawdź podania na Moderatora</h2>
-      </div>
-      <div class="admin-section" v-if="canViewAdministrator">
-        <h2>Sprawdź podania na Administratora</h2>
-      </div>
-      <div class="admin-section" v-if="canViewDeveloper">
-        <h2>Sprawdź podania na Developera</h2>
+      <div class="admin-extra">
+        <!-- Tu w przyszłości pojawią się dodatkowe funkcje -->
       </div>
     </div>
   </main>
@@ -83,31 +93,57 @@ const canViewDeveloper = computed(
 <style scoped>
 .admin-page {
   padding: 4rem 2rem;
-  text-align: center;
   min-height: 100vh;
-  background: #0a0a0a;
+  background: linear-gradient(135deg, #1b1032 0%, #0a0a1a 100%);
   color: #fff;
 }
 
+.admin-page h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: var(--light);
+}
+
+.admin-layout {
+  display: flex;
+  gap: 2rem;
+  max-width: 1200px;
+  margin-top: 2rem;
+}
+
 .sections {
-  max-width: 700px;
-  margin: 2rem auto 0;
+  width: 40%;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
 .admin-section {
-  padding: 1.5rem;
-  border-radius: 8px;
-  background: rgba(138, 43, 226, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  background: rgba(138, 43, 226, 0.15);
   border: 1px solid rgba(138, 43, 226, 0.3);
   box-shadow: 0 4px 20px rgba(138, 43, 226, 0.2);
-  text-align: left;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
-.admin-section h2 {
+.admin-section:hover {
+  background: rgba(138, 43, 226, 0.25);
+}
+
+.admin-section i {
   color: var(--primary);
-  margin: 0;
+}
+
+.admin-section span {
+  color: var(--light);
+}
+
+.admin-extra {
+  flex: 1;
 }
 </style>
