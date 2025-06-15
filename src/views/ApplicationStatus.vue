@@ -73,7 +73,7 @@ const statuses = {
   PENDING: 'Przyjęte, oczekuje na rozpatrzenie',
   IN_REVIEW: 'W trakcie rozpatrywania',
   APPROVED: 'Pozytywnie',
-  REJECTED: 'Negatywnie (Napisz nowe podanie w ciągu 24/48h)'
+  REJECTED: 'Negatywnie'
 }
 
 const joinSteps = ref([
@@ -186,6 +186,8 @@ const statusClass = computed(() => {
     case statuses.APPROVED:
       return 'green'
     case statuses.REJECTED:
+    case 'Rozpatrzone negatywnie':
+    case 'Negatywnie (Napisz nowe podanie w ciągu 24/48h)':
       return 'red'
     default:
       return ''

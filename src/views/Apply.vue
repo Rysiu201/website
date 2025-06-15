@@ -163,7 +163,7 @@ onMounted(async () => {
   const statusData = await statusRes.json()
   if (
     statusData.status &&
-    (statusData.status !== 'Negatywnie (Napisz nowe podanie w ciągu 24/48h)' ||
+    (statusData.status !== 'Negatywnie' ||
       (statusData.reapplyAfter && Date.now() < statusData.reapplyAfter))
   ) {
     router.push('/status')

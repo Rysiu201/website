@@ -11,7 +11,7 @@ import AdminApplications from '../views/AdminApplications.vue'
 import AdminApplicationDetail from '../views/AdminApplicationDetail.vue'
 
 const STATUS = {
-  REJECTED: 'Rozpatrzone negatywnie (Napisz nowe podanie w ciągu 24/48h)'
+  REJECTED: 'Negatywnie'
 }
 
 const router = createRouter({
