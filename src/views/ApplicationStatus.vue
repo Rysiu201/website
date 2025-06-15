@@ -13,7 +13,7 @@
         i zgłoś się w celu dalszej rekrutacji.
       </p>
       <div v-if="status === statuses.APPROVED" class="next-steps">
-        <h2>Dalsze kroki</h2>
+        <h2><span class="logo-accent">Dalsze kroki</span></h2>
         <div class="steps-grid">
           <div v-for="step in joinSteps" :key="step.id" class="step-card">
             <div class="step-number">{{ step.id }}</div>
@@ -22,9 +22,13 @@
             </div>
             <h3 class="step-title">{{ step.title }}</h3>
             <p class="step-description">{{ step.description }}</p>
-            <a :href="step.link" class="step-button"
-              >Czytaj więcej <i class="fa-solid fa-arrow-right"></i
-            ></a>
+            <a
+              v-if="step.link"
+              class="step-button"
+              :href="step.link"
+            >
+              Kliknij tutaj!
+            </a>
           </div>
         </div>
       </div>
@@ -75,34 +79,32 @@ const statuses = {
 const joinSteps = ref([
   {
     id: 1,
-    title: 'Dołącz na Discord',
+    title: 'Wskakuj na kanał  🎢Kolejka',
     description:
-      'Połącz się z naszą społecznością i otrzymuj najnowsze informacje na Discordzie.',
+      'Dużo już nie zostało! Oczekuj na godziny przepytywania i dołącz na kanał 🎢Kolejka.',
     icon: 'fa-brands fa-discord',
-    link: '#'
+    link: 'https://discord.com/channels/1370536825638355154/1370545312527286405'
   },
   {
     id: 2,
-    title: 'Stwórz Swoją Postać',
+    title: 'Aktywne Godziny Przepytywania',
     description:
-      'Skorzystaj z poradnika tworzenia postaci i przygotuj swoją tożsamość na serwerze.',
-    icon: 'fa-solid fa-user-plus',
-    link: '#'
+      'W aktywnych godzinach Admin sam przeniesie Cię na kanał do przepytywania.',
+    icon: 'fa-brands fa-discord'
   },
   {
     id: 3,
-    title: 'Przeczytaj Zasady',
+    title: 'Przeczytaj Zasady i przypomnij Sobie historie postaci',
     description:
-      'Zapoznaj się z regulaminem serwera, by zapewnić sobie i innym dobrą rozgrywkę.',
-    icon: 'fa-solid fa-book',
-    link: '#'
+      'Przypomnij Sobie zasady oraz Historię postaci, bo z tego będziesz pytany/a.',
+    icon: 'fa-solid fa-book'
   },
   {
     id: 4,
-    title: 'Połącz się z Serwerem',
-    description: 'Użyj klienta FiveM i danych z Discorda, aby wejść na nasz serwer.',
+    title: 'Przejdź Rozmowę Rekrutacyjną',
+    description: 'Po pozytywnym przejściu rozmowy zostało Ci już tylko połączenie się z serwerem!',
     icon: 'fa-solid fa-server',
-    link: '#'
+    link: '/join'
   }
 ])
 
