@@ -415,6 +415,12 @@ app.post('/api/admin/status', async (req, res) => {
     appEntry.history.push(entry);
   }
 
+  if (status === STATUS.APPROVED) {
+    appEntry.history = appEntry.history.filter(
+      h => normalizeStatus(h.status) !== STATUS.REJECTED
+    );
+  }
+
   if (status === STATUS.REJECTED) {
     appEntry.reapplyAfter = computeReapplyAfter(appEntry.history);
   } else {
