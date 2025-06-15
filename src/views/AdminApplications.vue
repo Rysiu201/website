@@ -96,7 +96,7 @@ function statusClass(status: string) {
     case 'Rozpatrzone Pozytywnie':
       return 'green'
     case statuses.REJECTED:
-    case 'Rozpatrzone negatywnie (Napisz nowe podanie w ciągu 24/48h)':
+    case 'Rozpatrzone negatywnie':
       return 'red'
     default:
       return ''
