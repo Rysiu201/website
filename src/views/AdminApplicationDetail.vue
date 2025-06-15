@@ -5,32 +5,50 @@
     </RouterLink>
     <div v-if="app" class="detail-container">
       <h1 class="detail-title">Podanie użytkownika {{ cleanDiscord(app.data.ooc.discord) }}</h1>
-      <p><b>Status:</b> <span class="status-text">{{ app.status }}</span></p>
-      <p><b>Data zgłoszenia:</b> {{ formatDate(ts) }}</p>
+      <table class="app-table">
+        <tr>
+          <th>Status</th>
+          <td><span :class="['status-text', statusClass]">{{ app.status }}</span></td>
+        </tr>
+        <tr>
+          <th>Data zgłoszenia</th>
+          <td>{{ formatDate(ts) }}</td>
+        </tr>
+      </table>
       <h2>Informacje IC</h2>
-      <ul>
-        <li><b>Imię i nazwisko:</b> {{ app.data.ic.name }}</li>
-        <li><b>Wiek:</b> {{ app.data.ic.age }}</li>
-        <li><b>Historia:</b> {{ app.data.ic.story }}</li>
-        <li><b>Charakter:</b> {{ app.data.ic.personality }}</li>
-        <li><b>Umiejętności:</b> {{ app.data.ic.skills }}</li>
-        <li><b>Motywacja:</b> {{ app.data.ic.motivation }}</li>
-      </ul>
+      <table class="app-table">
+        <tr><th>Imię i nazwisko</th><td>{{ app.data.ic.name }}</td></tr>
+        <tr><th>Wiek</th><td>{{ app.data.ic.age }}</td></tr>
+        <tr><th>Historia</th><td>{{ app.data.ic.story }}</td></tr>
+        <tr><th>Charakter</th><td>{{ app.data.ic.personality }}</td></tr>
+        <tr><th>Umiejętności</th><td>{{ app.data.ic.skills }}</td></tr>
+        <tr><th>Motywacja</th><td>{{ app.data.ic.motivation }}</td></tr>
+      </table>
       <h2>Informacje OOC</h2>
-      <ul>
-        <li><b>Discord:</b> {{ app.data.ooc.discord }}</li>
-        <li><b>Doświadczenie:</b> {{ app.data.ooc.experience }}</li>
-        <li><b>Znajomość zasad:</b> {{ app.data.ooc.knowsRules ? 'Tak' : 'Nie' }}</li>
-      </ul>
+      <table class="app-table">
+        <tr><th>Discord</th><td>{{ app.data.ooc.discord }}</td></tr>
+        <tr><th>Doświadczenie</th><td>{{ app.data.ooc.experience }}</td></tr>
+        <tr>
+          <th>Zgody</th>
+          <td>
+            Dane: {{ app.data.consents.data ? 'Tak' : 'Nie' }},
+            Zasady: {{ app.data.consents.rules ? 'Tak' : 'Nie' }},
+            Prawdziwość: {{ app.data.consents.truth ? 'Tak' : 'Nie' }}
+          </td>
+        </tr>
+      </table>
       <h2>Pytania sytuacyjne</h2>
-      <ol>
-        <li v-for="(sc, idx) in app.data.scenarios" :key="idx">{{ sc }}</li>
-      </ol>
+      <table class="app-table">
+        <tr v-for="(qa, idx) in scenarioPairs" :key="idx">
+          <th>{{ qa.question }}</th>
+          <td>{{ qa.answer }}</td>
+        </tr>
+      </table>
       <h2>Dodatkowo</h2>
-      <ul>
-        <li><b>Portfolio:</b> {{ app.data.extra.portfolio }}</li>
-        <li><b>Frakcja:</b> {{ app.data.extra.faction }}</li>
-      </ul>
+      <table class="app-table">
+        <tr><th>Portfolio</th><td>{{ app.data.extra.portfolio }}</td></tr>
+        <tr><th>Frakcja</th><td>{{ app.data.extra.faction }}</td></tr>
+      </table>
     </div>
     <p v-else>Ładowanie...</p>
   </main>
@@ -61,6 +79,31 @@ onMounted(async () => {
 const ts = computed(() => {
   if (!app.value) return 0
   return app.value.history && app.value.history[0] ? app.value.history[0].timestamp : Number(app.value.id)
+})
+
+const scenarioPairs = computed(() => {
+  if (!app.value) return [] as { question: string; answer: string }[]
+  const qs: string[] = app.value.data.questions || []
+  const ans: string[] = app.value.data.scenarios || []
+  return qs.map((q, i) => ({ question: q, answer: ans[i] || '' }))
+})
+
+const statusClass = computed(() => {
+  if (!app.value) return ''
+  switch (app.value.status) {
+    case 'Wysłane':
+      return 'gray'
+    case 'Przyjęte, oczekuje na rozpatrzenie':
+      return 'orange'
+    case 'W trakcie rozpatrywania':
+      return 'blue'
+    case 'Rozpatrzone Pozytywnie':
+      return 'green'
+    case 'Rozpatrzone negatywnie (Napisz nowe podanie w ciągu 24/48h)':
+      return 'red'
+    default:
+      return ''
+  }
 })
 
 function formatDate(t: number) {
@@ -100,5 +143,37 @@ function cleanDiscord(d: string) {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.detail-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.app-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+.app-table th,
+.app-table td {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.5rem;
+  vertical-align: top;
+}
+.gray {
+  color: gray;
+}
+.orange {
+  color: orange;
+}
+.blue {
+  color: #00aaff;
+}
+.green {
+  color: #00aa00;
+}
+.red {
+  color: #dd0000;
 }
 </style>

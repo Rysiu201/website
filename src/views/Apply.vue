@@ -106,6 +106,7 @@ interface FormData {
     knowsRules: boolean
   }
   scenarios: string[]
+  questions: string[]
   consents: {
     data: boolean
     rules: boolean
@@ -137,6 +138,7 @@ const form = ref<FormData>({
     knowsRules: false
   },
   scenarios: ['', '', '', '', ''],
+  questions: [],
   consents: {
     data: false,
     rules: false,
@@ -147,6 +149,7 @@ const form = ref<FormData>({
     faction: ''
   }
 })
+
 
 onMounted(async () => {
   // Pobierz dane użytkownika z API
@@ -176,6 +179,7 @@ onMounted(async () => {
 })
 
 async function submitForm() {
+  form.value.questions = questions.value
   const response = await fetch('/api/apply', {
     method: 'POST',
     headers: {
