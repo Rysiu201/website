@@ -73,7 +73,7 @@ const statuses = {
   PENDING: 'Przyjęte, oczekuje na rozpatrzenie',
   IN_REVIEW: 'W trakcie rozpatrywania',
   APPROVED: 'Pozytywnie',
-  REJECTED: 'Negatywnie (Napisz nowe podanie w ciągu 24/48h)'
+  REJECTED: 'Negatywnie'
 }
 
 const joinSteps = ref([

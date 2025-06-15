@@ -58,15 +58,12 @@
         <tr><th>Frakcja</th><td>{{ app.data.extra.faction }}</td></tr>
       </table>
       <div class="decision-box">
-        <label>
-          Decyzja:
-          <select v-model="selectedStatus">
-            <option :value="app.status">{{ app.status }}</option>
-            <option v-for="(label, key) in decisionOptions" :key="key" :value="label">
-              {{ label }}
-            </option>
-          </select>
-        </label>
+        <label for="status-select">Decyzja</label>
+        <select id="status-select" v-model="selectedStatus">
+          <option v-for="(label, key) in decisionOptions" :key="key" :value="label">
+            {{ label }}
+          </option>
+        </select>
         <button @click="updateStatus" class="update-btn">Zmień status</button>
       </div>
     </div>
@@ -96,10 +93,11 @@ const statuses = {
   PENDING: 'Przyjęte, oczekuje na rozpatrzenie',
   IN_REVIEW: 'W trakcie rozpatrywania',
   APPROVED: 'Pozytywnie',
-  REJECTED: 'Negatywnie (Napisz nowe podanie w ciągu 24/48h)'
+  REJECTED: 'Negatywnie'
 }
 
 const decisionOptions = {
+  PENDING: statuses.PENDING,
   IN_REVIEW: statuses.IN_REVIEW,
   APPROVED: statuses.APPROVED,
   REJECTED: statuses.REJECTED
@@ -140,14 +138,16 @@ const scenarioPairs = computed(() => {
 const statusClass = computed(() => {
   if (!app.value) return ''
   switch (app.value.status) {
-    case 'Wysłane':
+    case statuses.SENT:
       return 'gray'
-    case 'Przyjęte, oczekuje na rozpatrzenie':
+    case statuses.PENDING:
       return 'orange'
-    case 'W trakcie rozpatrywania':
+    case statuses.IN_REVIEW:
       return 'blue'
+    case statuses.APPROVED:
     case 'Rozpatrzone Pozytywnie':
       return 'green'
+    case statuses.REJECTED:
     case 'Rozpatrzone negatywnie (Napisz nowe podanie w ciągu 24/48h)':
       return 'red'
     default:
@@ -212,7 +212,11 @@ const decisionInfo = computed(() => {
   align-items: center;
   gap: 0.3rem;
   margin-bottom: 1rem;
+  padding: 0.3rem 0.6rem;
   color: #fff;
+  background: var(--gradient-accent);
+  border-radius: 4px;
+  text-decoration: none;
 }
 
 .detail-title {
@@ -263,6 +267,7 @@ const decisionInfo = computed(() => {
 .decision-box {
   margin-top: 1rem;
   display: flex;
+  flex-direction: column;
   gap: 0.5rem;
   align-items: center;
 }
@@ -274,14 +279,6 @@ const decisionInfo = computed(() => {
   color: #fff;
   cursor: pointer;
   border-radius: 4px;
-}
-
-.back-link {
-  border: 1px solid transparent;
-  padding: 0.3rem 0.6rem;
-  border-radius: 4px;
-  color: #fff;
-  border-image: var(--gradient-accent) 1;
 }
 
 .question-cell {

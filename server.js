@@ -17,8 +17,8 @@ const STATUS = {
   SENT: 'Wysłane',
   PENDING: 'Przyjęte, oczekuje na rozpatrzenie',
   IN_REVIEW: 'W trakcie rozpatrywania',
-  APPROVED: 'Rozpatrzone Pozytywnie',
-  REJECTED: 'Rozpatrzone negatywnie (Napisz nowe podanie w ciągu 24/48h)'
+  APPROVED: 'Pozytywnie',
+  REJECTED: 'Negatywnie'
 };
 
 // Configurable cooldown settings loaded from config.js
