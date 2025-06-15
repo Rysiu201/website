@@ -31,9 +31,32 @@ const {
 
 const DB_FILE = path.join(process.cwd(), 'database.json');
 
+function normalizeStatus(s) {
+  if (!s) return s;
+  if (
+    s === 'Negatywnie (Napisz nowe podanie w ciągu 24/48h)' ||
+    s === 'Rozpatrzone negatywnie'
+  )
+    return STATUS.REJECTED;
+  if (s === 'Rozpatrzone Pozytywnie') return STATUS.APPROVED;
+  return s;
+}
+
 function loadDb() {
   try {
-    return JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
+    const data = JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
+    if (data && Array.isArray(data.applications)) {
+      data.applications.forEach(app => {
+        app.status = normalizeStatus(app.status);
+        if (Array.isArray(app.history)) {
+          app.history = app.history.map(h => ({
+            ...h,
+            status: normalizeStatus(h.status)
+          }));
+        }
+      });
+    }
+    return data;
   } catch (err) {
     return { applications: [] };
   }
@@ -44,7 +67,9 @@ function saveDb(db) {
 }
 
 function computeReapplyAfter(history) {
-  const rejections = (history || []).filter(h => h.status === STATUS.REJECTED);
+  const rejections = (history || []).filter(
+    h => normalizeStatus(h.status) === STATUS.REJECTED
+  );
   if (rejections.length === 0) return null;
   const last = rejections[rejections.length - 1];
   const recent = rejections.filter(
@@ -380,7 +405,15 @@ app.post('/api/admin/status', async (req, res) => {
 
   appEntry.status = status;
   appEntry.history = appEntry.history || [];
-  appEntry.history.push({ status, timestamp: Date.now(), by: req.user.username });
+  const idx = appEntry.history.findIndex(
+    h => normalizeStatus(h.status) === status
+  );
+  const entry = { status, timestamp: Date.now(), by: req.user.username };
+  if (idx >= 0) {
+    appEntry.history[idx] = entry;
+  } else {
+    appEntry.history.push(entry);
+  }
 
   if (status === STATUS.REJECTED) {
     appEntry.reapplyAfter = computeReapplyAfter(appEntry.history);

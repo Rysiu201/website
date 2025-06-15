@@ -149,6 +149,7 @@ const statusClass = computed(() => {
       return 'green'
     case statuses.REJECTED:
     case 'Rozpatrzone negatywnie':
+    case 'Negatywnie (Napisz nowe podanie w ciągu 24/48h)':
       return 'red'
     default:
       return ''
