@@ -386,6 +386,59 @@ app.post('/api/admin/status', async (req, res) => {
   res.json({ success: true });
 });
 
+// Provide list of all applications for administrators
+app.get('/api/admin/applications', async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ applications: [] });
+  }
+
+  let isAdmin = false;
+  if (process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID) {
+    try {
+      const response = await fetch(
+        `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${req.user.id}`,
+        { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        const roles = data.roles || [];
+        isAdmin =
+          roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
+          roles.includes(process.env.STAFF_ROLE_ID || '');
+      }
+    } catch (err) {
+      console.error('Failed to check admin roles', err);
+    }
+  }
+
+  if (!isAdmin) {
+    return res.status(403).json({ applications: [] });
+  }
+
+  const db = loadDb();
+  const sorted = db.applications
+    .map(a => ({
+      ...a,
+      ts: a.history && a.history[0] ? a.history[0].timestamp : Number(a.id)
+    }))
+    .sort((a, b) => a.ts - b.ts);
+
+  const counts = {};
+  const result = sorted.map(a => {
+    counts[a.userId] = (counts[a.userId] || 0) + 1;
+    return {
+      id: a.id,
+      userId: a.userId,
+      discord: a.data?.ooc?.discord || '',
+      status: a.status,
+      timestamp: a.ts,
+      number: counts[a.userId]
+    };
+  });
+
+  res.json({ applications: result });
+});
+
 // Serve static files
 app.use(express.static(path.join(__dirname, 'dist')));
 
