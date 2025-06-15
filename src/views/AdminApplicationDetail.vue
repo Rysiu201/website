@@ -282,7 +282,6 @@ const decisionInfo = computed(() => {
   border-radius: 4px;
 }
 
-
 .question-cell {
   font-weight: 600;
 }

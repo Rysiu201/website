@@ -57,7 +57,7 @@ const statuses = {
   PENDING: 'Przyjęte, oczekuje na rozpatrzenie',
   IN_REVIEW: 'W trakcie rozpatrywania',
   APPROVED: 'Pozytywnie',
-  REJECTED: 'Negatywnie'
+  REJECTED: 'Negatywnie (Napisz nowe podanie w ciągu 24/48h)'
 }
 
 const columns: { key: keyof typeof statuses; label: string }[] = [
