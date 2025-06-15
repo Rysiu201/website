@@ -1,9 +1,6 @@
 <template>
   <main class="applications-page">
-    <h1 class="page-title">
-      <span class="title-normal">Aktualne</span>
-      <span class="title-accent">podania</span>
-    </h1>
+    <h1 class="page-title">Aktualne <span class="title-accent">Podania</span></h1>
     <div class="status-columns">
       <div
         v-for="col in columns"
@@ -18,7 +15,7 @@
         >
           <p class="app-discord"><b>Nazwa:</b> {{ cleanDiscord(app.discord) }}</p>
           <p class="app-time"><b>Data:</b> {{ formatDate(app.timestamp) }}</p>
-          <p class="app-status"><b>Status:</b> <span class="status-text">{{ app.status }}</span></p>
+          <p class="app-status"><b>Status:</b> <span :class="['status-text', statusClass(app.status)]">{{ app.status }}</span></p>
           <p class="app-number"><b>Numer:</b> {{ app.number }}</p>
           <RouterLink :to="`/admin/applications/${app.id}`" class="preview-btn">
             <i class="fa-solid fa-eye"></i> Podgląd
@@ -84,6 +81,23 @@ function cleanDiscord(d: string) {
 function formatDate(t: number) {
   const d = new Date(t)
   return d.toLocaleString()
+}
+
+function statusClass(status: string) {
+  switch (status) {
+    case statuses.SENT:
+      return 'gray'
+    case statuses.PENDING:
+      return 'orange'
+    case statuses.IN_REVIEW:
+      return 'blue'
+    case statuses.APPROVED:
+      return 'green'
+    case statuses.REJECTED:
+      return 'red'
+    default:
+      return ''
+  }
 }
 </script>
 
@@ -153,6 +167,21 @@ function formatDate(t: number) {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+.gray {
+  color: gray;
+}
+.orange {
+  color: orange;
+}
+.blue {
+  color: #00aaff;
+}
+.green {
+  color: #00aa00;
+}
+.red {
+  color: #dd0000;
 }
 
 .preview-btn {
