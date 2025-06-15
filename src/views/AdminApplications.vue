@@ -1,6 +1,9 @@
 <template>
   <main class="applications-page">
-    <h1>Aktualne podania</h1>
+    <h1 class="page-title">
+      <span class="title-normal">Aktualne</span>
+      <span class="title-accent">podania</span>
+    </h1>
     <div class="status-columns">
       <div
         v-for="col in columns"
@@ -13,10 +16,13 @@
           :key="app.id"
           class="app-card"
         >
-          <p class="app-discord">{{ cleanDiscord(app.discord) }}</p>
-          <p class="app-time">{{ formatDate(app.timestamp) }}</p>
-          <p class="app-status">{{ app.status }}</p>
-          <p class="app-number">Podanie #{{ app.number }}</p>
+          <p class="app-discord"><b>Nazwa:</b> {{ cleanDiscord(app.discord) }}</p>
+          <p class="app-time"><b>Data:</b> {{ formatDate(app.timestamp) }}</p>
+          <p class="app-status"><b>Status:</b> <span class="status-text">{{ app.status }}</span></p>
+          <p class="app-number"><b>Numer:</b> {{ app.number }}</p>
+          <RouterLink :to="`/admin/applications/${app.id}`" class="preview-btn">
+            <i class="fa-solid fa-eye"></i> Podgląd
+          </RouterLink>
         </div>
       </div>
     </div>
@@ -25,6 +31,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { RouterLink } from 'vue-router'
 
 interface Application {
   id: string
@@ -88,6 +95,24 @@ function formatDate(t: number) {
   color: #fff;
 }
 
+.page-title {
+  text-align: center;
+  margin: 0;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.title-normal {
+  color: #fff;
+}
+
+.title-accent {
+  background: linear-gradient(90deg, #8A2BE2, #00FFFF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 .status-columns {
   display: flex;
   gap: 1rem;
@@ -104,19 +129,46 @@ function formatDate(t: number) {
   margin: 0 0 0.5rem;
   font-size: 1.1rem;
   text-align: center;
-  color: var(--primary);
+  background: linear-gradient(90deg, #8A2BE2, #00FFFF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .app-card {
   background: rgba(138, 43, 226, 0.15);
   border: 1px solid rgba(138, 43, 226, 0.3);
   border-radius: 8px;
-  padding: 0.5rem;
-  margin-bottom: 0.5rem;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
   font-size: 0.9rem;
 }
 
 .app-card p {
   margin: 0.2rem 0;
+}
+
+.status-text {
+  background: linear-gradient(90deg, #8A2BE2, #00FFFF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.preview-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+  color: #fff;
+  background: rgba(138, 43, 226, 0.3);
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.preview-btn:hover {
+  background: rgba(138, 43, 226, 0.5);
 }
 </style>

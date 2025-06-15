@@ -439,6 +439,44 @@ app.get('/api/admin/applications', async (req, res) => {
   res.json({ applications: result });
 });
 
+// Provide single application details for administrators
+app.get('/api/admin/applications/:id', async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ application: null });
+  }
+
+  let isAdmin = false;
+  if (process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID) {
+    try {
+      const response = await fetch(
+        `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${req.user.id}`,
+        { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        const roles = data.roles || [];
+        isAdmin =
+          roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
+          roles.includes(process.env.STAFF_ROLE_ID || '');
+      }
+    } catch (err) {
+      console.error('Failed to check admin roles', err);
+    }
+  }
+
+  if (!isAdmin) {
+    return res.status(403).json({ application: null });
+  }
+
+  const db = loadDb();
+  const appEntry = db.applications.find(a => a.id === req.params.id);
+  if (!appEntry) {
+    return res.status(404).json({ application: null });
+  }
+
+  res.json({ application: appEntry });
+});
+
 // Serve static files
 app.use(express.static(path.join(__dirname, 'dist')));
 
