@@ -8,6 +8,7 @@ import Apply from '../views/Apply.vue'
 import Admin from '../views/Admin.vue'
 import ApplicationStatus from '../views/ApplicationStatus.vue'
 import AdminApplications from '../views/AdminApplications.vue'
+import AdminApplicationDetail from '../views/AdminApplicationDetail.vue'
 
 const STATUS = {
   REJECTED: 'Rozpatrzone negatywnie (Napisz nowe podanie w ciągu 24/48h)'
@@ -102,6 +103,15 @@ const router = createRouter({
       component: AdminApplications,
       meta: {
         title: 'Lista Podań - AetherRP',
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/admin/applications/:id',
+      name: 'application-detail',
+      component: AdminApplicationDetail,
+      meta: {
+        title: 'Podgląd Podania - AetherRP',
         requiresAuth: true
       }
     }
