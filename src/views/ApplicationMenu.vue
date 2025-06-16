@@ -6,35 +6,51 @@
       <p class="page-desc">Dołącz do naszej społeczności – wybierz jedną z dostępnych ścieżek i złóż podanie.</p>
 
       <RouterLink to="/apply" class="card main-card">
-        <span class="card-title">🧾 Podanie na Whitelistę</span>
+        <span class="card-title">
+          <span class="emoji">🧾</span>
+          <span class="gradient-text">Podanie na WhiteListe</span>
+        </span>
         <p class="card-desc">Pierwszy krok, aby dołączyć do gry.</p>
       </RouterLink>
+        <div class="card-grid">
+          <RouterLink to="/apply-checker" class="card">
+            <span class="card-title">
+              <span class="emoji">🧾</span>
+              <span class="gradient-text">Podanie na WhiteListCheckera</span>
+            </span>
+            <p class="card-desc">Pomóż nam weryfikować nowych graczy.</p>
+          </RouterLink>
 
-      <div class="card-grid">
-        <RouterLink to="/apply-checker" class="card">
-          <span class="card-title">🔍 Podanie na WhiteListCheckera</span>
-          <p class="card-desc">Pomóż nam weryfikować nowych graczy.</p>
-        </RouterLink>
-        <RouterLink to="/apply-moderator" class="card">
-          <span class="card-title">🛡️ Podanie na Moderatora</span>
-          <p class="card-desc">Zostań częścią zespołu moderatorów.</p>
-        </RouterLink>
-        <RouterLink to="/apply-administrator" class="card">
-          <span class="card-title">👮 Podanie na Administratora</span>
-          <p class="card-desc">Wspieraj administrację serwera.</p>
-        </RouterLink>
-        <RouterLink to="/apply-developer" class="card">
-          <span class="card-title">💻 Podanie na Developera</span>
-          <p class="card-desc">Twórz i rozwijaj nasze skrypty.</p>
-        </RouterLink>
-      </div>
+          <RouterLink to="/apply-moderator" class="card">
+            <span class="card-title">
+              <span class="emoji">🛠️</span>
+              <span class="gradient-text">Podanie na Moderatora</span>
+            </span>
+            <p class="card-desc">Zostań częścią zespołu moderatorów.</p>
+          </RouterLink>
 
+          <RouterLink to="/apply-administrator" class="card">
+            <span class="card-title">
+              <span class="emoji">⚖️</span>
+              <span class="gradient-text">Podanie na Administratora</span>
+            </span>
+            <p class="card-desc">Wspieraj administrację serwera.</p>
+          </RouterLink>
+
+          <RouterLink to="/apply-developer" class="card">
+            <span class="card-title">
+              <span class="emoji">⚙️</span>
+              <span class="gradient-text">Podanie na Developera</span>
+            </span>
+            <p class="card-desc">Twórz i rozwijaj nasze skrypty.</p>
+          </RouterLink>
+        </div>
       <section class="process-steps">
         <h2 class="process-title">Jak wygląda proces</h2>
         <div class="steps-grid">
           <div class="step-tile" v-for="step in steps" :key="step.id">
             <div class="step-number">{{ step.id }}</div>
-            <div class="step-icon"><i :class="step.icon"></i></div>
+            <div class="step-icon gradient"><i :class="step.icon"></i></div>
             <h3 class="step-title">{{ step.title }}</h3>
             <p class="step-desc">{{ step.description }}</p>
           </div>
@@ -120,6 +136,7 @@ const steps = ref([
 .page-title {
   font-size: 2rem;
   margin-bottom: 0.5rem;
+  color: var(--secondary);
 }
 
 .page-desc {
@@ -156,7 +173,19 @@ const steps = ref([
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: var(--secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.emoji {
+  color: white; /* lub inny neutralny */
+}
+
+.gradient-text {
+  background: linear-gradient(to right, #00b4d8, #7b2ff7); /* dopasuj do Whitelisty */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .card-desc {
