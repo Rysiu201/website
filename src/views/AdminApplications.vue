@@ -33,7 +33,11 @@
             <i class="fa-solid fa-eye"></i> Podgląd
           </button>
           <button
+<<<<<<< kexp8n-codex/add-archiving-button-and-category
             v-if="!app.archived"
+=======
+            v-if="app.status !== statuses.ARCHIVED"
+>>>>>>> main
             class="archive-btn"
             @click="archiveApplication(app)"
           >
@@ -198,6 +202,8 @@ function statusClass(status: string) {
     case 'Rozpatrzone negatywnie':
     case 'Negatywnie (Napisz nowe podanie w ciągu 24/48h)':
       return 'red'
+    case statuses.ARCHIVED:
+      return 'yellow'
     default:
       return ''
   }
@@ -221,7 +227,11 @@ async function archiveApplication(app: Application) {
     method: 'POST',
     credentials: 'include'
   })
+<<<<<<< kexp8n-codex/add-archiving-button-and-category
   app.archived = { by: 'Admin', timestamp: Date.now() }
+=======
+  app.status = statuses.ARCHIVED
+>>>>>>> main
 }
 </script>
 
