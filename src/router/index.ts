@@ -5,6 +5,10 @@ import Staff from '../views/Staff.vue'
 import Rules from '../views/Rules.vue'
 import JoinUs from '../views/Join.vue'
 import Apply from '../views/Apply.vue'
+import ApplyChecker from '../views/ApplyChecker.vue'
+import ApplyModerator from '../views/ApplyModerator.vue'
+import ApplyAdministrator from '../views/ApplyAdministrator.vue'
+import ApplyDeveloper from '../views/ApplyDeveloper.vue'
 import Admin from '../views/Admin.vue'
 import ApplicationStatus from '../views/ApplicationStatus.vue'
 import AdminApplications from '../views/AdminApplications.vue'
@@ -86,47 +90,42 @@ const router = createRouter({
         description: 'Wypełnij formularz, aby dołączyć do zespołu AetherRP.',
         keywords: 'podanie, rekrutacja, aetherrp',
         requiresAuth: true,
-        type: 'whitelist'
       }
     },
     {
       path: '/apply-checker',
       name: 'apply-checker',
-      component: Apply,
+      component: ApplyChecker,
       meta: {
         title: 'Podanie na WhiteListCheckera - AetherRP',
         requiresAuth: true,
-        type: 'checker'
       }
     },
     {
       path: '/apply-moderator',
       name: 'apply-moderator',
-      component: Apply,
+      component: ApplyModerator,
       meta: {
         title: 'Podanie na Moderatora - AetherRP',
         requiresAuth: true,
-        type: 'moderator'
       }
     },
     {
       path: '/apply-administrator',
       name: 'apply-administrator',
-      component: Apply,
+      component: ApplyAdministrator,
       meta: {
         title: 'Podanie na Administratora - AetherRP',
         requiresAuth: true,
-        type: 'administrator'
       }
     },
     {
       path: '/apply-developer',
       name: 'apply-developer',
-      component: Apply,
+      component: ApplyDeveloper,
       meta: {
         title: 'Podanie na Developera - AetherRP',
         requiresAuth: true,
-        type: 'developer'
       }
     },
     {
