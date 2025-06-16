@@ -19,30 +19,79 @@
           <td>{{ decisionInfo }}</td>
         </tr>
       </table>
-      <h2 v-if="app.data.ic">Informacje IC</h2>
-      <table v-if="app.data.ic" class="app-table">
-        <tr><th>Imię i nazwisko</th><td>{{ app.data.ic.name }}</td></tr>
-        <tr><th>Wiek</th><td>{{ app.data.ic.age }}</td></tr>
-        <tr><th>Historia</th><td>{{ app.data.ic.story }}</td></tr>
-        <tr><th>Charakter</th><td>{{ app.data.ic.personality }}</td></tr>
-        <tr><th>Umiejętności</th><td>{{ app.data.ic.skills }}</td></tr>
-        <tr><th>Motywacja</th><td>{{ app.data.ic.motivation }}</td></tr>
-      </table>
-      <h2 v-if="app.data && (app.data.ooc || app.data.discord)">Informacje OOC</h2>
-      <table v-if="app.data && (app.data.ooc || app.data.discord)" class="app-table">
-        <tr><th>Discord</th><td>{{ discordField }}</td></tr>
-        <template v-if="app.data.ooc">
-          <tr><th>Doświadczenie</th><td>{{ app.data.ooc.experience }}</td></tr>
-          <tr>
-            <th>Zgody</th>
-            <td>
-              Dane: {{ app.data.consents.data ? 'Tak' : 'Nie' }},
-              Zasady: {{ app.data.consents.rules ? 'Tak' : 'Nie' }},
-              Prawdziwość: {{ app.data.consents.truth ? 'Tak' : 'Nie' }}
-            </td>
-          </tr>
-        </template>
-      </table>
+      <template v-if="app.type === 'administrator'">
+        <h2>Informacje OOC</h2>
+        <table class="app-table">
+          <tr><th>Discord</th><td>{{ discordField }}</td></tr>
+          <tr><th>Doświadczenie jako admin</th><td>{{ app.data.previousAdmin }}</td></tr>
+          <tr><th>Obszary administracyjne</th><td>{{ app.data.adminAreas }}</td></tr>
+        </table>
+        <h2>Sytuacje organizacyjne</h2>
+        <table class="app-table">
+          <template v-for="(qa, idx) in scenarioPairs" :key="idx">
+            <tr>
+              <th colspan="2" class="question-cell">{{ qa.question }}</th>
+            </tr>
+            <tr>
+              <td colspan="2" class="answer-cell">{{ qa.answer }}</td>
+            </tr>
+          </template>
+        </table>
+        <h2>Zarządzanie</h2>
+        <table class="app-table">
+          <tr><th>Zdrowa struktura</th><td>{{ app.data.healthyStructure }}</td></tr>
+          <tr><th>Współpraca</th><td>{{ app.data.cooperation }}</td></tr>
+          <tr><th>Usprawnienia</th><td>{{ app.data.improvements }}</td></tr>
+        </table>
+        <h2>Zgody</h2>
+        <table class="app-table">
+          <tr><th>Dane</th><td>{{ app.data.consentData ? 'Tak' : 'Nie' }}</td></tr>
+          <tr><th>Obowiązki</th><td>{{ app.data.consentDuties ? 'Tak' : 'Nie' }}</td></tr>
+          <tr><th>Prawdziwość</th><td>{{ app.data.consentTruth ? 'Tak' : 'Nie' }}</td></tr>
+        </table>
+      </template>
+      <template v-else>
+        <h2 v-if="app.data.ic">Informacje IC</h2>
+        <table v-if="app.data.ic" class="app-table">
+          <tr><th>Imię i nazwisko</th><td>{{ app.data.ic.name }}</td></tr>
+          <tr><th>Wiek</th><td>{{ app.data.ic.age }}</td></tr>
+          <tr><th>Historia</th><td>{{ app.data.ic.story }}</td></tr>
+          <tr><th>Charakter</th><td>{{ app.data.ic.personality }}</td></tr>
+          <tr><th>Umiejętności</th><td>{{ app.data.ic.skills }}</td></tr>
+          <tr><th>Motywacja</th><td>{{ app.data.ic.motivation }}</td></tr>
+        </table>
+        <h2 v-if="app.data && (app.data.ooc || app.data.discord)">Informacje OOC</h2>
+        <table v-if="app.data && (app.data.ooc || app.data.discord)" class="app-table">
+          <tr><th>Discord</th><td>{{ discordField }}</td></tr>
+          <template v-if="app.data.ooc">
+            <tr><th>Doświadczenie</th><td>{{ app.data.ooc.experience }}</td></tr>
+            <tr>
+              <th>Zgody</th>
+              <td>
+                Dane: {{ app.data.consents.data ? 'Tak' : 'Nie' }},
+                Zasady: {{ app.data.consents.rules ? 'Tak' : 'Nie' }},
+                Prawdziwość: {{ app.data.consents.truth ? 'Tak' : 'Nie' }}
+              </td>
+            </tr>
+          </template>
+        </table>
+        <h2>Pytania sytuacyjne</h2>
+        <table class="app-table">
+          <template v-for="(qa, idx) in scenarioPairs" :key="idx">
+            <tr>
+              <th colspan="2" class="question-cell">{{ qa.question }}</th>
+            </tr>
+            <tr>
+              <td colspan="2" class="answer-cell">{{ qa.answer }}</td>
+            </tr>
+          </template>
+        </table>
+        <h2 v-if="app.data.extra">Dodatkowo</h2>
+        <table v-if="app.data.extra" class="app-table">
+          <tr><th>Portfolio</th><td>{{ app.data.extra.portfolio }}</td></tr>
+          <tr><th>Frakcja</th><td>{{ app.data.extra.faction }}</td></tr>
+        </table>
+      </template>
       <h2>Pytania sytuacyjne</h2>
       <table class="app-table">
         <template v-for="(qa, idx) in scenarioPairs" :key="idx">

@@ -20,11 +20,17 @@
           <button @click="performSearch(col.key)">Szukaj</button>
         </div>
         <div class="apps" :class="{ scrollable: showMore[col.key] }">
-          <div
-            v-for="app in displayed(col.key)"
-            :key="app.id"
-            :class="['app-card', { highlight: isHighlighted(app, col.key) }]"
+        <div
+          v-for="app in displayed(col.key)"
+          :key="app.id"
+          :class="['app-card', { highlight: isHighlighted(app, col.key) }]"
+        >
+          <p
+            v-if="showArchivedOnly && app.type === 'administrator'"
+            class="app-type"
           >
+            Podanie Administratora
+          </p>
           <button
             v-if="!app.archived &&
               (app.status === statuses.APPROVED || app.status === statuses.REJECTED)"
@@ -345,6 +351,10 @@ async function archiveApplication(app: Application) {
 
 .app-card p {
   margin: 0.2rem 0;
+}
+.app-type {
+  color: orange;
+  font-weight: bold;
 }
 .app-archived {
   color: #ffd700;
