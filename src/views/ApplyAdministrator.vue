@@ -4,10 +4,13 @@
     <div class="apply-container">
       <h1>{{ pageTitle }}</h1>
       <form @submit.prevent="submitForm" class="app-form">
+        <h2>1. Informacje ogólne (OOC)</h2>
         <label>
           Nick Discord + ID
           <input v-model="form.discord" readonly />
         </label>
+
+        <h2>2. Doświadczenie i obowiązki</h2>
         <label>
           Czy byłeś wcześniej adminem na serwerze RP lub społecznościowym?
           <textarea v-model="form.previousAdmin" required></textarea>
@@ -16,11 +19,14 @@
           Jakie obszary administracyjne Cię interesują?
           <textarea v-model="form.adminAreas" required></textarea>
         </label>
-        <h2>🎲 Sytuacje organizacyjne</h2>
+
+        <h2>3. 🎲 Sytuacje organizacyjne</h2>
         <div v-for="(q, i) in scenarioQuestions" :key="i" class="question-block">
           <p class="question">{{ q }}</p>
           <textarea v-model="form.scenarios[i]" required></textarea>
         </div>
+
+        <h2>4. Zarządzanie</h2>
         <label>
           Co to jest zdrowa struktura administracyjna?
           <textarea v-model="form.healthyStructure" required></textarea>
@@ -33,6 +39,8 @@
           Co Twoim zdaniem warto byłoby usprawnić w administracji?
           <textarea v-model="form.improvements" required></textarea>
         </label>
+
+        <h2>5. Zgody</h2>
         <label class="checkbox">
           <input type="checkbox" v-model="form.consentData" required />
           Zgoda na przetwarzanie danych (Discord ID)
@@ -120,9 +128,19 @@ onMounted(async () => {
   if (data.user) {
     form.value.discord = `${data.user.username}#${data.user.id}`
   }
-  // pick 3 random unique scenarios
   const shuffled = [...scenarioPool].sort(() => Math.random() - 0.5)
   scenarioQuestions.value = shuffled.slice(0, 3)
+
+  const statusRes = await fetch('/api/status', { credentials: 'include' })
+  const statusData = await statusRes.json()
+  if (
+    statusData.status &&
+    (statusData.status !== 'Negatywnie' ||
+      (statusData.reapplyAfter && Date.now() < statusData.reapplyAfter))
+  ) {
+    router.push('/status')
+    return
+  }
 })
 
 async function submitForm() {
