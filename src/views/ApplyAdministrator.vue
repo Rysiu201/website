@@ -131,14 +131,16 @@ onMounted(async () => {
   const shuffled = [...scenarioPool].sort(() => Math.random() - 0.5)
   scenarioQuestions.value = shuffled.slice(0, 3)
 
-  const statusRes = await fetch('/api/status', { credentials: 'include' })
+  const statusRes = await fetch('/api/status?type=administrator', {
+    credentials: 'include'
+  })
   const statusData = await statusRes.json()
   if (
     statusData.status &&
     (statusData.status !== 'Negatywnie' ||
       (statusData.reapplyAfter && Date.now() < statusData.reapplyAfter))
   ) {
-    router.push('/status')
+    router.push('/status-administrator')
     return
   }
 })
@@ -151,9 +153,9 @@ async function submitForm() {
   })
   if (response.ok) {
     success.value = true
-    router.push('/status')
+    router.push('/status-administrator')
   } else if (response.status === 400) {
-    router.push('/status')
+    router.push('/status-administrator')
   }
 }
 </script>

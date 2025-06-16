@@ -173,14 +173,16 @@ onMounted(async () => {
   }
   randomScenario.value = scenarioPool[Math.floor(Math.random() * scenarioPool.length)]
 
-  const statusRes = await fetch('/api/status', { credentials: 'include' })
+  const statusRes = await fetch('/api/status?type=moderator', {
+    credentials: 'include'
+  })
   const statusData = await statusRes.json()
   if (
     statusData.status &&
     (statusData.status !== 'Negatywnie' ||
       (statusData.reapplyAfter && Date.now() < statusData.reapplyAfter))
   ) {
-    router.push('/status')
+    router.push('/status-moderator')
     return
   }
 })
@@ -193,9 +195,9 @@ async function submitForm() {
   })
   if (response.ok) {
     success.value = true
-    router.push('/status')
+    router.push('/status-moderator')
   } else if (response.status === 400) {
-    router.push('/status')
+    router.push('/status-moderator')
   }
 }
 </script>

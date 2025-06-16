@@ -71,6 +71,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import backgroundImage from '../assets/background.jpg'
 
 const backgroundImageUrl = backgroundImage
@@ -116,6 +117,9 @@ const joinSteps = ref([
   }
 ])
 
+const route = useRoute()
+const appType = computed(() => (route.meta.type as string) || 'whitelist')
+
 const status = ref('')
 const headerText = ref('Twoje podanie zostało Wysłane')
 const discordLink = 'https://discord.gg/your-waiting-room'
@@ -133,7 +137,9 @@ const rejectedHistory = computed(() =>
 let interval: number | null = null
 
 onMounted(async () => {
-  const res = await fetch('/api/status', { credentials: 'include' })
+  const res = await fetch(`/api/status?type=${appType.value}`, {
+    credentials: 'include'
+  })
   const data = await res.json()
   status.value = data.status || ''
   rejectionReason.value = data.rejectionReason || ''
@@ -185,7 +191,14 @@ function formatHistory(h: any) {
 
 function gotoApply() {
   if (!timeRemaining.value) {
-    window.location.href = '/apply'
+    const paths: Record<string, string> = {
+      whitelist: '/apply',
+      checker: '/apply-checker',
+      moderator: '/apply-moderator',
+      administrator: '/apply-administrator',
+      developer: '/apply-developer'
+    }
+    window.location.href = paths[appType.value] || '/apply'
   }
 }
 
