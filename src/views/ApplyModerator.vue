@@ -2,194 +2,194 @@
   <main class="apply-page" :style="{ backgroundImage: `url(${backgroundImageUrl})` }">
     <div class="apply-overlay"></div>
     <div class="apply-container">
-    <h1>{{ pageTitle }}</h1>
-    <p class="intro">
-      Przed wypełnieniem formularza zapoznaj się z poniższymi wskazówkami. Odpowiadaj wyczerpująco i zgodnie z zasadami roleplay. Pamiętaj, aby unikać informacji OOC w części IC.
-    </p>
-    <form @submit.prevent="submitForm" class="app-form">
-      <!-- Sekcja 1 -->
-      <h2>1. Informacje ogólne (IC)</h2>
-      <label>
-        Imię i nazwisko postaci
-        <input v-model="form.ic.name" required placeholder="Cezary Soplica" />
-      </label>
-      <label>
-        Wiek postaci
-        <input type="number" v-model.number="form.ic.age" required placeholder="26" />
-      </label>
-      <label>
-        Krótki opis postaci / Historia
-        <textarea v-model="form.ic.story" required placeholder="Krótka historia postaci..."></textarea>
-      </label>
-      <label>
-        Charakter / cechy osobowości
-        <textarea v-model="form.ic.personality" required placeholder="Opis cech charakteru..."></textarea>
-      </label>
-      <label>
-        Umiejętności, zawód, hobby
-        <textarea v-model="form.ic.skills" required placeholder="Np. mechanik, granie na gitarze..."></textarea>
-      </label>
-      <label>
-        Motywacja przyjazdu do miasta
-        <textarea v-model="form.ic.motivation" required placeholder="Co Cię skłoniło do przyjazdu?"></textarea>
-      </label>
+      <h1>{{ pageTitle }}</h1>
+      <form @submit.prevent="submitForm" class="app-form">
+        <h2>1. Informacje ogólne (OOC)</h2>
+        <label>
+          Nick Discord + ID
+          <input v-model="form.discord" readonly />
+        </label>
+        <label>
+          Wiek
+          <input type="number" v-model.number="form.age" required />
+        </label>
+        <label>
+          Od jak dawna jesteś na serwerze?
+          <input v-model="form.serverTime" required />
+        </label>
+        <label>
+          Ile czasu dziennie jesteś aktywny/a na Discordzie?
+          <input v-model="form.activeTime" required />
+        </label>
 
-      <!-- Sekcja 2 -->
-      <h2>2. Informacje OOC</h2>
-      <label>
-        Nick Discord + ID
-        <input v-model="form.ooc.discord" readonly />
-      </label>
-      <label>
-        Doświadczenie w RP
-        <textarea v-model="form.ooc.experience" required placeholder="Twoje doświadczenie w RP..."></textarea>
-      </label>
+        <h2>2. Doświadczenie i podejście</h2>
+        <label>
+          Czy pełniłaś/eś wcześniej funkcję moderatora? Gdzie i jak wyglądała ta rola?
+          <textarea v-model="form.moderatorExp" required></textarea>
+        </label>
+        <label>
+          Dlaczego chcesz zostać Moderatorem u nas?
+          <textarea v-model="form.motivation" required></textarea>
+        </label>
+        <label>
+          Jakie są Twoje mocne strony w kontakcie z ludźmi?
+          <textarea v-model="form.strengths" required></textarea>
+        </label>
 
-      <!-- Sekcja 3 -->
-      <h2>3. Pytania sytuacyjne</h2>
-      <div v-for="(q, index) in questions" :key="index" class="question-block">
-        <p class="question">{{ q }}</p>
-        <textarea v-model="form.scenarios[index]" required placeholder="Twoja odpowiedź..."></textarea>
-      </div>
+        <h2>3. Sytuacje i zachowanie</h2>
+        <label>
+          Jak reagujesz, gdy użytkownik prowokuje innych, ale nie łamie regulaminu bezpośrednio?
+          <textarea v-model="form.provocation" required></textarea>
+        </label>
+        <label>
+          Co robisz, jeśli ktoś wysyła zgłoszenie w stylu \"XD lol\" – bez konkretów?
+          <textarea v-model="form.lolReport" required></textarea>
+        </label>
+        <label>
+          Jak rozpoznać, że zgłoszenie nie jest trollowaniem, tylko realnym problemem?
+          <textarea v-model="form.realProblem" required></textarea>
+        </label>
+        <div class="question-block">
+          <p class="question">🎲 PYTANIE LOSOWE</p>
+          <p>{{ randomScenario }}</p>
+          <textarea v-model="form.randomAnswer" required></textarea>
+        </div>
 
-      <!-- Sekcja 4 -->
-      <h2>4. Zgody</h2>
-      <label class="checkbox">
-        <input type="checkbox" v-model="form.consents.data" required />
-        Zgoda na przetwarzanie danych (Discord ID)
-      </label>
-      <label class="checkbox">
-        <input type="checkbox" v-model="form.consents.rules" required />
-        Znam zasady RP i Akceptuję regulamin serwera
-      </label>
-      <label class="checkbox">
-        <input type="checkbox" v-model="form.consents.truth" required />
-        Potwierdzam prawdziwość podanych informacji
-      </label>
+        <h2>4. Praca w zespole</h2>
+        <label>
+          Jak widzisz współpracę z innymi członkami zespołu, takimi jak Community Manager, Admin czy Developer?
+          <textarea v-model="form.teamwork" required></textarea>
+        </label>
+        <label>
+          Jak rozumiesz swoją rolę w przekazywaniu zgłoszeń dalej? Kiedy decydujesz się rozwiązać coś samodzielnie, a kiedy informujesz innych członków zespołu?
+          <textarea v-model="form.escalation" required></textarea>
+        </label>
+        <label>
+          Czy potrafisz pozostać neutralny, nawet gdy temat dotyczy znajomej osoby?
+          <textarea v-model="form.neutrality" required></textarea>
+        </label>
 
-      <!-- Sekcja 5 -->
-      <h2>5. Dodatkowo (opcjonalnie)</h2>
-      <label>
-        Link do portfolio RP
-        <input v-model="form.extra.portfolio" placeholder="URL do portfolio" />
-      </label>
-      <label>
-        Preferowana frakcja lub rola
-        <input v-model="form.extra.faction" placeholder="Np. EMS, cywil..." />
-      </label>
-
-      <button type="submit" class="submit-btn">Wyślij podanie</button>
-    </form>
-    <p v-if="success" class="success-message">Dziękujemy za wysłanie podania!</p>
+        <h2>5. Zgody</h2>
+        <label class="checkbox">
+          <input type="checkbox" v-model="form.consentData" required />
+          Zgoda na przetwarzanie danych (Discord ID)
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" v-model="form.consentDuties" required />
+          Akceptuję obowiązki Moderatora
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" v-model="form.consentTruth" required />
+          Potwierdzam prawdziwość podanych informacji
+        </label>
+        <button type="submit" class="submit-btn">Wyślij podanie</button>
+      </form>
+      <p v-if="success" class="success-message">Dziękujemy za wysłanie podania!</p>
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import backgroundImage from '../assets/background.jpg'
+
 const backgroundImageUrl = ref(backgroundImage)
-const appType: string = 'moderator'
 const pageTitle = 'Podanie na Moderatora'
-
-interface FormData {
-  ic: {
-    name: string
-    age: number | null
-    story: string
-    personality: string
-    skills: string
-    motivation: string
-  }
-  ooc: {
-    discord: string
-    experience: string
-    knowsRules: boolean
-  }
-  scenarios: string[]
-  questions: string[]
-  consents: {
-    data: boolean
-    rules: boolean
-    truth: boolean
-  }
-  extra: {
-    portfolio: string
-    faction: string
-  }
-}
-
-
-const questions = ref<string[]>([])
+const appType = 'moderator'
 const success = ref(false)
 const router = useRouter()
 
+const scenarioPool = [
+  'Ktoś pisze na publicznym czacie: „admin to idiota”.',
+  'Gracz spamuje memami w poważnej dyskusji mimo ostrzeżeń.',
+  'Ktoś wstawia wulgarną nazwę użytkownika i pisze nią na czacie.',
+  'Gracz podaje link do innego serwera Discord.',
+  'Rozpoczyna się kłótnia między dwiema frakcjami — Discord płonie.',
+  'Gracz prowokuje pytaniami typu „ile macie IQ?” wśród innych.',
+  'Ktoś zgłasza rasistowski lub homofobiczny komentarz — nie ma screena.',
+  'Gracz pisze do Ciebie na DM z groźbą zgłoszenia do właściciela.',
+  'W ticketach ktoś pisze same „XD” i „lol” — nie wiadomo o co chodzi.',
+  'Grupa graczy spamuje jednocześnie w kilku kanałach (np. @everyone, .gif).',
+  'Ktoś zgłasza oszustwo IC na czacie OOC — temat eskaluje.',
+  'Gracz oznacza właściciela bez powodu, mimo ostrzeżeń.',
+  'Ktoś publikuje screen z prywatnej rozmowy z innym graczem.',
+  'Gracz celowo psuje zgłoszenia — usuwa wiadomości, edytuje odpowiedzi.',
+  'Ktoś przesyła zdjęcie kontrowersyjnego contentu NSFW (mimo zakazu).',
+  'Zgłoszenie „moderator nie reaguje, więc piszę tu!” — co robisz?',
+  'Na kanale IC ktoś zaczyna pisać czystym OOC-em i robi burdel.',
+  'Gracz trolluje tickety pisząc o „duchach w systemie” – nic konkretnego.',
+  'Współpracownik z ekipy odpowiada z ironią do gracza — co robisz?',
+  'Ktoś pisze „to nie złamanie regulaminu, ale zachował się jak frajer” — co robisz?'
+]
+
+const randomScenario = ref('')
+
+interface FormData {
+  discord: string
+  age: number | null
+  serverTime: string
+  activeTime: string
+  moderatorExp: string
+  motivation: string
+  strengths: string
+  provocation: string
+  lolReport: string
+  realProblem: string
+  randomAnswer: string
+  teamwork: string
+  escalation: string
+  neutrality: string
+  consentData: boolean
+  consentDuties: boolean
+  consentTruth: boolean
+}
+
 const form = ref<FormData>({
-  ic: {
-    name: '',
-    age: null,
-    story: '',
-    personality: '',
-    skills: '',
-    motivation: ''
-  },
-  ooc: {
-    discord: '',
-    experience: '',
-    knowsRules: false
-  },
-  scenarios: ['', '', '', '', ''],
-  questions: [],
-  consents: {
-    data: false,
-    rules: false,
-    truth: false
-  },
-  extra: {
-    portfolio: '',
-    faction: ''
-  }
+  discord: '',
+  age: null,
+  serverTime: '',
+  activeTime: '',
+  moderatorExp: '',
+  motivation: '',
+  strengths: '',
+  provocation: '',
+  lolReport: '',
+  realProblem: '',
+  randomAnswer: '',
+  teamwork: '',
+  escalation: '',
+  neutrality: '',
+  consentData: false,
+  consentDuties: false,
+  consentTruth: false
 })
 
-
 onMounted(async () => {
-  // Pobierz dane użytkownika z API
   const res = await fetch('/api/user', { credentials: 'include' })
   const data = await res.json()
   if (data.user) {
-    form.value.ooc.discord = `${data.user.username}#${data.user.id}`
+    form.value.discord = `${data.user.username}#${data.user.id}`
   }
+  randomScenario.value = scenarioPool[Math.floor(Math.random() * scenarioPool.length)]
 
-  if (appType === 'whitelist') {
-    const statusRes = await fetch('/api/status', { credentials: 'include' })
-    const statusData = await statusRes.json()
-    if (
-      statusData.status &&
-      (statusData.status !== 'Negatywnie' ||
-        (statusData.reapplyAfter && Date.now() < statusData.reapplyAfter))
-    ) {
-      router.push('/status')
-      return
-    }
-  }
-
-  // Odbierz przypisane do użytkownika pytania
-  const qRes = await fetch('/api/questions', { credentials: 'include' })
-  const qData = await qRes.json()
-  if (Array.isArray(qData.questions)) {
-    questions.value = qData.questions
+  const statusRes = await fetch('/api/status', { credentials: 'include' })
+  const statusData = await statusRes.json()
+  if (
+    statusData.status &&
+    (statusData.status !== 'Negatywnie' ||
+      (statusData.reapplyAfter && Date.now() < statusData.reapplyAfter))
+  ) {
+    router.push('/status')
+    return
   }
 })
 
 async function submitForm() {
-  form.value.questions = questions.value
   const response = await fetch('/api/apply', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ ...form.value, type: appType })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...form.value, scenario: randomScenario.value, type: appType })
   })
   if (response.ok) {
     success.value = true
@@ -231,11 +231,6 @@ async function submitForm() {
   z-index: 2;
 }
 
-.intro {
-  margin-bottom: 2rem;
-  color: rgba(255, 255, 255, 0.8);
-}
-
 .app-form {
   display: flex;
   flex-direction: column;
@@ -267,8 +262,19 @@ async function submitForm() {
   gap: 0.5rem;
 }
 
+.question-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.question {
+  font-weight: 600;
+}
+
 .submit-btn {
-  align-self: flex-start;
+  align-self: center;
   padding: 0.6rem 1.2rem;
   background: var(--primary);
   border: none;
@@ -280,16 +286,5 @@ async function submitForm() {
 .success-message {
   margin-top: 1rem;
   color: var(--secondary);
-}
-
-.question-block {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.question {
-  font-weight: 600;
 }
 </style>

@@ -4,10 +4,13 @@
     <div class="apply-container">
       <h1>{{ pageTitle }}</h1>
       <form @submit.prevent="submitForm" class="app-form">
+        <h2>1. Informacje ogólne (OOC)</h2>
         <label>
           Nick Discord + ID
           <input v-model="form.discord" readonly />
         </label>
+
+        <h2>2. Doświadczenie i umiejętności</h2>
         <label>
           Jakie języki programowania znasz?
           <textarea v-model="form.languages" required></textarea>
@@ -44,6 +47,8 @@
           🔗 Link do portfolio (GitHub, Discord bot, skrypt, demo)
           <input v-model="form.portfolio" required />
         </label>
+
+        <h2>3. Zgody</h2>
         <label class="checkbox">
           <input type="checkbox" v-model="form.consentData" required />
           Zgoda na przetwarzanie danych (Discord ID)
@@ -111,6 +116,17 @@ onMounted(async () => {
   const data = await res.json()
   if (data.user) {
     form.value.discord = `${data.user.username}#${data.user.id}`
+  }
+
+  const statusRes = await fetch('/api/status', { credentials: 'include' })
+  const statusData = await statusRes.json()
+  if (
+    statusData.status &&
+    (statusData.status !== 'Negatywnie' ||
+      (statusData.reapplyAfter && Date.now() < statusData.reapplyAfter))
+  ) {
+    router.push('/status')
+    return
   }
 })
 
@@ -197,7 +213,7 @@ async function submitForm() {
 }
 
 .submit-btn {
-  align-self: flex-start;
+  align-self: center;
   padding: 0.6rem 1.2rem;
   background: var(--primary);
   border: none;
