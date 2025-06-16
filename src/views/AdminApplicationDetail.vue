@@ -1,6 +1,6 @@
 <template>
   <main class="app-detail-page">
-    <RouterLink to="/admin/applications" class="back-link">
+    <RouterLink :to="backPath" class="back-link">
       <i class="fa-solid fa-arrow-left"></i> Powrót
     </RouterLink>
     <div v-if="app" class="detail-container">
@@ -141,6 +141,7 @@ interface Application {
   userId: string
   status: string
   data: any
+  type?: string
   history?: { status: string; timestamp: number; by?: string }[]
   rejectionReason?: string
   adminNotes?: string
@@ -151,6 +152,18 @@ interface Application {
 const route = useRoute()
 const app = ref<Application | null>(null)
 const currentUser = ref<any>(null)
+
+const backPath = computed(() => {
+  const map: Record<string, string> = {
+    whitelist: '/admin/applications',
+    checker: '/admin/checker-applications',
+    moderator: '/admin/moderator-applications',
+    administrator: '/admin/administrator-applications',
+    developer: '/admin/developer-applications'
+  }
+  const type = (route.meta.type as string) || 'whitelist'
+  return map[type] || '/admin/applications'
+})
 
 const selectedStatus = ref('')
 const rejectionReason = ref('')
@@ -249,7 +262,9 @@ async function updateStatusInternal(newStatus: string) {
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
     body: JSON.stringify({
+      id: app.value.id,
       userId: app.value.userId,
+      type: app.value.type,
       status: newStatus,
       rejectionReason: rejectionReason.value,
       adminNotes: adminNotes.value,

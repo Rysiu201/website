@@ -11,22 +11,38 @@
           <i class="fa-solid fa-clipboard-check"></i>
           <span>Sprawdź podania na WhiteListe</span>
         </RouterLink>
-        <div class="admin-section" v-if="canViewWhitelistChecker">
+        <RouterLink
+          class="admin-section"
+          v-if="canViewWhitelistChecker"
+          to="/admin/checker-applications"
+        >
           <i class="fa-solid fa-user-check"></i>
           <span>Sprawdź podania na WhiteListCheckera</span>
-        </div>
-        <div class="admin-section" v-if="canViewModerator">
+        </RouterLink>
+        <RouterLink
+          class="admin-section"
+          v-if="canViewModerator"
+          to="/admin/moderator-applications"
+        >
           <i class="fa-solid fa-shield"></i>
           <span>Sprawdź podania na Moderatora</span>
-        </div>
-        <div class="admin-section" v-if="canViewAdministrator">
+        </RouterLink>
+        <RouterLink
+          class="admin-section"
+          v-if="canViewAdministrator"
+          to="/admin/administrator-applications"
+        >
           <i class="fa-solid fa-user-shield"></i>
           <span>Sprawdź podania na Administratora</span>
-        </div>
-        <div class="admin-section" v-if="canViewDeveloper">
+        </RouterLink>
+        <RouterLink
+          class="admin-section"
+          v-if="canViewDeveloper"
+          to="/admin/developer-applications"
+        >
           <i class="fa-solid fa-code"></i>
           <span>Sprawdź podania na Developera</span>
-        </div>
+        </RouterLink>
         <RouterLink class="admin-section" to="/admin/player-notes">
           <i class="fa-solid fa-note-sticky"></i>
           <span>Notatki o graczach</span>

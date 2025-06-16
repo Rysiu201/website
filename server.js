@@ -441,9 +441,9 @@ app.post('/api/admin/status', async (req, res) => {
     return res.status(401).json({ success: false });
   }
 
-  const { userId, status, rejectionReason, adminNotes, interviewNotes } =
+  const { id, userId, status, rejectionReason, adminNotes, interviewNotes, type } =
     req.body || {};
-  if (!userId || !status) {
+  if ((!userId && !id) || !status) {
     return res.status(400).json({ success: false });
   }
 
@@ -473,7 +473,17 @@ app.post('/api/admin/status', async (req, res) => {
   }
 
   const db = loadDb();
-  const appEntry = db.applications.find(a => a.userId === userId);
+  let appEntry = null;
+  if (id) {
+    appEntry = db.applications.find(a => a.id === id);
+  }
+  if (!appEntry && userId) {
+    appEntry = db.applications.find(a => {
+      if (a.userId !== userId) return false;
+      if (type) return (a.type || 'whitelist') === type;
+      return true;
+    });
+  }
   if (!appEntry) {
     return res.status(404).json({ success: false });
   }
@@ -543,8 +553,12 @@ app.get('/api/admin/applications', async (req, res) => {
   }
 
   const db = loadDb();
+  const type = req.query.type || 'whitelist';
   autoArchiveOldApplications(db);
-  const sorted = db.applications
+  const filteredApps = db.applications.filter(
+    a => (a.type || 'whitelist') === type
+  );
+  const sorted = filteredApps
     .map(a => ({
       ...a,
       ts: a.history && a.history[0] ? a.history[0].timestamp : Number(a.id)
