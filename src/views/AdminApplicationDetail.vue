@@ -72,6 +72,13 @@
           required
         ></textarea>
         <button @click="updateStatus" class="update-btn">Zmień status</button>
+        <p v-if="updateMessage" class="update-msg">{{ updateMessage }}</p>
+      </div>
+      <div v-if="app && app.status === statuses.APPROVED" class="notes-box">
+        <h3>Notatki Administratora</h3>
+        <textarea v-model="adminNotes" class="notes-input"></textarea>
+        <h3>Notatki po rozmowie</h3>
+        <textarea v-model="interviewNotes" class="notes-input"></textarea>
       </div>
       <div v-if="app && app.status === statuses.APPROVED" class="notes-box">
         <h3>
@@ -365,6 +372,10 @@ const decisionInfo = computed(() => {
   min-height: 80px;
   border-radius: 6px;
   padding: 0.4rem;
+}
+=======
+.update-msg {
+  color: #00ff7f;
 }
 .notes-box {
   margin-top: 1.5rem;
