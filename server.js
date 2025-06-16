@@ -212,22 +212,40 @@ if (discordEnabled) {
         clientID: process.env.DISCORD_CLIENT_ID,
         clientSecret: process.env.DISCORD_CLIENT_SECRET,
         callbackURL: process.env.DISCORD_CALLBACK_URL,
-        scope: ['identify']
+        scope: ['identify', 'guilds']
       },
-      (_accessToken, _refreshToken, profile, done) => {
+      (accessToken, _refreshToken, profile, done) => {
+        profile.accessToken = accessToken;
         return done(null, profile);
       }
     )
   );
   app.get('/auth/discord', passport.authenticate('discord'));
 
-  app.get(
-    '/auth/discord/callback',
-    passport.authenticate('discord', { failureRedirect: '/' }),
-    (req, res) => {
-      res.redirect('/');
-    }
-  );
+  app.get('/auth/discord/callback', (req, res, next) => {
+    passport.authenticate('discord', async (err, user) => {
+      if (err) return next(err);
+      if (!user) return res.redirect('/');
+
+      try {
+        const guildRes = await fetch('https://discord.com/api/users/@me/guilds', {
+          headers: { Authorization: `Bearer ${user.accessToken}` }
+        });
+        const guilds = await guildRes.json();
+        const inGuild = Array.isArray(guilds) && guilds.some(g => g.id === process.env.DISCORD_GUILD_ID);
+        if (!inGuild) {
+          const invite = process.env.DISCORD_INVITE_URL || '/discord-required';
+          return res.redirect(invite);
+        }
+        req.logIn(user, err2 => {
+          if (err2) return next(err2);
+          res.redirect('/');
+        });
+      } catch (e) {
+        next(e);
+      }
+    })(req, res, next);
+  });
 } else {
   console.warn('Discord OAuth not configured, authentication disabled');
   app.get('/auth/discord', (_req, res) => {
