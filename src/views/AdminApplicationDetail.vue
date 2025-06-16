@@ -18,10 +18,6 @@
           <th>Decyzja</th>
           <td>{{ decisionInfo }}</td>
         </tr>
-        <tr v-if="archiveInfo">
-          <th>Archiwizacja</th>
-          <td>{{ archiveInfo }}</td>
-        </tr>
       </table>
       <h2>Informacje IC</h2>
       <table class="app-table">
@@ -77,11 +73,11 @@
         ></textarea>
         <button @click="updateStatus" class="update-btn">Zmień status</button>
         <button
-          v-if="app && !app.archived && (app.status === statuses.APPROVED || app.status === statuses.REJECTED)"
-          @click="archive"
+          v-if="app && app.archived"
+          @click="unarchive"
           class="archive-btn"
         >
-          <i class="fa-solid fa-box-archive"></i> Archiwizuj
+          <i class="fa-solid fa-box-open"></i> Przywróć zgłoszenie
         </button>
         <p v-if="updateMessage" class="update-msg">{{ updateMessage }}</p>
       </div>
@@ -311,22 +307,17 @@ async function saveNotes() {
   setTimeout(() => updateMessage.value = '', 3000)
 }
 
-async function archive() {
+
+async function unarchive() {
   if (!app.value) return
-  await fetch(`/api/admin/archive/${app.value.id}`, {
+  await fetch(`/api/admin/unarchive/${app.value.id}`, {
     method: 'POST',
     credentials: 'include'
   })
-  app.value.archived = {
-    timestamp: Date.now(),
-    by: currentUser.value?.username || 'Admin'
+  app.value.archived = null
+  if (app.value.history) {
+    app.value.history = app.value.history.filter(h => h.status !== statuses.ARCHIVED)
   }
-  app.value.history = app.value.history || []
-  app.value.history.push({
-    status: statuses.ARCHIVED,
-    timestamp: Date.now(),
-    by: currentUser.value?.username || 'Admin'
-  })
 }
 
 const decisionInfo = computed(() => {
@@ -337,12 +328,6 @@ const decisionInfo = computed(() => {
   if (!latest) return ''
   const date = new Date(latest.timestamp).toLocaleString()
   return `${latest.status} przez ${latest.by || 'Admin'} - ${date}`
-})
-
-const archiveInfo = computed(() => {
-  if (!app.value?.archived) return ''
-  const date = new Date(app.value.archived.timestamp).toLocaleString()
-  return `Zarchiwizowane przez ${app.value.archived.by || 'System'} - ${date}`
 })
 </script>
 
