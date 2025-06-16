@@ -4,13 +4,6 @@
       <i class="fa-solid fa-arrow-left"></i> Powrót
     </RouterLink>
     <div v-if="app" class="detail-container">
-      <button
-        v-if="!app.archived"
-        class="archive-btn top-right"
-        @click="archive"
-      >
-        <i class="fa-solid fa-box-archive"></i> Archiwizuj
-      </button>
       <h1 class="detail-title">Podanie użytkownika <span class="logo-accent discord-name">{{ cleanDiscord(app.data.ooc.discord) }}</span></h1>
       <table class="app-table">
         <tr>
@@ -84,7 +77,7 @@
         ></textarea>
         <button @click="updateStatus" class="update-btn">Zmień status</button>
         <button
-          v-if="app && app.status !== statuses.ARCHIVED"
+          v-if="app && !app.archived && (app.status === statuses.APPROVED || app.status === statuses.REJECTED)"
           @click="archive"
           class="archive-btn"
         >

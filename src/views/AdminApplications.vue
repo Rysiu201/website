@@ -25,19 +25,20 @@
             :key="app.id"
             :class="['app-card', { highlight: isHighlighted(app, col.key) }]"
           >
+          <button
+            v-if="!app.archived &&
+              (app.status === statuses.APPROVED || app.status === statuses.REJECTED)"
+            class="archive-btn top-right"
+            @click="archiveApplication(app)"
+          >
+            <i class="fa-solid fa-box-archive"></i> Archiwizuj
+          </button>
           <p class="app-discord"><b>Nazwa:</b> {{ cleanDiscord(app.discord) }}</p>
           <p class="app-time"><b>Data:</b> {{ formatDate(app.timestamp) }}</p>
           <p class="app-status"><b>Status:</b> <span :class="['status-text', statusClass(app.status)]">{{ app.status }}</span></p>
           <p class="app-number"><b>Numer:</b> {{ app.number }}</p>
           <button class="preview-btn" @click="openDetail(app)">
             <i class="fa-solid fa-eye"></i> Podgląd
-          </button>
-          <button
-            v-if="!app.archived"
-            class="archive-btn"
-            @click="archiveApplication(app)"
-          >
-            <i class="fa-solid fa-box-archive"></i> Archiwizuj
           </button>
           </div>
         </div>
@@ -134,7 +135,7 @@ function filtered(key: keyof typeof statuses) {
     list = list.filter(a => a.archived)
   } else {
     const status = statuses[key]
-    list = list.filter(a => a.status === status)
+    list = list.filter(a => a.status === status && !a.archived)
   }
   list = list.sort((a, b) => a.timestamp - b.timestamp)
 
@@ -327,6 +328,7 @@ async function archiveApplication(app: Application) {
   font-size: 0.9rem;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .app-card p {
@@ -388,7 +390,6 @@ async function archiveApplication(app: Application) {
   align-items: center;
   justify-content: center;
   gap: 0.3rem;
-  margin-top: 0.5rem;
   font-size: 0.85rem;
   color: #fff;
   background: rgba(255, 165, 0, 0.3);
@@ -396,6 +397,13 @@ async function archiveApplication(app: Application) {
   border-radius: 6px;
   transition: background 0.2s ease;
   align-self: center;
+}
+
+.archive-btn.top-right {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  margin: 0;
 }
 
 .archive-btn:hover {
