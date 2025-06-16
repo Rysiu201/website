@@ -1,7 +1,6 @@
 <template>
   <main class="apply-menu" :style="{ backgroundImage: `url(${backgroundImageUrl})` }">
     <div class="menu-overlay"></div>
-<<<<<<< 95vg3o-codex/dostosuj-wygląd-podania-na-whitelist
     <div class="menu-container">
       <h1 class="page-title">Wybierz rodzaj podania</h1>
       <p class="page-desc">Dołącz do naszej społeczności – wybierz jedną z dostępnych ścieżek i złóż podanie.</p>
@@ -39,32 +38,6 @@
           <li>Wynik otrzymasz na stronie z podaniem!</li>
         </ol>
       </section>
-=======
-    <h1>Wybierz rodzaj podania</h1>
-    <div class="tiles">
-      <RouterLink to="/apply" class="tile main">
-        <div class="emoji">📜</div>
-        <span class="wh-title"><span class="white">Podanie n</span><span class="gradient">a Whiteliste</span></span>
-      </RouterLink>
-      <div class="tile-grid">
-        <RouterLink to="/apply-checker" class="tile small">
-          <div class="emoji">🔍</div>
-          <span>Podanie na WhiteListCheckera</span>
-        </RouterLink>
-        <RouterLink to="/apply-moderator" class="tile small">
-          <div class="emoji">🛡️</div>
-          <span>Podanie na Moderatora</span>
-        </RouterLink>
-        <RouterLink to="/apply-administrator" class="tile small">
-          <div class="emoji">👮</div>
-          <span>Podanie na Administratora</span>
-        </RouterLink>
-        <RouterLink to="/apply-developer" class="tile small">
-          <div class="emoji">💻</div>
-          <span>Podanie na Developera</span>
-        </RouterLink>
-      </div>
->>>>>>> main
     </div>
   </main>
 </template>
@@ -84,11 +57,7 @@ const backgroundImageUrl = ref(backgroundImage)
   min-height: 100vh;
   display: flex;
   align-items: center;
-<<<<<<< 95vg3o-codex/dostosuj-wygląd-podania-na-whitelist
   justify-content: center;
-=======
-  justify-content: flex-start;
->>>>>>> main
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -101,7 +70,6 @@ const backgroundImageUrl = ref(backgroundImage)
   left: 0;
   width: 100%;
   height: 100%;
-<<<<<<< 95vg3o-codex/dostosuj-wygląd-podania-na-whitelist
   background: rgba(0, 0, 0, 0.6);
   z-index: 1;
 }
@@ -109,17 +77,6 @@ const backgroundImageUrl = ref(backgroundImage)
 .menu-container {
   position: relative;
   z-index: 2;
-=======
-  background: rgba(0, 0, 0, 0.7);
-  z-index: 1;
-}
-.tiles {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
->>>>>>> main
   width: 100%;
   max-width: 900px;
   text-align: center;
@@ -141,21 +98,13 @@ const backgroundImageUrl = ref(backgroundImage)
   margin-bottom: 2rem;
 }
 
-<<<<<<< 95vg3o-codex/dostosuj-wygląd-podania-na-whitelist
 .card-grid {
-=======
-.tile-grid {
->>>>>>> main
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
-<<<<<<< 95vg3o-codex/dostosuj-wygląd-podania-na-whitelist
 
 .card {
-=======
-.tile {
->>>>>>> main
   display: flex;
   flex-direction: column;
   align-items: center;
