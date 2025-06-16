@@ -4,6 +4,7 @@
     <div class="apply-container">
       <h1>{{ pageTitle }}</h1>
       <form @submit.prevent="submitForm" class="app-form">
+        <h2>1. Informacje ogólne (OOC)</h2>
         <label>
           Nick Discord + ID
           <input v-model="form.discord" readonly />
@@ -12,6 +13,8 @@
           Od jak dawna jesteś na naszym serwerze?
           <input v-model="form.serverTime" required />
         </label>
+
+        <h2>2. Doświadczenie i podejście</h2>
         <label>
           Czy miałeś styczność z weryfikacją lub selekcją graczy?
           <textarea v-model="form.verificationExp" required></textarea>
@@ -28,6 +31,8 @@
           Co Twoim zdaniem oznacza dobre RP i jakbyś je promował?
           <textarea v-model="form.goodRp" required></textarea>
         </label>
+
+        <h2>3. Praca</h2>
         <label>
           Ile podań jesteś w stanie realnie sprawdzić dziennie / tygodniowo?
           <input v-model="form.workload" required />
@@ -40,6 +45,8 @@
           Wolisz działać samodzielnie czy w parze z innym Checkerem?
           <input v-model="form.teamwork" required />
         </label>
+
+        <h2>4. Zgody</h2>
         <label class="checkbox">
           <input type="checkbox" v-model="form.consentData" required />
           Zgoda na przetwarzanie danych (Discord ID)
@@ -106,6 +113,19 @@ onMounted(async () => {
   if (data.user) {
     form.value.discord = `${data.user.username}#${data.user.id}`
   }
+
+  const statusRes = await fetch('/api/status?type=checker', {
+    credentials: 'include'
+  })
+  const statusData = await statusRes.json()
+  if (
+    statusData.status &&
+    (statusData.status !== 'Negatywnie' ||
+      (statusData.reapplyAfter && Date.now() < statusData.reapplyAfter))
+  ) {
+    router.push('/status-checker')
+    return
+  }
 })
 
 async function submitForm() {
@@ -116,9 +136,9 @@ async function submitForm() {
   })
   if (response.ok) {
     success.value = true
-    router.push('/status')
+    router.push('/status-checker')
   } else if (response.status === 400) {
-    router.push('/status')
+    router.push('/status-checker')
   }
 }
 </script>
@@ -191,7 +211,7 @@ async function submitForm() {
 }
 
 .submit-btn {
-  align-self: flex-start;
+  align-self: center;
   padding: 0.6rem 1.2rem;
   background: var(--primary);
   border: none;
