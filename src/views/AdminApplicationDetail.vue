@@ -324,14 +324,10 @@ async function archive() {
     method: 'POST',
     credentials: 'include'
   })
-<<<<<<< kexp8n-codex/add-archiving-button-and-category
   app.value.archived = {
     timestamp: Date.now(),
     by: currentUser.value?.username || 'Admin'
   }
-=======
-  app.value.status = statuses.ARCHIVED
->>>>>>> main
   app.value.history = app.value.history || []
   app.value.history.push({
     status: statuses.ARCHIVED,
@@ -351,18 +347,9 @@ const decisionInfo = computed(() => {
 })
 
 const archiveInfo = computed(() => {
-<<<<<<< kexp8n-codex/add-archiving-button-and-category
   if (!app.value?.archived) return ''
   const date = new Date(app.value.archived.timestamp).toLocaleString()
   return `Zarchiwizowane przez ${app.value.archived.by || 'System'} - ${date}`
-=======
-  if (!app.value?.history) return ''
-  const entry = [...app.value.history].reverse()
-    .find(h => h.status === statuses.ARCHIVED)
-  if (!entry) return ''
-  const date = new Date(entry.timestamp).toLocaleString()
-  return `Zarchiwizowane przez ${entry.by || 'System'} - ${date}`
->>>>>>> main
 })
 </script>
 
@@ -498,7 +485,6 @@ const archiveInfo = computed(() => {
   color: #fff;
   cursor: pointer;
   border-radius: 4px;
-<<<<<<< kexp8n-codex/add-archiving-button-and-category
 }
 .archive-btn.top-right {
   position: absolute;
@@ -509,9 +495,6 @@ const archiveInfo = computed(() => {
 
 .archive-extra {
   margin-top: 1.5rem;
-=======
-  margin-left: 0.5rem;
->>>>>>> main
 }
 
 .archive-btn:hover {
