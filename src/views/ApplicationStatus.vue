@@ -12,6 +12,9 @@
         <a :href="discordLink" target="_blank">Dołącz na Discorda</a>
         i zgłoś się w celu dalszej rekrutacji.
       </p>
+      <p v-if="status === statuses.ARCHIVED" class="approved-msg">
+        Twoje podanie zostało zarchiwizowane.
+      </p>
       <div v-if="status === statuses.APPROVED" class="next-steps">
         <h2><span class="logo-accent">Dalsze kroki</span></h2>
         <div class="steps-grid">
@@ -77,7 +80,8 @@ const statuses = {
   PENDING: 'Przyjęte, oczekuje na rozpatrzenie',
   IN_REVIEW: 'W trakcie rozpatrywania',
   APPROVED: 'Pozytywnie',
-  REJECTED: 'Negatywnie'
+  REJECTED: 'Negatywnie',
+  ARCHIVED: 'Zarchiwizowane'
 }
 
 const joinSteps = ref([
@@ -139,6 +143,8 @@ onMounted(async () => {
   rejectionsBeforeExtra.value = data.rejectionsBeforeExtra || 0
   if (status.value === statuses.APPROVED) {
     headerText.value = 'Posiadasz już zaakceptowane podanie'
+  } else if (status.value === statuses.ARCHIVED) {
+    headerText.value = 'Twoje podanie zostało zarchiwizowane'
   }
   updateRemaining()
   if (reapplyAfter.value && Date.now() < reapplyAfter.value) {
@@ -195,6 +201,8 @@ const statusClass = computed(() => {
     case 'Rozpatrzone negatywnie':
     case 'Negatywnie (Napisz nowe podanie w ciągu 24/48h)':
       return 'red'
+    case statuses.ARCHIVED:
+      return 'yellow'
     default:
       return ''
   }
