@@ -27,6 +27,10 @@
           <i class="fa-solid fa-code"></i>
           <span>Sprawdź podania na Developera</span>
         </div>
+        <RouterLink class="admin-section" to="/admin/player-notes">
+          <i class="fa-solid fa-note-sticky"></i>
+          <span>Notatki o graczach</span>
+        </RouterLink>
       </div>
       <div class="admin-extra">
         <!-- Tu w przyszłości pojawią się dodatkowe funkcje -->

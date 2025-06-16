@@ -54,11 +54,15 @@ function loadDb() {
             status: normalizeStatus(h.status)
           }));
         }
+        if (!('rejectionReason' in app)) app.rejectionReason = '';
+        if (!('adminNotes' in app)) app.adminNotes = '';
+        if (!('interviewNotes' in app)) app.interviewNotes = '';
       });
     }
+    if (!data.playerNotes) data.playerNotes = {};
     return data;
   } catch (err) {
-    return { applications: [] };
+    return { applications: [], playerNotes: {} };
   }
 }
 
@@ -277,6 +281,7 @@ app.get('/api/status', (req, res) => {
   const appEntry = db.applications.find(a => a.userId === req.user.id);
   res.json({
     status: appEntry ? appEntry.status : null,
+    rejectionReason: appEntry ? appEntry.rejectionReason || '' : '',
     history: appEntry ? appEntry.history || [] : [],
     reapplyAfter: appEntry ? appEntry.reapplyAfter || null : null,
     baseCooldownHours: REAPPLY_COOLDOWN_HOURS,
@@ -367,7 +372,8 @@ app.post('/api/admin/status', async (req, res) => {
     return res.status(401).json({ success: false });
   }
 
-  const { userId, status } = req.body || {};
+  const { userId, status, rejectionReason, adminNotes, interviewNotes } =
+    req.body || {};
   if (!userId || !status) {
     return res.status(400).json({ success: false });
   }
@@ -404,6 +410,13 @@ app.post('/api/admin/status', async (req, res) => {
   }
 
   appEntry.status = status;
+  if (status === STATUS.REJECTED) {
+    appEntry.rejectionReason = rejectionReason || '';
+  } else {
+    appEntry.rejectionReason = '';
+  }
+  if (adminNotes !== undefined) appEntry.adminNotes = adminNotes;
+  if (interviewNotes !== undefined) appEntry.interviewNotes = interviewNotes;
   appEntry.history = appEntry.history || [];
   const idx = appEntry.history.findIndex(
     h => normalizeStatus(h.status) === status
@@ -520,6 +533,65 @@ app.get('/api/admin/applications/:id', async (req, res) => {
   }
 
   res.json({ application: appEntry });
+});
+
+// Update or fetch notes about players
+app.post('/api/admin/player-notes', async (req, res) => {
+  if (!req.user) return res.status(401).json({ success: false });
+
+  const { userId, notes } = req.body || {};
+  if (!userId) return res.status(400).json({ success: false });
+
+  let isAdmin = false;
+  if (process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID) {
+    try {
+      const response = await fetch(
+        `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${req.user.id}`,
+        { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        const roles = data.roles || [];
+        isAdmin =
+          roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
+          roles.includes(process.env.STAFF_ROLE_ID || '');
+      }
+    } catch (err) {
+      console.error('Failed to check admin roles', err);
+    }
+  }
+  if (!isAdmin) return res.status(403).json({ success: false });
+
+  const db = loadDb();
+  db.playerNotes[userId] = notes || '';
+  saveDb(db);
+  res.json({ success: true });
+});
+
+app.get('/api/admin/player-notes/:userId', async (req, res) => {
+  if (!req.user) return res.status(401).json({ notes: '' });
+  let isAdmin = false;
+  if (process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID) {
+    try {
+      const response = await fetch(
+        `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${req.user.id}`,
+        { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        const roles = data.roles || [];
+        isAdmin =
+          roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
+          roles.includes(process.env.STAFF_ROLE_ID || '');
+      }
+    } catch (err) {
+      console.error('Failed to check admin roles', err);
+    }
+  }
+  if (!isAdmin) return res.status(403).json({ notes: '' });
+
+  const db = loadDb();
+  res.json({ notes: db.playerNotes[req.params.userId] || '' });
 });
 
 // Serve static files

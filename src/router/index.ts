@@ -9,6 +9,7 @@ import Admin from '../views/Admin.vue'
 import ApplicationStatus from '../views/ApplicationStatus.vue'
 import AdminApplications from '../views/AdminApplications.vue'
 import AdminApplicationDetail from '../views/AdminApplicationDetail.vue'
+import AdminPlayerNotes from '../views/AdminPlayerNotes.vue'
 
 const STATUS = {
   REJECTED: 'Negatywnie'
@@ -112,6 +113,15 @@ const router = createRouter({
       component: AdminApplicationDetail,
       meta: {
         title: 'Podgląd Podania - AetherRP',
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/admin/player-notes',
+      name: 'player-notes',
+      component: AdminPlayerNotes,
+      meta: {
+        title: 'Notatki o Graczach - AetherRP',
         requiresAuth: true
       }
     }
