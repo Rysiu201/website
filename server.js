@@ -18,7 +18,8 @@ const STATUS = {
   PENDING: 'Przyjęte, oczekuje na rozpatrzenie',
   IN_REVIEW: 'W trakcie rozpatrywania',
   APPROVED: 'Pozytywnie',
-  REJECTED: 'Negatywnie'
+  REJECTED: 'Negatywnie',
+  ARCHIVED: 'Zarchiwizowane'
 };
 
 // Configurable cooldown settings loaded from config.js
@@ -57,6 +58,7 @@ function loadDb() {
         if (!('rejectionReason' in app)) app.rejectionReason = '';
         if (!('adminNotes' in app)) app.adminNotes = '';
         if (!('interviewNotes' in app)) app.interviewNotes = '';
+        if (!('archived' in app)) app.archived = null;
       });
     }
     if (!data.playerNotes) data.playerNotes = {};
@@ -85,6 +87,29 @@ function computeReapplyAfter(history) {
     cooldown += EXTRA_COOLDOWN_HOURS;
   }
   return last.timestamp + cooldown * 3600 * 1000;
+}
+
+function autoArchiveOldApplications(db) {
+  const WEEK = 7 * 24 * 3600 * 1000;
+  const now = Date.now();
+  let changed = false;
+  for (const app of db.applications) {
+    if (!app.archived) {
+      const last = (app.history && app.history[app.history.length - 1]) || null;
+      const ts = last ? last.timestamp : Number(app.id);
+      if (now - ts >= WEEK) {
+        app.archived = { timestamp: now, by: 'System' };
+        app.history = app.history || [];
+        app.history.push({
+          status: STATUS.ARCHIVED,
+          timestamp: now,
+          by: 'System'
+        });
+        changed = true;
+      }
+    }
+  }
+  if (changed) saveDb(db);
 }
 
 // Pool of possible scenario questions
@@ -278,11 +303,13 @@ app.get('/api/status', (req, res) => {
   }
 
   const db = loadDb();
+  autoArchiveOldApplications(db);
   const appEntry = db.applications.find(a => a.userId === req.user.id);
   res.json({
     status: appEntry ? appEntry.status : null,
     rejectionReason: appEntry ? appEntry.rejectionReason || '' : '',
     history: appEntry ? appEntry.history || [] : [],
+    archived: appEntry ? appEntry.archived || null : null,
     reapplyAfter: appEntry ? appEntry.reapplyAfter || null : null,
     baseCooldownHours: REAPPLY_COOLDOWN_HOURS,
     extraCooldownHours: EXTRA_COOLDOWN_HOURS,
@@ -474,6 +501,7 @@ app.get('/api/admin/applications', async (req, res) => {
   }
 
   const db = loadDb();
+  autoArchiveOldApplications(db);
   const sorted = db.applications
     .map(a => ({
       ...a,
@@ -490,7 +518,8 @@ app.get('/api/admin/applications', async (req, res) => {
       discord: a.data?.ooc?.discord || '',
       status: a.status,
       timestamp: a.ts,
-      number: counts[a.userId]
+      number: counts[a.userId],
+      archived: a.archived || null
     };
   });
 
@@ -527,12 +556,62 @@ app.get('/api/admin/applications/:id', async (req, res) => {
   }
 
   const db = loadDb();
+  autoArchiveOldApplications(db);
   const appEntry = db.applications.find(a => a.id === req.params.id);
   if (!appEntry) {
     return res.status(404).json({ application: null });
   }
 
   res.json({ application: appEntry });
+});
+
+// Manually archive an application
+app.post('/api/admin/archive/:id', async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ success: false });
+  }
+
+  let isAdmin = false;
+  if (process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID) {
+    try {
+      const response = await fetch(
+        `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${req.user.id}`,
+        { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        const roles = data.roles || [];
+        isAdmin =
+          roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
+          roles.includes(process.env.STAFF_ROLE_ID || '');
+      }
+    } catch (err) {
+      console.error('Failed to check admin roles', err);
+    }
+  }
+
+  if (!isAdmin) {
+    return res.status(403).json({ success: false });
+  }
+
+  const db = loadDb();
+  const appEntry = db.applications.find(a => a.id === req.params.id);
+  if (!appEntry) {
+    return res.status(404).json({ success: false });
+  }
+
+  if (!appEntry.archived) {
+    appEntry.archived = { timestamp: Date.now(), by: req.user.username };
+    appEntry.history = appEntry.history || [];
+    appEntry.history.push({
+      status: STATUS.ARCHIVED,
+      timestamp: Date.now(),
+      by: req.user.username
+    });
+    saveDb(db);
+  }
+
+  res.json({ success: true });
 });
 
 // Update or fetch notes about players

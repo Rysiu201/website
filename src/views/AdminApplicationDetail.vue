@@ -4,6 +4,13 @@
       <i class="fa-solid fa-arrow-left"></i> Powrót
     </RouterLink>
     <div v-if="app" class="detail-container">
+      <button
+        v-if="!app.archived"
+        class="archive-btn top-right"
+        @click="archive"
+      >
+        <i class="fa-solid fa-box-archive"></i> Archiwizuj
+      </button>
       <h1 class="detail-title">Podanie użytkownika <span class="logo-accent discord-name">{{ cleanDiscord(app.data.ooc.discord) }}</span></h1>
       <table class="app-table">
         <tr>
@@ -17,6 +24,10 @@
         <tr v-if="decisionInfo">
           <th>Decyzja</th>
           <td>{{ decisionInfo }}</td>
+        </tr>
+        <tr v-if="archiveInfo">
+          <th>Archiwizacja</th>
+          <td>{{ archiveInfo }}</td>
         </tr>
       </table>
       <h2>Informacje IC</h2>
@@ -105,6 +116,20 @@
           Zapisz notatki
         </button>
       </div>
+      <div v-if="app && app.archived" class="archive-extra">
+        <div v-if="app.rejectionReason" class="reason-box">
+          <h3>Powód odrzucenia</h3>
+          <p>{{ app.rejectionReason }}</p>
+        </div>
+        <div v-if="app.adminNotes" class="reason-box">
+          <h3>Notatki Administratora</h3>
+          <p class="notes-text">{{ app.adminNotes }}</p>
+        </div>
+        <div v-if="app.interviewNotes" class="reason-box">
+          <h3>Notatki po rozmowie</h3>
+          <p class="notes-text">{{ app.interviewNotes }}</p>
+        </div>
+      </div>
     </div>
     <p v-else>Ładowanie...</p>
   </main>
@@ -123,6 +148,7 @@ interface Application {
   rejectionReason?: string
   adminNotes?: string
   interviewNotes?: string
+  archived?: { by: string; timestamp: number } | null
 }
 
 const route = useRoute()
@@ -143,7 +169,8 @@ const statuses = {
   PENDING: 'Przyjęte, oczekuje na rozpatrzenie',
   IN_REVIEW: 'W trakcie rozpatrywania',
   APPROVED: 'Pozytywnie',
-  REJECTED: 'Negatywnie'
+  REJECTED: 'Negatywnie',
+  ARCHIVED: 'Zarchiwizowane'
 }
 
 const decisionOptions = {
@@ -283,6 +310,24 @@ async function saveNotes() {
   setTimeout(() => updateMessage.value = '', 3000)
 }
 
+async function archive() {
+  if (!app.value) return
+  await fetch(`/api/admin/archive/${app.value.id}`, {
+    method: 'POST',
+    credentials: 'include'
+  })
+  app.value.archived = {
+    timestamp: Date.now(),
+    by: currentUser.value?.username || 'Admin'
+  }
+  app.value.history = app.value.history || []
+  app.value.history.push({
+    status: statuses.ARCHIVED,
+    timestamp: Date.now(),
+    by: currentUser.value?.username || 'Admin'
+  })
+}
+
 const decisionInfo = computed(() => {
   if (!app.value?.history) return ''
   const latest = [...app.value.history].reverse()
@@ -291,6 +336,12 @@ const decisionInfo = computed(() => {
   if (!latest) return ''
   const date = new Date(latest.timestamp).toLocaleString()
   return `${latest.status} przez ${latest.by || 'Admin'} - ${date}`
+})
+
+const archiveInfo = computed(() => {
+  if (!app.value?.archived) return ''
+  const date = new Date(app.value.archived.timestamp).toLocaleString()
+  return `Zarchiwizowane przez ${app.value.archived.by || 'System'} - ${date}`
 })
 </script>
 
@@ -417,6 +468,29 @@ const decisionInfo = computed(() => {
   color: #fff;
   cursor: pointer;
   border-radius: 4px;
+}
+
+.archive-btn {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid transparent;
+  background: rgba(255, 165, 0, 0.3);
+  color: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.archive-btn.top-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+}
+
+.archive-extra {
+  margin-top: 1.5rem;
+}
+
+.archive-btn:hover {
+  background: rgba(255, 165, 0, 0.5);
 }
 
 .question-cell {

@@ -12,6 +12,9 @@
         <a :href="discordLink" target="_blank">Dołącz na Discorda</a>
         i zgłoś się w celu dalszej rekrutacji.
       </p>
+      <p v-if="archived" class="approved-msg">
+        Twoje podanie zostało zarchiwizowane.
+      </p>
       <div v-if="status === statuses.APPROVED" class="next-steps">
         <h2><span class="logo-accent">Dalsze kroki</span></h2>
         <div class="steps-grid">
@@ -77,7 +80,8 @@ const statuses = {
   PENDING: 'Przyjęte, oczekuje na rozpatrzenie',
   IN_REVIEW: 'W trakcie rozpatrywania',
   APPROVED: 'Pozytywnie',
-  REJECTED: 'Negatywnie'
+  REJECTED: 'Negatywnie',
+  ARCHIVED: 'Zarchiwizowane'
 }
 
 const joinSteps = ref([
@@ -118,6 +122,7 @@ const discordLink = 'https://discord.gg/your-waiting-room'
 const reapplyAfter = ref<number | null>(null)
 const history = ref<any[]>([])
 const rejectionReason = ref('')
+const archived = ref(false)
 const timeRemaining = ref('')
 const cooldownHours = ref(0)
 const recentRejections = ref(0)
@@ -133,12 +138,15 @@ onMounted(async () => {
   status.value = data.status || ''
   rejectionReason.value = data.rejectionReason || ''
   history.value = Array.isArray(data.history) ? data.history : []
+  archived.value = !!data.archived
   reapplyAfter.value = data.reapplyAfter || null
   cooldownHours.value = data.baseCooldownHours || 0
   recentRejections.value = data.recentRejections || 0
   rejectionsBeforeExtra.value = data.rejectionsBeforeExtra || 0
   if (status.value === statuses.APPROVED) {
     headerText.value = 'Posiadasz już zaakceptowane podanie'
+  } else if (archived.value) {
+    headerText.value = 'Twoje podanie zostało zarchiwizowane'
   }
   updateRemaining()
   if (reapplyAfter.value && Date.now() < reapplyAfter.value) {

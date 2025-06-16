@@ -108,6 +108,15 @@ const router = createRouter({
       }
     },
     {
+      path: '/admin/archived',
+      name: 'archived-applications',
+      component: AdminApplications,
+      meta: {
+        title: 'Zaarchiwizowane Podania - AetherRP',
+        requiresAuth: true
+      }
+    },
+    {
       path: '/admin/applications/:id',
       name: 'application-detail',
       component: AdminApplicationDetail,

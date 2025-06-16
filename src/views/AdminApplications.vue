@@ -32,6 +32,13 @@
           <button class="preview-btn" @click="openDetail(app)">
             <i class="fa-solid fa-eye"></i> Podgląd
           </button>
+          <button
+            v-if="!app.archived"
+            class="archive-btn"
+            @click="archiveApplication(app)"
+          >
+            <i class="fa-solid fa-box-archive"></i> Archiwizuj
+          </button>
           </div>
         </div>
         <button
@@ -54,8 +61,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, reactive } from 'vue'
-import { useRouter, RouterLink } from 'vue-router'
+import { ref, onMounted, reactive, computed } from 'vue'
+import { useRouter, RouterLink, useRoute } from 'vue-router'
 
 interface Application {
   id: string
@@ -64,6 +71,7 @@ interface Application {
   status: string
   timestamp: number
   number: number
+  archived?: { by: string; timestamp: number } | null
 }
 
 const applications = ref<Application[]>([])
@@ -84,23 +92,31 @@ const statuses = {
   PENDING: 'Przyjęte, oczekuje na rozpatrzenie',
   IN_REVIEW: 'W trakcie rozpatrywania',
   APPROVED: 'Pozytywnie',
-  REJECTED: 'Negatywnie'
+  REJECTED: 'Negatywnie',
+  ARCHIVED: 'Zarchiwizowane'
 }
+const route = useRoute()
+const showArchivedOnly = computed(() => route.path.includes('archived'))
 
-const columns: { key: keyof typeof statuses; label: string }[] = [
-  { key: 'SENT', label: statuses.SENT },
-  { key: 'PENDING', label: statuses.PENDING },
-  { key: 'IN_REVIEW', label: statuses.IN_REVIEW },
-  { key: 'APPROVED', label: statuses.APPROVED },
-  { key: 'REJECTED', label: statuses.REJECTED }
-]
+const columns = computed<{ key: keyof typeof statuses; label: string }[]>(() =>
+  showArchivedOnly.value
+    ? [{ key: 'ARCHIVED' as const, label: statuses.ARCHIVED }]
+    : [
+        { key: 'SENT' as const, label: statuses.SENT },
+        { key: 'PENDING' as const, label: statuses.PENDING },
+        { key: 'IN_REVIEW' as const, label: statuses.IN_REVIEW },
+        { key: 'APPROVED' as const, label: statuses.APPROVED },
+        { key: 'REJECTED' as const, label: statuses.REJECTED }
+      ]
+)
 
 const showMore = reactive<Record<keyof typeof statuses, boolean>>({
   SENT: false,
   PENDING: false,
   IN_REVIEW: false,
   APPROVED: false,
-  REJECTED: false
+  REJECTED: false,
+  ARCHIVED: false
 })
 
 const searchTerms = reactive<Record<keyof typeof statuses, string>>({
@@ -108,14 +124,19 @@ const searchTerms = reactive<Record<keyof typeof statuses, string>>({
   PENDING: '',
   IN_REVIEW: '',
   APPROVED: '',
-  REJECTED: ''
+  REJECTED: '',
+  ARCHIVED: ''
 })
 
 function filtered(key: keyof typeof statuses) {
-  const status = statuses[key]
   let list = applications.value
-    .filter(a => a.status === status)
-    .sort((a, b) => a.timestamp - b.timestamp)
+  if (key === 'ARCHIVED') {
+    list = list.filter(a => a.archived)
+  } else {
+    const status = statuses[key]
+    list = list.filter(a => a.status === status)
+  }
+  list = list.sort((a, b) => a.timestamp - b.timestamp)
 
   const term = searchTerms[key].toLowerCase()
   if (term) {
@@ -193,6 +214,14 @@ async function openDetail(app: Application) {
     app.status = statuses.PENDING
   }
   router.push(`/admin/applications/${app.id}`)
+}
+
+async function archiveApplication(app: Application) {
+  await fetch(`/api/admin/archive/${app.id}`, {
+    method: 'POST',
+    credentials: 'include'
+  })
+  app.archived = { by: 'Admin', timestamp: Date.now() }
 }
 </script>
 
@@ -350,6 +379,25 @@ async function openDetail(app: Application) {
 
 .preview-btn:hover {
   background: rgba(138, 43, 226, 0.5);
+}
+
+.archive-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #fff;
+  background: rgba(255, 165, 0, 0.3);
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+  align-self: center;
+}
+
+.archive-btn:hover {
+  background: rgba(255, 165, 0, 0.5);
 }
 
 .show-more-btn {
