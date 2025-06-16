@@ -34,6 +34,10 @@
       </div>
 
       <div v-if="status === statuses.REJECTED" class="rejected-box">
+        <div v-if="rejectionReason" class="reason-box">
+          <h3>Powód odrzucenia</h3>
+          <p>{{ rejectionReason }}</p>
+        </div>
         <p v-if="timeRemaining">
           W ciągu {{ cooldownHours }}h możesz ponownie złożyć podanie.
         </p>
@@ -113,6 +117,7 @@ const headerText = ref('Twoje podanie zostało Wysłane')
 const discordLink = 'https://discord.gg/your-waiting-room'
 const reapplyAfter = ref<number | null>(null)
 const history = ref<any[]>([])
+const rejectionReason = ref('')
 const timeRemaining = ref('')
 const cooldownHours = ref(0)
 const recentRejections = ref(0)
@@ -126,6 +131,7 @@ onMounted(async () => {
   const res = await fetch('/api/status', { credentials: 'include' })
   const data = await res.json()
   status.value = data.status || ''
+  rejectionReason.value = data.rejectionReason || ''
   history.value = Array.isArray(data.history) ? data.history : []
   reapplyAfter.value = data.reapplyAfter || null
   cooldownHours.value = data.baseCooldownHours || 0
@@ -244,6 +250,12 @@ const statusClass = computed(() => {
 
 .rejected-box {
   margin-top: 1.5rem;
+}
+.reason-box {
+  margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
 }
 
 .reapply-btn {

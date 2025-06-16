@@ -64,7 +64,20 @@
             {{ label }}
           </option>
         </select>
+        <textarea
+          v-if="selectedStatus === statuses.REJECTED"
+          v-model="rejectionReason"
+          placeholder="Powód odrzucenia"
+          class="reason-input"
+        ></textarea>
         <button @click="updateStatus" class="update-btn">Zmień status</button>
+        <p v-if="updateMessage" class="update-msg">{{ updateMessage }}</p>
+      </div>
+      <div v-if="app && app.status === statuses.APPROVED" class="notes-box">
+        <h3>Notatki Administratora</h3>
+        <textarea v-model="adminNotes" class="notes-input"></textarea>
+        <h3>Notatki po rozmowie</h3>
+        <textarea v-model="interviewNotes" class="notes-input"></textarea>
       </div>
     </div>
     <p v-else>Ładowanie...</p>
@@ -81,12 +94,19 @@ interface Application {
   status: string
   data: any
   history?: { status: string; timestamp: number; by?: string }[]
+  rejectionReason?: string
+  adminNotes?: string
+  interviewNotes?: string
 }
 
 const route = useRoute()
 const app = ref<Application | null>(null)
 const currentUser = ref<any>(null)
 const selectedStatus = ref('')
+const rejectionReason = ref('')
+const adminNotes = ref('')
+const interviewNotes = ref('')
+const updateMessage = ref('')
 
 const statuses = {
   SENT: 'Wysłane',
@@ -115,6 +135,9 @@ onMounted(async () => {
     app.value = data.application || null
     if (app.value) {
       selectedStatus.value = app.value.status
+      rejectionReason.value = app.value.rejectionReason || ''
+      adminNotes.value = app.value.adminNotes || ''
+      interviewNotes.value = app.value.interviewNotes || ''
       if (app.value.status === statuses.SENT) {
         await updateStatusInternal(statuses.PENDING)
         selectedStatus.value = statuses.PENDING
@@ -171,9 +194,22 @@ async function updateStatusInternal(newStatus: string) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
-    body: JSON.stringify({ userId: app.value.userId, status: newStatus })
+    body: JSON.stringify({
+      userId: app.value.userId,
+      status: newStatus,
+      rejectionReason: rejectionReason.value,
+      adminNotes: adminNotes.value,
+      interviewNotes: interviewNotes.value
+    })
   })
   app.value.status = newStatus
+  if (newStatus === statuses.REJECTED) {
+    app.value.rejectionReason = rejectionReason.value
+  } else {
+    app.value.rejectionReason = ''
+  }
+  if (adminNotes.value) app.value.adminNotes = adminNotes.value
+  if (interviewNotes.value) app.value.interviewNotes = interviewNotes.value
   if (!app.value.history) app.value.history = []
   const idx = app.value.history.findIndex(h => h.status === newStatus)
   const entry = {
@@ -197,6 +233,8 @@ function updateStatus() {
   if (!selectedStatus.value || !app.value) return
   if (selectedStatus.value !== app.value.status) {
     updateStatusInternal(selectedStatus.value)
+    updateMessage.value = `Status zmieniono na ${selectedStatus.value}`
+    setTimeout(() => (updateMessage.value = ''), 3000)
   }
 }
 
@@ -282,6 +320,27 @@ const decisionInfo = computed(() => {
   flex-direction: column;
   gap: 0.5rem;
   align-items: center;
+}
+.reason-input {
+  width: 100%;
+  min-height: 80px;
+  border-radius: 6px;
+  padding: 0.4rem;
+}
+.update-msg {
+  color: #00ff7f;
+}
+.notes-box {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.notes-input {
+  width: 100%;
+  min-height: 80px;
+  border-radius: 6px;
+  padding: 0.4rem;
 }
 
 .update-btn {
