@@ -215,11 +215,20 @@ async function openDetail(app: Application) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify({ userId: app.userId, status: statuses.PENDING })
+      body: JSON.stringify({ id: app.id, userId: app.userId, type: app.type, status: statuses.PENDING })
     })
     app.status = statuses.PENDING
   }
-  router.push(`/admin/applications/${app.id}`)
+  const map: Record<string, string> = {
+    whitelist: '/admin/applications',
+    checker: '/admin/checker-applications',
+    moderator: '/admin/moderator-applications',
+    administrator: '/admin/administrator-applications',
+    developer: '/admin/developer-applications'
+  }
+  const typeForDetail = showArchivedOnly.value ? (app.type || 'whitelist') : appType.value
+  const prefix = map[typeForDetail] || '/admin/applications'
+  router.push(`${prefix}/${app.id}`)
 }
 
 async function archiveApplication(app: Application) {
