@@ -571,7 +571,7 @@ app.get('/api/admin/applications', async (req, res) => {
     return {
       id: a.id,
       userId: a.userId,
-      discord: a.data?.ooc?.discord || '',
+      discord: a.data?.ooc?.discord || a.data?.discord || '',
       status: a.status,
       timestamp: a.ts,
       number: counts[a.userId],
