@@ -543,8 +543,12 @@ app.get('/api/admin/applications', async (req, res) => {
   }
 
   const db = loadDb();
+  const type = req.query.type || 'whitelist';
   autoArchiveOldApplications(db);
-  const sorted = db.applications
+  const filteredApps = db.applications.filter(
+    a => (a.type || 'whitelist') === type
+  );
+  const sorted = filteredApps
     .map(a => ({
       ...a,
       ts: a.history && a.history[0] ? a.history[0].timestamp : Number(a.id)
