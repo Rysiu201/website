@@ -2,11 +2,11 @@
   <main class="apply-menu" :style="{ backgroundImage: `url(${backgroundImageUrl})` }">
     <div class="menu-overlay"></div>
     <div class="menu-container">
-      <h1 class="page-title">Wybierz rodzaj podania</h1>
+      <h1 class="page-title gradient">Wybierz rodzaj podania</h1>
       <p class="page-desc">Dołącz do naszej społeczności – wybierz jedną z dostępnych ścieżek i złóż podanie.</p>
 
       <RouterLink to="/apply" class="card main-card">
-        <span class="card-title">🧾 <span class="white">Podanie n</span> <span class="gradient">a Whitelistę</span></span>
+        <span class="card-title">🧾 Podanie na Whitelistę</span>
         <p class="card-desc">Pierwszy krok, aby dołączyć do gry.</p>
       </RouterLink>
 
@@ -29,14 +29,16 @@
         </RouterLink>
       </div>
 
-      <section class="process">
-        <h2>Jak wygląda proces</h2>
-        <ol>
-          <li>Wybierz rodzaj podania</li>
-          <li>Uzupełnij formularz</li>
-          <li>Poczekaj na decyzję</li>
-          <li>Wynik otrzymasz na stronie z podaniem!</li>
-        </ol>
+      <section class="process-steps">
+        <h2 class="process-title">Jak wygląda proces</h2>
+        <div class="steps-grid">
+          <div class="step-tile" v-for="step in steps" :key="step.id">
+            <div class="step-number">{{ step.id }}</div>
+            <div class="step-icon"><i :class="step.icon"></i></div>
+            <h3 class="step-title">{{ step.title }}</h3>
+            <p class="step-desc">{{ step.description }}</p>
+          </div>
+        </div>
       </section>
     </div>
   </main>
@@ -48,6 +50,33 @@ import { RouterLink } from 'vue-router'
 import backgroundImage from '../assets/background.jpg'
 
 const backgroundImageUrl = ref(backgroundImage)
+
+const steps = ref([
+  {
+    id: 1,
+    title: 'Dołącz na Discord',
+    description: 'Bądź na bieżąco i uzyskaj pomoc w razie pytań.',
+    icon: 'fa-brands fa-discord'
+  },
+  {
+    id: 2,
+    title: 'Wybierz rodzaj podania',
+    description: 'Zdecyduj, o jaką rolę chcesz aplikować.',
+    icon: 'fa-solid fa-user-plus'
+  },
+  {
+    id: 3,
+    title: 'Uzupełnij formularz',
+    description: 'Podaj wymagane informacje i prześlij zgłoszenie.',
+    icon: 'fa-solid fa-book'
+  },
+  {
+    id: 4,
+    title: 'Oczekuj na decyzję',
+    description: 'Wynik znajdziesz na stronie statusu.',
+    icon: 'fa-solid fa-server'
+  }
+])
 </script>
 
 <style scoped>
@@ -127,11 +156,13 @@ const backgroundImageUrl = ref(backgroundImage)
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
+  color: var(--secondary);
 }
 
 .card-desc {
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: #ffffff;
+  opacity: 0.8;
 }
 
 .main-card {
@@ -151,22 +182,56 @@ const backgroundImageUrl = ref(backgroundImage)
   color: #fff;
 }
 
-.process {
+.process-steps {
   margin-top: 2rem;
-  text-align: left;
 }
 
-.process h2 {
+.process-title {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.step-tile {
+  position: relative;
+  padding: 2rem 1rem;
+  background: rgba(30, 30, 30, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.step-number {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 3rem;
+  font-weight: 700;
+  opacity: 0.07;
+  color: var(--secondary);
+}
+
+.step-icon {
+  font-size: 2rem;
   margin-bottom: 0.5rem;
+  color: var(--secondary);
 }
 
-.process ol {
-  list-style: decimal inside;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  color: rgba(255, 255, 255, 0.8);
+.step-title {
+  font-weight: 700;
+  margin-bottom: 0.25rem;
 }
+
+.step-desc {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+}
+
 
 @media (max-width: 640px) {
   .card-grid {
@@ -177,22 +242,10 @@ const backgroundImageUrl = ref(backgroundImage)
   }
 }
 
-.tile.small {
-  font-size: 0.9rem;
+@media (max-width: 768px) {
+  .steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-.wh-title {
-  display: inline-block;
-}
-
-.wh-title .white {
-  color: #fff;
-}
-
-.wh-title .gradient {
-  background: linear-gradient(90deg, #8A2BE2, #00FFFF);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
 </style>
