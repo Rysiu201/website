@@ -75,12 +75,6 @@
         <p v-if="updateMessage" class="update-msg">{{ updateMessage }}</p>
       </div>
       <div v-if="app && app.status === statuses.APPROVED" class="notes-box">
-        <h3>Notatki Administratora</h3>
-        <textarea v-model="adminNotes" class="notes-input"></textarea>
-        <h3>Notatki po rozmowie</h3>
-        <textarea v-model="interviewNotes" class="notes-input"></textarea>
-      </div>
-      <div v-if="app && app.status === statuses.APPROVED" class="notes-box">
         <h3>
           Notatki Administratora
           <span v-if="adminNotes && !editAdmin" class="edit-icon" @click="editAdmin = true">📝</span>
@@ -134,10 +128,13 @@ interface Application {
 const route = useRoute()
 const app = ref<Application | null>(null)
 const currentUser = ref<any>(null)
+
 const selectedStatus = ref('')
 const rejectionReason = ref('')
 const adminNotes = ref('')
 const interviewNotes = ref('')
+const updateMessage = ref('')
+
 const editAdmin = ref(false)
 const editInterview = ref(false)
 
@@ -162,15 +159,18 @@ onMounted(async () => {
     const userData = await userRes.json()
     currentUser.value = userData.user
   }
+
   const res = await fetch(`/api/admin/applications/${route.params.id}`, { credentials: 'include' })
   if (res.ok) {
     const data = await res.json()
     app.value = data.application || null
+
     if (app.value) {
       selectedStatus.value = app.value.status
       rejectionReason.value = app.value.rejectionReason || ''
       adminNotes.value = app.value.adminNotes || ''
       interviewNotes.value = app.value.interviewNotes || ''
+
       if (app.value.status === statuses.SENT) {
         await updateStatusInternal(statuses.PENDING)
         selectedStatus.value = statuses.PENDING
@@ -181,11 +181,11 @@ onMounted(async () => {
 
 const ts = computed(() => {
   if (!app.value) return 0
-  return app.value.history && app.value.history[0] ? app.value.history[0].timestamp : Number(app.value.id)
+  return app.value.history?.[0]?.timestamp || Number(app.value.id)
 })
 
 const scenarioPairs = computed(() => {
-  if (!app.value) return [] as { question: string; answer: string }[]
+  if (!app.value) return []
   const qs: string[] = app.value.data.questions || []
   const ans: string[] = app.value.data.scenarios || []
   return qs.map((q, i) => ({ question: q, answer: ans[i] || '' }))
@@ -194,27 +194,20 @@ const scenarioPairs = computed(() => {
 const statusClass = computed(() => {
   if (!app.value) return ''
   switch (app.value.status) {
-    case statuses.SENT:
-      return 'gray'
-    case statuses.PENDING:
-      return 'orange'
-    case statuses.IN_REVIEW:
-      return 'blue'
+    case statuses.SENT: return 'gray'
+    case statuses.PENDING: return 'orange'
+    case statuses.IN_REVIEW: return 'blue'
     case statuses.APPROVED:
-    case 'Rozpatrzone Pozytywnie':
-      return 'green'
+    case 'Rozpatrzone Pozytywnie': return 'green'
     case statuses.REJECTED:
     case 'Rozpatrzone negatywnie':
-    case 'Negatywnie (Napisz nowe podanie w ciągu 24/48h)':
-      return 'red'
-    default:
-      return ''
+    case 'Negatywnie (Napisz nowe podanie w ciągu 24/48h)': return 'red'
+    default: return ''
   }
 })
 
 function formatDate(t: number) {
-  const d = new Date(t)
-  return d.toLocaleString()
+  return new Date(t).toLocaleString()
 }
 
 function cleanDiscord(d: string) {
@@ -223,6 +216,7 @@ function cleanDiscord(d: string) {
 
 async function updateStatusInternal(newStatus: string) {
   if (!app.value) return
+
   await fetch('/api/admin/status', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -235,14 +229,12 @@ async function updateStatusInternal(newStatus: string) {
       interviewNotes: interviewNotes.value
     })
   })
+
   app.value.status = newStatus
-  if (newStatus === statuses.REJECTED) {
-    app.value.rejectionReason = rejectionReason.value
-  } else {
-    app.value.rejectionReason = ''
-  }
-  if (adminNotes.value) app.value.adminNotes = adminNotes.value
-  if (interviewNotes.value) app.value.interviewNotes = interviewNotes.value
+  app.value.rejectionReason = newStatus === statuses.REJECTED ? rejectionReason.value : ''
+  app.value.adminNotes = adminNotes.value
+  app.value.interviewNotes = interviewNotes.value
+
   if (!app.value.history) app.value.history = []
   const idx = app.value.history.findIndex(h => h.status === newStatus)
   const entry = {
@@ -250,28 +242,30 @@ async function updateStatusInternal(newStatus: string) {
     timestamp: Date.now(),
     by: currentUser.value?.username || 'Admin'
   }
+
   if (idx >= 0) {
     app.value.history[idx] = entry
   } else {
     app.value.history.push(entry)
   }
+
   if (newStatus === statuses.APPROVED) {
-    app.value.history = app.value.history.filter(
-      h => h.status !== statuses.REJECTED
-    )
+    app.value.history = app.value.history.filter(h => h.status !== statuses.REJECTED)
   }
+
+  updateMessage.value = 'Status zaktualizowany pomyślnie'
+  setTimeout(() => updateMessage.value = '', 3000)
 }
 
 async function updateStatus() {
   if (!selectedStatus.value || !app.value) return
+
   if (selectedStatus.value !== app.value.status) {
-    if (
-      selectedStatus.value === statuses.REJECTED &&
-      !rejectionReason.value.trim()
-    ) {
+    if (selectedStatus.value === statuses.REJECTED && !rejectionReason.value.trim()) {
       window.alert('Powód odrzucenia jest wymagany')
       return
     }
+
     await updateStatusInternal(selectedStatus.value)
     window.alert(`Status zmieniono na ${selectedStatus.value}`)
   }
@@ -279,16 +273,19 @@ async function updateStatus() {
 
 async function saveNotes() {
   if (!app.value) return
+
   await updateStatusInternal(app.value.status)
   editAdmin.value = false
   editInterview.value = false
+  updateMessage.value = 'Notatki zapisane'
+  setTimeout(() => updateMessage.value = '', 3000)
 }
 
 const decisionInfo = computed(() => {
-  if (!app.value || !app.value.history) return ''
-  const latest = [...app.value.history]
-    .reverse()
+  if (!app.value?.history) return ''
+  const latest = [...app.value.history].reverse()
     .find(h => h.status === statuses.APPROVED || h.status === statuses.REJECTED)
+
   if (!latest) return ''
   const date = new Date(latest.timestamp).toLocaleString()
   return `${latest.status} przez ${latest.by || 'Admin'} - ${date}`
