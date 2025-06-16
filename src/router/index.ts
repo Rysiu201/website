@@ -147,6 +147,46 @@ const router = createRouter({
       }
     },
     {
+      path: '/status-checker',
+      name: 'status-checker',
+      component: ApplicationStatus,
+      meta: {
+        title: 'Status Podania Checkera - AetherRP',
+        requiresAuth: true,
+        type: 'checker'
+      }
+    },
+    {
+      path: '/status-moderator',
+      name: 'status-moderator',
+      component: ApplicationStatus,
+      meta: {
+        title: 'Status Podania Moderatora - AetherRP',
+        requiresAuth: true,
+        type: 'moderator'
+      }
+    },
+    {
+      path: '/status-administrator',
+      name: 'status-administrator',
+      component: ApplicationStatus,
+      meta: {
+        title: 'Status Podania Administratora - AetherRP',
+        requiresAuth: true,
+        type: 'administrator'
+      }
+    },
+    {
+      path: '/status-developer',
+      name: 'status-developer',
+      component: ApplicationStatus,
+      meta: {
+        title: 'Status Podania Developera - AetherRP',
+        requiresAuth: true,
+        type: 'developer'
+      }
+    },
+    {
       path: '/admin',
       name: 'admin',
       component: Admin,
@@ -221,15 +261,28 @@ router.beforeEach(async (to, _from, next) => {
     return next('/');
   }
 
-  if (to.path === '/apply') {
-    const statusRes = await fetch('/api/status', { credentials: 'include' });
+  const applyRoutes: Record<string, { type: string; statusPath: string }> = {
+    '/apply': { type: 'whitelist', statusPath: '/status' },
+    '/apply-checker': { type: 'checker', statusPath: '/status-checker' },
+    '/apply-moderator': { type: 'moderator', statusPath: '/status-moderator' },
+    '/apply-administrator': {
+      type: 'administrator',
+      statusPath: '/status-administrator'
+    },
+    '/apply-developer': { type: 'developer', statusPath: '/status-developer' }
+  };
+  if (applyRoutes[to.path]) {
+    const { type, statusPath } = applyRoutes[to.path];
+    const statusRes = await fetch(`/api/status?type=${type}`, {
+      credentials: 'include'
+    });
     const statusData = await statusRes.json();
     if (
       statusData.status &&
       (statusData.status !== STATUS.REJECTED ||
         (statusData.reapplyAfter && Date.now() < statusData.reapplyAfter))
     ) {
-      return next('/status');
+      return next(statusPath);
     }
   }
 

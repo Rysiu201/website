@@ -339,7 +339,10 @@ app.get('/api/status', (req, res) => {
 
   const db = loadDb();
   autoArchiveOldApplications(db);
-  const appEntry = db.applications.find(a => a.userId === req.user.id);
+  const type = req.query.type || 'whitelist';
+  const appEntry = db.applications.find(
+    a => a.userId === req.user.id && a.type === type
+  );
   res.json({
     status: appEntry ? appEntry.status : null,
     rejectionReason: appEntry ? appEntry.rejectionReason || '' : '',
@@ -392,7 +395,10 @@ app.post('/api/apply', async (req, res) => {
   // Save application with initial status
   if (req.user) {
     const db = loadDb();
-    const userApps = db.applications.filter(a => a.userId === req.user.id);
+    const appType = req.body.type || 'whitelist'
+    const userApps = db.applications.filter(
+      a => a.userId === req.user.id && a.type === appType
+    )
     const latest = userApps[userApps.length - 1];
     if (latest && latest.status !== STATUS.REJECTED) {
       return res
@@ -412,7 +418,7 @@ app.post('/api/apply', async (req, res) => {
       id: Date.now().toString(),
       userId: req.user.id,
       data: req.body,
-      type: req.body.type || 'whitelist',
+      type: appType,
       status: STATUS.SENT,
       history: [
         {
