@@ -344,7 +344,7 @@ const decisionInfo = computed(() => {
   white-space: pre-wrap;
 }
 .app-table th {
-  color: var(--secondary);
+  color: #5bc0de;
 }
 .gray {
   color: gray;
