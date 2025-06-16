@@ -33,7 +33,10 @@
         </RouterLink>
       </div>
       <div class="admin-extra">
-        <!-- Tu w przyszłości pojawią się dodatkowe funkcje -->
+        <RouterLink class="admin-section" to="/admin/archived">
+          <i class="fa-solid fa-box-archive"></i>
+          <span>Zaarchiwizowane podania</span>
+        </RouterLink>
       </div>
     </div>
   </main>

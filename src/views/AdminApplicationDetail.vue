@@ -18,6 +18,10 @@
           <th>Decyzja</th>
           <td>{{ decisionInfo }}</td>
         </tr>
+        <tr v-if="archiveInfo">
+          <th>Archiwizacja</th>
+          <td>{{ archiveInfo }}</td>
+        </tr>
       </table>
       <h2>Informacje IC</h2>
       <table class="app-table">
@@ -72,6 +76,13 @@
           required
         ></textarea>
         <button @click="updateStatus" class="update-btn">Zmień status</button>
+        <button
+          v-if="app && app.status !== statuses.ARCHIVED"
+          @click="archive"
+          class="archive-btn"
+        >
+          <i class="fa-solid fa-box-archive"></i> Archiwizuj
+        </button>
         <p v-if="updateMessage" class="update-msg">{{ updateMessage }}</p>
       </div>
       <div v-if="app && app.status === statuses.APPROVED" class="notes-box">
@@ -143,7 +154,8 @@ const statuses = {
   PENDING: 'Przyjęte, oczekuje na rozpatrzenie',
   IN_REVIEW: 'W trakcie rozpatrywania',
   APPROVED: 'Pozytywnie',
-  REJECTED: 'Negatywnie'
+  REJECTED: 'Negatywnie',
+  ARCHIVED: 'Zarchiwizowane'
 }
 
 const decisionOptions = {
@@ -204,6 +216,7 @@ const statusClass = computed(() => {
     case statuses.REJECTED:
     case 'Rozpatrzone negatywnie':
     case 'Negatywnie (Napisz nowe podanie w ciągu 24/48h)': return 'red'
+    case statuses.ARCHIVED: return 'yellow'
     default: return ''
   }
 })
@@ -283,6 +296,21 @@ async function saveNotes() {
   setTimeout(() => updateMessage.value = '', 3000)
 }
 
+async function archive() {
+  if (!app.value) return
+  await fetch(`/api/admin/archive/${app.value.id}`, {
+    method: 'POST',
+    credentials: 'include'
+  })
+  app.value.status = statuses.ARCHIVED
+  app.value.history = app.value.history || []
+  app.value.history.push({
+    status: statuses.ARCHIVED,
+    timestamp: Date.now(),
+    by: currentUser.value?.username || 'Admin'
+  })
+}
+
 const decisionInfo = computed(() => {
   if (!app.value?.history) return ''
   const latest = [...app.value.history].reverse()
@@ -291,6 +319,15 @@ const decisionInfo = computed(() => {
   if (!latest) return ''
   const date = new Date(latest.timestamp).toLocaleString()
   return `${latest.status} przez ${latest.by || 'Admin'} - ${date}`
+})
+
+const archiveInfo = computed(() => {
+  if (!app.value?.history) return ''
+  const entry = [...app.value.history].reverse()
+    .find(h => h.status === statuses.ARCHIVED)
+  if (!entry) return ''
+  const date = new Date(entry.timestamp).toLocaleString()
+  return `Zarchiwizowane przez ${entry.by || 'System'} - ${date}`
 })
 </script>
 
@@ -417,6 +454,20 @@ const decisionInfo = computed(() => {
   color: #fff;
   cursor: pointer;
   border-radius: 4px;
+}
+
+.archive-btn {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid transparent;
+  background: rgba(255, 165, 0, 0.3);
+  color: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-left: 0.5rem;
+}
+
+.archive-btn:hover {
+  background: rgba(255, 165, 0, 0.5);
 }
 
 .question-cell {
