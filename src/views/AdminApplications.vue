@@ -37,6 +37,7 @@
           <p class="app-time"><b>Data:</b> {{ formatDate(app.timestamp) }}</p>
           <p class="app-status"><b>Status:</b> <span :class="['status-text', statusClass(app.status)]">{{ app.status }}</span></p>
           <p class="app-number"><b>Numer:</b> {{ app.number }}</p>
+          <p v-if="app.archived" class="app-archived"><b>Archiwum:</b> {{ app.archived.by }} - {{ formatDate(app.archived.timestamp) }}</p>
           <button class="preview-btn" @click="openDetail(app)">
             <i class="fa-solid fa-eye"></i> Podgląd
           </button>
@@ -73,6 +74,7 @@ interface Application {
   timestamp: number
   number: number
   archived?: { by: string; timestamp: number } | null
+  type?: string
 }
 
 const applications = ref<Application[]>([])
@@ -333,6 +335,9 @@ async function archiveApplication(app: Application) {
 
 .app-card p {
   margin: 0.2rem 0;
+}
+.app-archived {
+  color: #ffd700;
 }
 
 .status-text {
