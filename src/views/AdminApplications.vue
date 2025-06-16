@@ -26,7 +26,12 @@
             :class="['app-card', { highlight: isHighlighted(app, col.key) }]"
           >
           <button
+<<<<<<< sii9i8-codex/przenieść-przycisk-archiwizuj-i-zmienić-status
+            v-if="!app.archived &&
+              (app.status === statuses.APPROVED || app.status === statuses.REJECTED)"
+=======
             v-if="!app.archived"
+>>>>>>> main
             class="archive-btn top-right"
             @click="archiveApplication(app)"
           >

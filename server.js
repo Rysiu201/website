@@ -94,7 +94,10 @@ function autoArchiveOldApplications(db) {
   const now = Date.now();
   let changed = false;
   for (const app of db.applications) {
-    if (!app.archived) {
+    if (
+      !app.archived &&
+      (app.status === STATUS.APPROVED || app.status === STATUS.REJECTED)
+    ) {
       const last = (app.history && app.history[app.history.length - 1]) || null;
       const ts = last ? last.timestamp : Number(app.id);
       if (now - ts >= WEEK) {
