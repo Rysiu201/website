@@ -228,15 +228,28 @@ if (discordEnabled) {
       if (!user) return res.redirect('/');
 
       try {
-        const guildRes = await fetch('https://discord.com/api/users/@me/guilds', {
-          headers: { Authorization: `Bearer ${user.accessToken}` }
-        });
-        const guilds = await guildRes.json();
-        const inGuild = Array.isArray(guilds) && guilds.some(g => g.id === process.env.DISCORD_GUILD_ID);
+        let inGuild = false;
+        if (process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID) {
+          const memberRes = await fetch(
+            `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${user.id}`,
+            { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
+          );
+          inGuild = memberRes.ok;
+        } else {
+          const guildRes = await fetch('https://discord.com/api/users/@me/guilds', {
+            headers: { Authorization: `Bearer ${user.accessToken}` }
+          });
+          if (guildRes.ok) {
+            const guilds = await guildRes.json();
+            inGuild = Array.isArray(guilds) && guilds.some(g => g.id === process.env.DISCORD_GUILD_ID);
+          }
+        }
+
         if (!inGuild) {
           const invite = process.env.DISCORD_INVITE_URL || '/discord-required';
           return res.redirect(invite);
         }
+
         req.logIn(user, err2 => {
           if (err2) return next(err2);
           res.redirect('/');
