@@ -219,7 +219,7 @@ async function submitForm() {
 }
 
 .submit-btn {
-  align-self: flex-start;
+  align-self: center;
   padding: 0.6rem 1.2rem;
   background: var(--primary);
   border: none;
