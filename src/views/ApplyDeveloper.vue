@@ -2,193 +2,122 @@
   <main class="apply-page" :style="{ backgroundImage: `url(${backgroundImageUrl})` }">
     <div class="apply-overlay"></div>
     <div class="apply-container">
-    <h1>{{ pageTitle }}</h1>
-    <p class="intro">
-      Przed wypełnieniem formularza zapoznaj się z poniższymi wskazówkami. Odpowiadaj wyczerpująco i zgodnie z zasadami roleplay. Pamiętaj, aby unikać informacji OOC w części IC.
-    </p>
-    <form @submit.prevent="submitForm" class="app-form">
-      <!-- Sekcja 1 -->
-      <h2>1. Informacje ogólne (IC)</h2>
-      <label>
-        Imię i nazwisko postaci
-        <input v-model="form.ic.name" required placeholder="Cezary Soplica" />
-      </label>
-      <label>
-        Wiek postaci
-        <input type="number" v-model.number="form.ic.age" required placeholder="26" />
-      </label>
-      <label>
-        Krótki opis postaci / Historia
-        <textarea v-model="form.ic.story" required placeholder="Krótka historia postaci..."></textarea>
-      </label>
-      <label>
-        Charakter / cechy osobowości
-        <textarea v-model="form.ic.personality" required placeholder="Opis cech charakteru..."></textarea>
-      </label>
-      <label>
-        Umiejętności, zawód, hobby
-        <textarea v-model="form.ic.skills" required placeholder="Np. mechanik, granie na gitarze..."></textarea>
-      </label>
-      <label>
-        Motywacja przyjazdu do miasta
-        <textarea v-model="form.ic.motivation" required placeholder="Co Cię skłoniło do przyjazdu?"></textarea>
-      </label>
-
-      <!-- Sekcja 2 -->
-      <h2>2. Informacje OOC</h2>
-      <label>
-        Nick Discord + ID
-        <input v-model="form.ooc.discord" readonly />
-      </label>
-      <label>
-        Doświadczenie w RP
-        <textarea v-model="form.ooc.experience" required placeholder="Twoje doświadczenie w RP..."></textarea>
-      </label>
-
-      <!-- Sekcja 3 -->
-      <h2>3. Pytania sytuacyjne</h2>
-      <div v-for="(q, index) in questions" :key="index" class="question-block">
-        <p class="question">{{ q }}</p>
-        <textarea v-model="form.scenarios[index]" required placeholder="Twoja odpowiedź..."></textarea>
-      </div>
-
-      <!-- Sekcja 4 -->
-      <h2>4. Zgody</h2>
-      <label class="checkbox">
-        <input type="checkbox" v-model="form.consents.data" required />
-        Zgoda na przetwarzanie danych (Discord ID)
-      </label>
-      <label class="checkbox">
-        <input type="checkbox" v-model="form.consents.rules" required />
-        Znam zasady RP i Akceptuję regulamin serwera
-      </label>
-      <label class="checkbox">
-        <input type="checkbox" v-model="form.consents.truth" required />
-        Potwierdzam prawdziwość podanych informacji
-      </label>
-
-      <!-- Sekcja 5 -->
-      <h2>5. Dodatkowo (opcjonalnie)</h2>
-      <label>
-        Link do portfolio RP
-        <input v-model="form.extra.portfolio" placeholder="URL do portfolio" />
-      </label>
-      <label>
-        Preferowana frakcja lub rola
-        <input v-model="form.extra.faction" placeholder="Np. EMS, cywil..." />
-      </label>
-
-      <button type="submit" class="submit-btn">Wyślij podanie</button>
-    </form>
-    <p v-if="success" class="success-message">Dziękujemy za wysłanie podania!</p>
+      <h1>{{ pageTitle }}</h1>
+      <form @submit.prevent="submitForm" class="app-form">
+        <label>
+          Nick Discord + ID
+          <input v-model="form.discord" readonly />
+        </label>
+        <label>
+          Jakie języki programowania znasz?
+          <textarea v-model="form.languages" required></textarea>
+        </label>
+        <label>
+          Czy pracowałeś wcześniej z zasobami FiveM? Jakimi?
+          <textarea v-model="form.fivemExp" required></textarea>
+        </label>
+        <label>
+          Jak wygląda Twoja organizacja pracy przy większych zadaniach?
+          <textarea v-model="form.workOrg" required></textarea>
+        </label>
+        <label>
+          Opisz projekt/skrypt, z którego jesteś najbardziej dumny/a.
+          <textarea v-model="form.proudProject" required></textarea>
+        </label>
+        <label>
+          Jak reagujesz, gdy ktoś zgłasza błąd w Twoim kodzie?
+          <textarea v-model="form.bugResponse" required></textarea>
+        </label>
+        <label>
+          Czy potrafisz kodować pod cudze wymagania?
+          <textarea v-model="form.requirements" required></textarea>
+        </label>
+        <label>
+          Jakie obszary Cię najbardziej interesują? (UI, systemy RP, joby, zasoby)
+          <textarea v-model="form.interests" required></textarea>
+        </label>
+        <label>
+          Czy potrafisz przeprowadzać testy jednostkowe i techniczne?
+          <textarea v-model="form.testing" required></textarea>
+        </label>
+        <label>
+          🔗 Link do portfolio (GitHub, Discord bot, skrypt, demo)
+          <input v-model="form.portfolio" required />
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" v-model="form.consentData" required />
+          Zgoda na przetwarzanie danych (Discord ID)
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" v-model="form.consentDuties" required />
+          Akceptuję zakres obowiązków Developera
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" v-model="form.consentTruth" required />
+          Potwierdzam prawdziwość podanych informacji
+        </label>
+        <button type="submit" class="submit-btn">Wyślij podanie</button>
+      </form>
+      <p v-if="success" class="success-message">Dziękujemy za wysłanie podania!</p>
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import backgroundImage from '../assets/background.jpg'
+
 const backgroundImageUrl = ref(backgroundImage)
-const appType: string = 'developer'
 const pageTitle = 'Podanie na Developera'
-
-interface FormData {
-  ic: {
-    name: string
-    age: number | null
-    story: string
-    personality: string
-    skills: string
-    motivation: string
-  }
-  ooc: {
-    discord: string
-    experience: string
-    knowsRules: boolean
-  }
-  scenarios: string[]
-  questions: string[]
-  consents: {
-    data: boolean
-    rules: boolean
-    truth: boolean
-  }
-  extra: {
-    portfolio: string
-    faction: string
-  }
-}
-
-
-const questions = ref<string[]>([])
+const appType = 'developer'
 const success = ref(false)
 const router = useRouter()
 
+interface FormData {
+  discord: string
+  languages: string
+  fivemExp: string
+  workOrg: string
+  proudProject: string
+  bugResponse: string
+  requirements: string
+  interests: string
+  testing: string
+  portfolio: string
+  consentData: boolean
+  consentDuties: boolean
+  consentTruth: boolean
+}
+
 const form = ref<FormData>({
-  ic: {
-    name: '',
-    age: null,
-    story: '',
-    personality: '',
-    skills: '',
-    motivation: ''
-  },
-  ooc: {
-    discord: '',
-    experience: '',
-    knowsRules: false
-  },
-  scenarios: ['', '', '', '', ''],
-  questions: [],
-  consents: {
-    data: false,
-    rules: false,
-    truth: false
-  },
-  extra: {
-    portfolio: '',
-    faction: ''
-  }
+  discord: '',
+  languages: '',
+  fivemExp: '',
+  workOrg: '',
+  proudProject: '',
+  bugResponse: '',
+  requirements: '',
+  interests: '',
+  testing: '',
+  portfolio: '',
+  consentData: false,
+  consentDuties: false,
+  consentTruth: false
 })
 
-
 onMounted(async () => {
-  // Pobierz dane użytkownika z API
   const res = await fetch('/api/user', { credentials: 'include' })
   const data = await res.json()
   if (data.user) {
-    form.value.ooc.discord = `${data.user.username}#${data.user.id}`
-  }
-
-  if (appType === 'whitelist') {
-    const statusRes = await fetch('/api/status', { credentials: 'include' })
-    const statusData = await statusRes.json()
-    if (
-      statusData.status &&
-      (statusData.status !== 'Negatywnie' ||
-        (statusData.reapplyAfter && Date.now() < statusData.reapplyAfter))
-    ) {
-      router.push('/status')
-      return
-    }
-  }
-
-  // Odbierz przypisane do użytkownika pytania
-  const qRes = await fetch('/api/questions', { credentials: 'include' })
-  const qData = await qRes.json()
-  if (Array.isArray(qData.questions)) {
-    questions.value = qData.questions
+    form.value.discord = `${data.user.username}#${data.user.id}`
   }
 })
 
 async function submitForm() {
-  form.value.questions = questions.value
   const response = await fetch('/api/apply', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ ...form.value, type: appType })
   })
   if (response.ok) {
@@ -280,16 +209,5 @@ async function submitForm() {
 .success-message {
   margin-top: 1rem;
   color: var(--secondary);
-}
-
-.question-block {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.question {
-  font-weight: 600;
 }
 </style>
