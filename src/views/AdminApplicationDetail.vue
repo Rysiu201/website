@@ -64,7 +64,45 @@
             {{ label }}
           </option>
         </select>
+        <textarea
+          v-if="selectedStatus === statuses.REJECTED"
+          v-model="rejectionReason"
+          placeholder="Powód odrzucenia"
+          class="reason-input"
+          required
+        ></textarea>
         <button @click="updateStatus" class="update-btn">Zmień status</button>
+      </div>
+      <div v-if="app && app.status === statuses.APPROVED" class="notes-box">
+        <h3>
+          Notatki Administratora
+          <span v-if="adminNotes && !editAdmin" class="edit-icon" @click="editAdmin = true">📝</span>
+        </h3>
+        <p v-if="adminNotes && !editAdmin" class="notes-text">{{ adminNotes }}</p>
+        <textarea
+          v-if="!adminNotes || editAdmin"
+          v-model="adminNotes"
+          class="notes-input"
+          placeholder="(Opcjonalnie) Tutaj możesz wpisać swoje spostrzeżenia na temat podania gracza"
+        ></textarea>
+        <h3>
+          Notatki po rozmowie
+          <span v-if="interviewNotes && !editInterview" class="edit-icon" @click="editInterview = true">📝</span>
+        </h3>
+        <p v-if="interviewNotes && !editInterview" class="notes-text">{{ interviewNotes }}</p>
+        <textarea
+          v-if="!interviewNotes || editInterview"
+          v-model="interviewNotes"
+          class="notes-input"
+          placeholder="(Opcjonalne) Tutaj możesz wpisać swoje spostrzeżenia po rozmowie rekrutacyjnej z graczem"
+        ></textarea>
+        <button
+          v-if="editAdmin || editInterview || !adminNotes || !interviewNotes"
+          class="save-notes-btn"
+          @click="saveNotes"
+        >
+          Zapisz notatki
+        </button>
       </div>
     </div>
     <p v-else>Ładowanie...</p>
@@ -81,12 +119,20 @@ interface Application {
   status: string
   data: any
   history?: { status: string; timestamp: number; by?: string }[]
+  rejectionReason?: string
+  adminNotes?: string
+  interviewNotes?: string
 }
 
 const route = useRoute()
 const app = ref<Application | null>(null)
 const currentUser = ref<any>(null)
 const selectedStatus = ref('')
+const rejectionReason = ref('')
+const adminNotes = ref('')
+const interviewNotes = ref('')
+const editAdmin = ref(false)
+const editInterview = ref(false)
 
 const statuses = {
   SENT: 'Wysłane',
@@ -115,6 +161,9 @@ onMounted(async () => {
     app.value = data.application || null
     if (app.value) {
       selectedStatus.value = app.value.status
+      rejectionReason.value = app.value.rejectionReason || ''
+      adminNotes.value = app.value.adminNotes || ''
+      interviewNotes.value = app.value.interviewNotes || ''
       if (app.value.status === statuses.SENT) {
         await updateStatusInternal(statuses.PENDING)
         selectedStatus.value = statuses.PENDING
@@ -171,9 +220,22 @@ async function updateStatusInternal(newStatus: string) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
-    body: JSON.stringify({ userId: app.value.userId, status: newStatus })
+    body: JSON.stringify({
+      userId: app.value.userId,
+      status: newStatus,
+      rejectionReason: rejectionReason.value,
+      adminNotes: adminNotes.value,
+      interviewNotes: interviewNotes.value
+    })
   })
   app.value.status = newStatus
+  if (newStatus === statuses.REJECTED) {
+    app.value.rejectionReason = rejectionReason.value
+  } else {
+    app.value.rejectionReason = ''
+  }
+  if (adminNotes.value) app.value.adminNotes = adminNotes.value
+  if (interviewNotes.value) app.value.interviewNotes = interviewNotes.value
   if (!app.value.history) app.value.history = []
   const idx = app.value.history.findIndex(h => h.status === newStatus)
   const entry = {
@@ -193,11 +255,26 @@ async function updateStatusInternal(newStatus: string) {
   }
 }
 
-function updateStatus() {
+async function updateStatus() {
   if (!selectedStatus.value || !app.value) return
   if (selectedStatus.value !== app.value.status) {
-    updateStatusInternal(selectedStatus.value)
+    if (
+      selectedStatus.value === statuses.REJECTED &&
+      !rejectionReason.value.trim()
+    ) {
+      window.alert('Powód odrzucenia jest wymagany')
+      return
+    }
+    await updateStatusInternal(selectedStatus.value)
+    window.alert(`Status zmieniono na ${selectedStatus.value}`)
   }
+}
+
+async function saveNotes() {
+  if (!app.value) return
+  await updateStatusInternal(app.value.status)
+  editAdmin.value = false
+  editInterview.value = false
 }
 
 const decisionInfo = computed(() => {
@@ -282,6 +359,43 @@ const decisionInfo = computed(() => {
   flex-direction: column;
   gap: 0.5rem;
   align-items: center;
+}
+.reason-input {
+  width: 100%;
+  min-height: 80px;
+  border-radius: 6px;
+  padding: 0.4rem;
+}
+.notes-box {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.edit-icon {
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+.notes-text {
+  white-space: pre-wrap;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.4rem;
+  border-radius: 6px;
+}
+.notes-input {
+  width: 100%;
+  min-height: 80px;
+  border-radius: 6px;
+  padding: 0.4rem;
+}
+.save-notes-btn {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid transparent;
+  background: var(--gradient-accent);
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  align-self: flex-start;
 }
 
 .update-btn {

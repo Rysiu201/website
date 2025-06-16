@@ -1,5 +1,8 @@
 <template>
   <main class="applications-page">
+    <RouterLink to="/admin" class="back-link">
+      <i class="fa-solid fa-arrow-left"></i> Powrót
+    </RouterLink>
     <h1 class="page-title">Aktualne <span class="title-accent">Podania</span></h1>
     <div class="status-columns">
       <div
@@ -28,7 +31,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, RouterLink } from 'vue-router'
 
 interface Application {
   id: string
@@ -198,6 +201,18 @@ async function openDetail(app: Application) {
 }
 .red {
   color: #dd0000;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 1rem;
+  padding: 0.3rem 0.6rem;
+  color: #fff;
+  background: var(--gradient-accent);
+  border-radius: 4px;
+  text-decoration: none;
 }
 
 .preview-btn {
