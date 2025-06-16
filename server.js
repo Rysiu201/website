@@ -616,6 +616,49 @@ app.post('/api/admin/archive/:id', async (req, res) => {
   res.json({ success: true });
 });
 
+// Restore an archived application
+app.post('/api/admin/unarchive/:id', async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ success: false });
+  }
+
+  let isAdmin = false;
+  if (process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID) {
+    try {
+      const response = await fetch(
+        `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${req.user.id}`,
+        { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        const roles = data.roles || [];
+        isAdmin =
+          roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
+          roles.includes(process.env.STAFF_ROLE_ID || '');
+      }
+    } catch (err) {
+      console.error('Failed to check admin roles', err);
+    }
+  }
+
+  if (!isAdmin) {
+    return res.status(403).json({ success: false });
+  }
+
+  const db = loadDb();
+  const appEntry = db.applications.find(a => a.id === req.params.id);
+  if (!appEntry) {
+    return res.status(404).json({ success: false });
+  }
+  if (appEntry.archived) {
+    appEntry.archived = null;
+    appEntry.history = (appEntry.history || []).filter(h => h.status !== STATUS.ARCHIVED);
+    saveDb(db);
+  }
+
+  res.json({ success: true });
+});
+
 // Update or fetch notes about players
 app.post('/api/admin/player-notes', async (req, res) => {
   if (!req.user) return res.status(401).json({ success: false });
