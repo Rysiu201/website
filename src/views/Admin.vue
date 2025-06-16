@@ -112,19 +112,28 @@ const canViewDeveloper = computed(
 
 .admin-page h1 {
   margin: 0;
-  font-size: 2rem;
-  color: var(--light);
+  font-size: 2.5rem;
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .admin-layout {
-  display: flex;
+  display: grid;
   gap: 2rem;
   max-width: 1200px;
   margin-top: 2rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .admin-layout {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .sections {
-  width: 40%;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -135,16 +144,18 @@ const canViewDeveloper = computed(
   align-items: center;
   gap: 0.75rem;
   padding: 1rem 1.25rem;
-  border-radius: 12px;
-  background: rgba(138, 43, 226, 0.15);
-  border: 1px solid rgba(138, 43, 226, 0.3);
-  box-shadow: 0 4px 20px rgba(138, 43, 226, 0.2);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .admin-section:hover {
-  background: rgba(138, 43, 226, 0.25);
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
 }
 
 .admin-section i {
@@ -152,10 +163,15 @@ const canViewDeveloper = computed(
 }
 
 .admin-section span {
-  color: var(--light);
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .admin-extra {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 </style>

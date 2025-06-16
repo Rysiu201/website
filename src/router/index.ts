@@ -14,6 +14,7 @@ import ApplicationStatus from '../views/ApplicationStatus.vue'
 import AdminApplications from '../views/AdminApplications.vue'
 import AdminApplicationDetail from '../views/AdminApplicationDetail.vue'
 import AdminPlayerNotes from '../views/AdminPlayerNotes.vue'
+import DiscordRequired from '../views/DiscordRequired.vue'
 
 const STATUS = {
   REJECTED: 'Negatywnie'
@@ -70,6 +71,14 @@ const router = createRouter({
         title: 'Dołącz - AetherRP',
         description: 'Dowiedz się, jak dołączyć do AetherRP i zacząć grę na naszym serwerze FiveM.',
         keywords: 'jak dołączyć, połączenie z FiveM, aplikacja'
+      }
+    },
+    {
+      path: '/discord-required',
+      name: 'discord-required',
+      component: DiscordRequired,
+      meta: {
+        title: 'Dołącz do Discorda - AetherRP'
       }
     },
     {
