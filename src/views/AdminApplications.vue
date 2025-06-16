@@ -11,11 +11,12 @@
         class="status-column"
       >
         <h2>{{ col.label }} ({{ filtered(col.key).length }})</h2>
-        <div
-          v-for="app in displayed(col.key)"
-          :key="app.id"
-          class="app-card"
-        >
+        <div class="apps" :class="{ scrollable: showMore[col.key] }">
+          <div
+            v-for="app in displayed(col.key)"
+            :key="app.id"
+            class="app-card"
+          >
           <p class="app-discord"><b>Nazwa:</b> {{ cleanDiscord(app.discord) }}</p>
           <p class="app-time"><b>Data:</b> {{ formatDate(app.timestamp) }}</p>
           <p class="app-status"><b>Status:</b> <span :class="['status-text', statusClass(app.status)]">{{ app.status }}</span></p>
@@ -23,6 +24,7 @@
           <button class="preview-btn" @click="openDetail(app)">
             <i class="fa-solid fa-eye"></i> Podgląd
           </button>
+          </div>
         </div>
         <button
           v-if="filtered(col.key).length > 5 && !showMore[col.key]"
@@ -191,6 +193,16 @@ async function openDetail(app: Application) {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.apps {
+  display: flex;
+  flex-direction: column;
+}
+
+.apps.scrollable {
+  max-height: 60vh;
+  overflow-y: auto;
 }
 
 .app-card {
