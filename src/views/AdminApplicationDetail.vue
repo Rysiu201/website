@@ -69,6 +69,7 @@
           v-model="rejectionReason"
           placeholder="Powód odrzucenia"
           class="reason-input"
+          required
         ></textarea>
         <button @click="updateStatus" class="update-btn">Zmień status</button>
         <p v-if="updateMessage" class="update-msg">{{ updateMessage }}</p>
@@ -78,6 +79,37 @@
         <textarea v-model="adminNotes" class="notes-input"></textarea>
         <h3>Notatki po rozmowie</h3>
         <textarea v-model="interviewNotes" class="notes-input"></textarea>
+      </div>
+      <div v-if="app && app.status === statuses.APPROVED" class="notes-box">
+        <h3>
+          Notatki Administratora
+          <span v-if="adminNotes && !editAdmin" class="edit-icon" @click="editAdmin = true">📝</span>
+        </h3>
+        <p v-if="adminNotes && !editAdmin" class="notes-text">{{ adminNotes }}</p>
+        <textarea
+          v-if="!adminNotes || editAdmin"
+          v-model="adminNotes"
+          class="notes-input"
+          placeholder="(Opcjonalnie) Tutaj możesz wpisać swoje spostrzeżenia na temat podania gracza"
+        ></textarea>
+        <h3>
+          Notatki po rozmowie
+          <span v-if="interviewNotes && !editInterview" class="edit-icon" @click="editInterview = true">📝</span>
+        </h3>
+        <p v-if="interviewNotes && !editInterview" class="notes-text">{{ interviewNotes }}</p>
+        <textarea
+          v-if="!interviewNotes || editInterview"
+          v-model="interviewNotes"
+          class="notes-input"
+          placeholder="(Opcjonalne) Tutaj możesz wpisać swoje spostrzeżenia po rozmowie rekrutacyjnej z graczem"
+        ></textarea>
+        <button
+          v-if="editAdmin || editInterview || !adminNotes || !interviewNotes"
+          class="save-notes-btn"
+          @click="saveNotes"
+        >
+          Zapisz notatki
+        </button>
       </div>
     </div>
     <p v-else>Ładowanie...</p>
@@ -106,7 +138,8 @@ const selectedStatus = ref('')
 const rejectionReason = ref('')
 const adminNotes = ref('')
 const interviewNotes = ref('')
-const updateMessage = ref('')
+const editAdmin = ref(false)
+const editInterview = ref(false)
 
 const statuses = {
   SENT: 'Wysłane',
@@ -229,13 +262,26 @@ async function updateStatusInternal(newStatus: string) {
   }
 }
 
-function updateStatus() {
+async function updateStatus() {
   if (!selectedStatus.value || !app.value) return
   if (selectedStatus.value !== app.value.status) {
-    updateStatusInternal(selectedStatus.value)
-    updateMessage.value = `Status zmieniono na ${selectedStatus.value}`
-    setTimeout(() => (updateMessage.value = ''), 3000)
+    if (
+      selectedStatus.value === statuses.REJECTED &&
+      !rejectionReason.value.trim()
+    ) {
+      window.alert('Powód odrzucenia jest wymagany')
+      return
+    }
+    await updateStatusInternal(selectedStatus.value)
+    window.alert(`Status zmieniono na ${selectedStatus.value}`)
   }
+}
+
+async function saveNotes() {
+  if (!app.value) return
+  await updateStatusInternal(app.value.status)
+  editAdmin.value = false
+  editInterview.value = false
 }
 
 const decisionInfo = computed(() => {
@@ -327,6 +373,7 @@ const decisionInfo = computed(() => {
   border-radius: 6px;
   padding: 0.4rem;
 }
+=======
 .update-msg {
   color: #00ff7f;
 }
@@ -336,11 +383,30 @@ const decisionInfo = computed(() => {
   flex-direction: column;
   gap: 0.5rem;
 }
+.edit-icon {
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+.notes-text {
+  white-space: pre-wrap;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.4rem;
+  border-radius: 6px;
+}
 .notes-input {
   width: 100%;
   min-height: 80px;
   border-radius: 6px;
   padding: 0.4rem;
+}
+.save-notes-btn {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid transparent;
+  background: var(--gradient-accent);
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  align-self: flex-start;
 }
 
 .update-btn {
