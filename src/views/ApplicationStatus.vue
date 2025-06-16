@@ -8,9 +8,14 @@
         <b><span :class="statusClass">{{ status }}</span></b>
       </h1>
       <p v-if="status === statuses.APPROVED" class="approved-msg">
-        Twoje podanie zostało rozpatrzone {{ status }}.
-        <a :href="discordLink" target="_blank">Dołącz na Discorda</a>
-        i zgłoś się w celu dalszej rekrutacji.
+        <template v-if="appType === 'administrator'">
+          Gratulacje! Twoje podanie zostało rozpatrzone {{ status }}. Poniżej znajdziesz kolejne kroki.
+        </template>
+        <template v-else>
+          Twoje podanie zostało rozpatrzone {{ status }}.
+          <a :href="discordLink" target="_blank">Dołącz na Discorda</a>
+          i zgłoś się w celu dalszej rekrutacji.
+        </template>
       </p>
       <p v-if="archived" class="approved-msg">
         Twoje podanie zostało zarchiwizowane.
@@ -42,7 +47,7 @@
           <p>{{ rejectionReason }}</p>
         </div>
         <p v-if="timeRemaining">
-          W ciągu {{ cooldownHours }}h możesz ponownie złożyć podanie.
+          W ciągu {{ cooldownText }} możesz ponownie złożyć podanie.
         </p>
         <button
           class="reapply-btn"
@@ -85,7 +90,7 @@ const statuses = {
   ARCHIVED: 'Zarchiwizowane'
 }
 
-const joinSteps = ref([
+const defaultSteps = [
   {
     id: 1,
     title: 'Wskakuj na kanał  🎢Kolejka',
@@ -115,13 +120,41 @@ const joinSteps = ref([
     icon: 'fa-solid fa-server',
     link: '/join'
   }
-])
+]
+
+const adminSteps = [
+  {
+    id: 1,
+    title: 'Skontaktuj się na kanale',
+    description: 'Użyj wskazanego kanału Discord aby umówić się na rozmowę.',
+    icon: 'fa-brands fa-discord',
+    link: undefined
+  },
+  {
+    id: 2,
+    title: 'Poczekaj na swoją kolej',
+    description: 'Gdy nadejdzie Twoja kolej przejdź rozmowę kwalifikacyjną.',
+    icon: 'fa-solid fa-comments',
+    link: undefined
+  },
+  {
+    id: 3,
+    title: 'Wspomagaj serwer',
+    description: 'Angażuj się i pomagaj innym tworzyć lepszą społeczność.',
+    icon: 'fa-solid fa-handshake',
+    link: undefined
+  }
+]
+
+const joinSteps = computed(() =>
+  appType.value === 'administrator' ? adminSteps : defaultSteps
+)
 
 const route = useRoute()
 const appType = computed(() => (route.meta.type as string) || 'whitelist')
 
 const status = ref('')
-const headerText = ref('Twoje podanie zostało Wysłane')
+const headerText = ref('')
 const discordLink = 'https://discord.gg/your-waiting-room'
 const reapplyAfter = ref<number | null>(null)
 const history = ref<any[]>([])
@@ -133,6 +166,11 @@ const recentRejections = ref(0)
 const rejectionsBeforeExtra = ref(0)
 const rejectedHistory = computed(() =>
   history.value.filter(h => h.status === statuses.REJECTED)
+)
+const cooldownText = computed(() =>
+  appType.value === 'administrator'
+    ? `${Math.round(cooldownHours.value / 24)} dni`
+    : `${cooldownHours.value}h`
 )
 let interval: number | null = null
 
@@ -153,6 +191,11 @@ onMounted(async () => {
     headerText.value = 'Posiadasz już zaakceptowane podanie'
   } else if (archived.value) {
     headerText.value = 'Twoje podanie zostało zarchiwizowane'
+  } else {
+    headerText.value =
+      appType.value === 'administrator'
+        ? 'Twoje podanie na Administratora zostało wysłane'
+        : 'Twoje podanie zostało Wysłane'
   }
   updateRemaining()
   if (reapplyAfter.value && Date.now() < reapplyAfter.value) {
