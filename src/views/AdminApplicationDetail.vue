@@ -170,6 +170,8 @@ onMounted(async () => {
       rejectionReason.value = app.value.rejectionReason || ''
       adminNotes.value = app.value.adminNotes || ''
       interviewNotes.value = app.value.interviewNotes || ''
+      editAdmin.value = !adminNotes.value
+      editInterview.value = !interviewNotes.value
 
       if (app.value.status === statuses.SENT) {
         await updateStatusInternal(statuses.PENDING)
@@ -341,6 +343,9 @@ const decisionInfo = computed(() => {
   word-wrap: break-word;
   white-space: pre-wrap;
 }
+.app-table th {
+  color: var(--secondary);
+}
 .gray {
   color: gray;
 }
@@ -370,7 +375,6 @@ const decisionInfo = computed(() => {
   border-radius: 6px;
   padding: 0.4rem;
 }
-=======
 .update-msg {
   color: #00ff7f;
 }

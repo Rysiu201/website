@@ -10,9 +10,9 @@
         :key="col.key"
         class="status-column"
       >
-        <h2>{{ col.label }}</h2>
+        <h2>{{ col.label }} ({{ filtered(col.key).length }})</h2>
         <div
-          v-for="app in filtered(col.key)"
+          v-for="app in displayed(col.key)"
           :key="app.id"
           class="app-card"
         >
@@ -24,13 +24,20 @@
             <i class="fa-solid fa-eye"></i> Podgląd
           </button>
         </div>
+        <button
+          v-if="filtered(col.key).length > 5 && !showMore[col.key]"
+          class="show-more-btn"
+          @click="showAll(col.key)"
+        >
+          Pokaż więcej
+        </button>
       </div>
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
 import { useRouter, RouterLink } from 'vue-router'
 
 interface Application {
@@ -71,11 +78,28 @@ const columns: { key: keyof typeof statuses; label: string }[] = [
   { key: 'REJECTED', label: statuses.REJECTED }
 ]
 
+const showMore = reactive<Record<keyof typeof statuses, boolean>>({
+  SENT: false,
+  PENDING: false,
+  IN_REVIEW: false,
+  APPROVED: false,
+  REJECTED: false
+})
+
 function filtered(key: keyof typeof statuses) {
   const status = statuses[key]
   return applications.value
     .filter(a => a.status === status)
     .sort((a, b) => a.timestamp - b.timestamp)
+}
+
+function displayed(key: keyof typeof statuses) {
+  const list = filtered(key)
+  return showMore[key] ? list : list.slice(0, 5)
+}
+
+function showAll(key: keyof typeof statuses) {
+  showMore[key] = true
 }
 
 function cleanDiscord(d: string) {
@@ -231,6 +255,22 @@ async function openDetail(app: Application) {
 }
 
 .preview-btn:hover {
+  background: rgba(138, 43, 226, 0.5);
+}
+
+.show-more-btn {
+  display: block;
+  margin: 0 auto 0.75rem;
+  padding: 0.4rem 0.8rem;
+  color: #fff;
+  background: rgba(138, 43, 226, 0.3);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.show-more-btn:hover {
   background: rgba(138, 43, 226, 0.5);
 }
 </style>
