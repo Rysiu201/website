@@ -27,7 +27,7 @@
           </div>
         </div>
         <button
-          v-if="filtered(col.key).length > 5 && !showMore[col.key]"
+          v-if="filtered(col.key).length > 3 && !showMore[col.key]"
           class="show-more-btn"
           @click="showAll(col.key)"
         >
@@ -97,7 +97,7 @@ function filtered(key: keyof typeof statuses) {
 
 function displayed(key: keyof typeof statuses) {
   const list = filtered(key)
-  return showMore[key] ? list : list.slice(0, 5)
+  return showMore[key] ? list : list.slice(0, 3)
 }
 
 function showAll(key: keyof typeof statuses) {
