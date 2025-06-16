@@ -69,6 +69,15 @@ const router = createRouter({
       }
     },
     {
+      path: '/applications',
+      name: 'application-menu',
+      component: () => import('../views/ApplicationMenu.vue'),
+      meta: {
+        title: 'Złóż podanie - AetherRP',
+        requiresAuth: true
+      }
+    },
+    {
       path: '/apply',
       name: 'apply',
       component: Apply,
@@ -76,7 +85,48 @@ const router = createRouter({
         title: 'Złóż podanie - AetherRP',
         description: 'Wypełnij formularz, aby dołączyć do zespołu AetherRP.',
         keywords: 'podanie, rekrutacja, aetherrp',
-        requiresAuth: true
+        requiresAuth: true,
+        type: 'whitelist'
+      }
+    },
+    {
+      path: '/apply-checker',
+      name: 'apply-checker',
+      component: Apply,
+      meta: {
+        title: 'Podanie na WhiteListCheckera - AetherRP',
+        requiresAuth: true,
+        type: 'checker'
+      }
+    },
+    {
+      path: '/apply-moderator',
+      name: 'apply-moderator',
+      component: Apply,
+      meta: {
+        title: 'Podanie na Moderatora - AetherRP',
+        requiresAuth: true,
+        type: 'moderator'
+      }
+    },
+    {
+      path: '/apply-administrator',
+      name: 'apply-administrator',
+      component: Apply,
+      meta: {
+        title: 'Podanie na Administratora - AetherRP',
+        requiresAuth: true,
+        type: 'administrator'
+      }
+    },
+    {
+      path: '/apply-developer',
+      name: 'apply-developer',
+      component: Apply,
+      meta: {
+        title: 'Podanie na Developera - AetherRP',
+        requiresAuth: true,
+        type: 'developer'
       }
     },
     {

@@ -59,6 +59,7 @@ function loadDb() {
         if (!('adminNotes' in app)) app.adminNotes = '';
         if (!('interviewNotes' in app)) app.interviewNotes = '';
         if (!('archived' in app)) app.archived = null;
+        if (!('type' in app)) app.type = 'whitelist';
       });
     }
     if (!data.playerNotes) data.playerNotes = {};
@@ -380,6 +381,7 @@ app.post('/api/apply', async (req, res) => {
       id: Date.now().toString(),
       userId: req.user.id,
       data: req.body,
+      type: req.body.type || 'whitelist',
       status: STATUS.SENT,
       history: [
         {
@@ -522,7 +524,8 @@ app.get('/api/admin/applications', async (req, res) => {
       status: a.status,
       timestamp: a.ts,
       number: counts[a.userId],
-      archived: a.archived || null
+      archived: a.archived || null,
+      type: a.type || 'whitelist'
     };
   });
 

@@ -113,6 +113,7 @@
         </button>
       </div>
       <div v-if="app && app.archived" class="archive-extra">
+        <p><b>Zarchiwizowane przez:</b> {{ app.archived.by }} - {{ formatDate(app.archived.timestamp) }}</p>
         <div v-if="app.rejectionReason" class="reason-box">
           <h3>Powód odrzucenia</h3>
           <p>{{ app.rejectionReason }}</p>
@@ -473,6 +474,10 @@ const decisionInfo = computed(() => {
 
 .archive-extra {
   margin-top: 1.5rem;
+}
+.archive-extra p {
+  margin: 0.2rem 0 1rem;
+  color: #ffd700;
 }
 
 .archive-btn:hover {

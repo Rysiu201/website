@@ -15,7 +15,7 @@
           <li><router-link to="/staff" class="nav-link" active-class="active"><i class="fa-solid fa-users"></i> Zespół</router-link></li>
           <li><router-link to="/rules" class="nav-link" active-class="active"><i class="fa-solid fa-file-contract"></i> Zasady</router-link></li>
           <li><router-link to="/join" class="nav-link" active-class="active"><i class="fa-solid fa-book"></i> Jak dołączyć</router-link></li>
-          <li v-if="isLoggedIn"><router-link to="/apply" class="nav-link" active-class="active"><i class="fa-solid fa-file-signature"></i> Złóż podanie</router-link></li>
+          <li v-if="isLoggedIn"><router-link to="/applications" class="nav-link" active-class="active"><i class="fa-solid fa-file-signature"></i> Złóż podanie</router-link></li>
         </ul>
       </nav>
       <div class="header-actions">
@@ -46,7 +46,7 @@
         <li><router-link to="/staff" @click="closeMenu"><i class="fa-solid fa-users"></i> Zespół</router-link></li>
         <li><router-link to="/rules" @click="closeMenu"><i class="fa-solid fa-file-contract"></i> Zasady</router-link></li>
         <li><router-link to="/join" @click="closeMenu"><i class="fa-solid fa-book"></i> Jak dołączyć</router-link></li>
-        <li v-if="isLoggedIn"><router-link to="/apply" @click="closeMenu"><i class="fa-solid fa-file-signature"></i> Złóż podanie</router-link></li>
+        <li v-if="isLoggedIn"><router-link to="/applications" @click="closeMenu"><i class="fa-solid fa-file-signature"></i> Złóż podanie</router-link></li>
         <li v-if="isAdmin"><router-link to="/admin" @click="closeMenu"><i class="fa-solid fa-screwdriver-wrench"></i> Administrowanie</router-link></li>
       </ul>
       <div class="mobile-social-icons">

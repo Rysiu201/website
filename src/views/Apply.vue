@@ -2,7 +2,7 @@
   <main class="apply-page" :style="{ backgroundImage: `url(${backgroundImageUrl})` }">
     <div class="apply-overlay"></div>
     <div class="apply-container">
-    <h1>Złóż podanie</h1>
+    <h1>{{ pageTitle }}</h1>
     <p class="intro">
       Przed wypełnieniem formularza zapoznaj się z poniższymi wskazówkami. Odpowiadaj wyczerpująco i zgodnie z zasadami roleplay. Pamiętaj, aby unikać informacji OOC w części IC.
     </p>
@@ -86,10 +86,26 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { onMounted, ref, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import backgroundImage from '../assets/background.jpg'
 const backgroundImageUrl = ref(backgroundImage)
+const route = useRoute()
+const appType = computed(() => (route.meta.type as string) || 'whitelist')
+const pageTitle = computed(() => {
+  switch (appType.value) {
+    case 'checker':
+      return 'Podanie na WhiteListCheckera'
+    case 'moderator':
+      return 'Podanie na Moderatora'
+    case 'administrator':
+      return 'Podanie na Administratora'
+    case 'developer':
+      return 'Podanie na Developera'
+    default:
+      return 'Złóż podanie na WhiteListe'
+  }
+})
 
 interface FormData {
   ic: {
@@ -159,15 +175,17 @@ onMounted(async () => {
     form.value.ooc.discord = `${data.user.username}#${data.user.id}`
   }
 
-  const statusRes = await fetch('/api/status', { credentials: 'include' })
-  const statusData = await statusRes.json()
-  if (
-    statusData.status &&
-    (statusData.status !== 'Negatywnie' ||
-      (statusData.reapplyAfter && Date.now() < statusData.reapplyAfter))
-  ) {
-    router.push('/status')
-    return
+  if (appType.value === 'whitelist') {
+    const statusRes = await fetch('/api/status', { credentials: 'include' })
+    const statusData = await statusRes.json()
+    if (
+      statusData.status &&
+      (statusData.status !== 'Negatywnie' ||
+        (statusData.reapplyAfter && Date.now() < statusData.reapplyAfter))
+    ) {
+      router.push('/status')
+      return
+    }
   }
 
   // Odbierz przypisane do użytkownika pytania
@@ -185,7 +203,7 @@ async function submitForm() {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(form.value)
+    body: JSON.stringify({ ...form.value, type: appType.value })
   })
   if (response.ok) {
     success.value = true
