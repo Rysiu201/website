@@ -1,6 +1,6 @@
 <template>
   <main class="admin-page">
-    <h1>Panel Administracyjny</h1>
+    <h1 class="section-title"><span class="accent">Panel Administracyjny</span></h1>
     <div class="admin-layout">
       <div class="sections">
         <RouterLink
@@ -110,9 +110,14 @@ const canViewDeveloper = computed(
   color: #fff;
 }
 
-.admin-page h1 {
-  margin: 0;
+.section-title {
+  text-align: center;
   font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.section-title .accent {
   background: var(--gradient-accent);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -123,7 +128,7 @@ const canViewDeveloper = computed(
   display: grid;
   gap: 2rem;
   max-width: 1200px;
-  margin-top: 2rem;
+  margin: 2rem auto 0 auto;
   grid-template-columns: 1fr;
 }
 
