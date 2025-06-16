@@ -4,7 +4,7 @@
       <i class="fa-solid fa-arrow-left"></i> Powrót
     </RouterLink>
     <div v-if="app" class="detail-container">
-      <h1 class="detail-title">Podanie użytkownika <span class="logo-accent discord-name">{{ cleanDiscord(app.data.ooc.discord) }}</span></h1>
+      <h1 class="detail-title">Podanie użytkownika <span class="logo-accent discord-name">{{ cleanDiscord(discordField) }}</span></h1>
       <table class="app-table">
         <tr>
           <th>Status</th>
@@ -19,8 +19,8 @@
           <td>{{ decisionInfo }}</td>
         </tr>
       </table>
-      <h2>Informacje IC</h2>
-      <table class="app-table">
+      <h2 v-if="app.data.ic">Informacje IC</h2>
+      <table v-if="app.data.ic" class="app-table">
         <tr><th>Imię i nazwisko</th><td>{{ app.data.ic.name }}</td></tr>
         <tr><th>Wiek</th><td>{{ app.data.ic.age }}</td></tr>
         <tr><th>Historia</th><td>{{ app.data.ic.story }}</td></tr>
@@ -28,18 +28,20 @@
         <tr><th>Umiejętności</th><td>{{ app.data.ic.skills }}</td></tr>
         <tr><th>Motywacja</th><td>{{ app.data.ic.motivation }}</td></tr>
       </table>
-      <h2>Informacje OOC</h2>
-      <table class="app-table">
-        <tr><th>Discord</th><td>{{ app.data.ooc.discord }}</td></tr>
-        <tr><th>Doświadczenie</th><td>{{ app.data.ooc.experience }}</td></tr>
-        <tr>
-          <th>Zgody</th>
-          <td>
-            Dane: {{ app.data.consents.data ? 'Tak' : 'Nie' }},
-            Zasady: {{ app.data.consents.rules ? 'Tak' : 'Nie' }},
-            Prawdziwość: {{ app.data.consents.truth ? 'Tak' : 'Nie' }}
-          </td>
-        </tr>
+      <h2 v-if="app.data && (app.data.ooc || app.data.discord)">Informacje OOC</h2>
+      <table v-if="app.data && (app.data.ooc || app.data.discord)" class="app-table">
+        <tr><th>Discord</th><td>{{ discordField }}</td></tr>
+        <template v-if="app.data.ooc">
+          <tr><th>Doświadczenie</th><td>{{ app.data.ooc.experience }}</td></tr>
+          <tr>
+            <th>Zgody</th>
+            <td>
+              Dane: {{ app.data.consents.data ? 'Tak' : 'Nie' }},
+              Zasady: {{ app.data.consents.rules ? 'Tak' : 'Nie' }},
+              Prawdziwość: {{ app.data.consents.truth ? 'Tak' : 'Nie' }}
+            </td>
+          </tr>
+        </template>
       </table>
       <h2>Pytania sytuacyjne</h2>
       <table class="app-table">
@@ -52,8 +54,8 @@
           </tr>
         </template>
       </table>
-      <h2>Dodatkowo</h2>
-      <table class="app-table">
+      <h2 v-if="app.data.extra">Dodatkowo</h2>
+      <table v-if="app.data.extra" class="app-table">
         <tr><th>Portfolio</th><td>{{ app.data.extra.portfolio }}</td></tr>
         <tr><th>Frakcja</th><td>{{ app.data.extra.faction }}</td></tr>
       </table>
@@ -228,6 +230,11 @@ const scenarioPairs = computed(() => {
   const qs: string[] = app.value.data.questions || []
   const ans: string[] = app.value.data.scenarios || []
   return qs.map((q, i) => ({ question: q, answer: ans[i] || '' }))
+})
+
+const discordField = computed(() => {
+  if (!app.value) return ''
+  return app.value.data?.ooc?.discord || app.value.data?.discord || ''
 })
 
 const statusClass = computed(() => {
