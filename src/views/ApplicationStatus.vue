@@ -12,7 +12,11 @@
         <a :href="discordLink" target="_blank">Dołącz na Discorda</a>
         i zgłoś się w celu dalszej rekrutacji.
       </p>
+<<<<<<< kexp8n-codex/add-archiving-button-and-category
+      <p v-if="archived" class="approved-msg">
+=======
       <p v-if="status === statuses.ARCHIVED" class="approved-msg">
+>>>>>>> main
         Twoje podanie zostało zarchiwizowane.
       </p>
       <div v-if="status === statuses.APPROVED" class="next-steps">
@@ -122,6 +126,7 @@ const discordLink = 'https://discord.gg/your-waiting-room'
 const reapplyAfter = ref<number | null>(null)
 const history = ref<any[]>([])
 const rejectionReason = ref('')
+const archived = ref(false)
 const timeRemaining = ref('')
 const cooldownHours = ref(0)
 const recentRejections = ref(0)
@@ -137,13 +142,18 @@ onMounted(async () => {
   status.value = data.status || ''
   rejectionReason.value = data.rejectionReason || ''
   history.value = Array.isArray(data.history) ? data.history : []
+  archived.value = !!data.archived
   reapplyAfter.value = data.reapplyAfter || null
   cooldownHours.value = data.baseCooldownHours || 0
   recentRejections.value = data.recentRejections || 0
   rejectionsBeforeExtra.value = data.rejectionsBeforeExtra || 0
   if (status.value === statuses.APPROVED) {
     headerText.value = 'Posiadasz już zaakceptowane podanie'
+<<<<<<< kexp8n-codex/add-archiving-button-and-category
+  } else if (archived.value) {
+=======
   } else if (status.value === statuses.ARCHIVED) {
+>>>>>>> main
     headerText.value = 'Twoje podanie zostało zarchiwizowane'
   }
   updateRemaining()

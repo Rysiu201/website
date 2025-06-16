@@ -4,6 +4,13 @@
       <i class="fa-solid fa-arrow-left"></i> Powrót
     </RouterLink>
     <div v-if="app" class="detail-container">
+      <button
+        v-if="!app.archived"
+        class="archive-btn top-right"
+        @click="archive"
+      >
+        <i class="fa-solid fa-box-archive"></i> Archiwizuj
+      </button>
       <h1 class="detail-title">Podanie użytkownika <span class="logo-accent discord-name">{{ cleanDiscord(app.data.ooc.discord) }}</span></h1>
       <table class="app-table">
         <tr>
@@ -116,6 +123,20 @@
           Zapisz notatki
         </button>
       </div>
+      <div v-if="app && app.archived" class="archive-extra">
+        <div v-if="app.rejectionReason" class="reason-box">
+          <h3>Powód odrzucenia</h3>
+          <p>{{ app.rejectionReason }}</p>
+        </div>
+        <div v-if="app.adminNotes" class="reason-box">
+          <h3>Notatki Administratora</h3>
+          <p class="notes-text">{{ app.adminNotes }}</p>
+        </div>
+        <div v-if="app.interviewNotes" class="reason-box">
+          <h3>Notatki po rozmowie</h3>
+          <p class="notes-text">{{ app.interviewNotes }}</p>
+        </div>
+      </div>
     </div>
     <p v-else>Ładowanie...</p>
   </main>
@@ -134,6 +155,7 @@ interface Application {
   rejectionReason?: string
   adminNotes?: string
   interviewNotes?: string
+  archived?: { by: string; timestamp: number } | null
 }
 
 const route = useRoute()
@@ -302,7 +324,14 @@ async function archive() {
     method: 'POST',
     credentials: 'include'
   })
+<<<<<<< kexp8n-codex/add-archiving-button-and-category
+  app.value.archived = {
+    timestamp: Date.now(),
+    by: currentUser.value?.username || 'Admin'
+  }
+=======
   app.value.status = statuses.ARCHIVED
+>>>>>>> main
   app.value.history = app.value.history || []
   app.value.history.push({
     status: statuses.ARCHIVED,
@@ -322,12 +351,18 @@ const decisionInfo = computed(() => {
 })
 
 const archiveInfo = computed(() => {
+<<<<<<< kexp8n-codex/add-archiving-button-and-category
+  if (!app.value?.archived) return ''
+  const date = new Date(app.value.archived.timestamp).toLocaleString()
+  return `Zarchiwizowane przez ${app.value.archived.by || 'System'} - ${date}`
+=======
   if (!app.value?.history) return ''
   const entry = [...app.value.history].reverse()
     .find(h => h.status === statuses.ARCHIVED)
   if (!entry) return ''
   const date = new Date(entry.timestamp).toLocaleString()
   return `Zarchiwizowane przez ${entry.by || 'System'} - ${date}`
+>>>>>>> main
 })
 </script>
 
@@ -463,7 +498,20 @@ const archiveInfo = computed(() => {
   color: #fff;
   cursor: pointer;
   border-radius: 4px;
+<<<<<<< kexp8n-codex/add-archiving-button-and-category
+}
+.archive-btn.top-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+}
+
+.archive-extra {
+  margin-top: 1.5rem;
+=======
   margin-left: 0.5rem;
+>>>>>>> main
 }
 
 .archive-btn:hover {

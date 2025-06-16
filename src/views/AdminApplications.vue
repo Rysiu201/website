@@ -33,7 +33,11 @@
             <i class="fa-solid fa-eye"></i> Podgląd
           </button>
           <button
+<<<<<<< kexp8n-codex/add-archiving-button-and-category
+            v-if="!app.archived"
+=======
             v-if="app.status !== statuses.ARCHIVED"
+>>>>>>> main
             class="archive-btn"
             @click="archiveApplication(app)"
           >
@@ -71,6 +75,7 @@ interface Application {
   status: string
   timestamp: number
   number: number
+  archived?: { by: string; timestamp: number } | null
 }
 
 const applications = ref<Application[]>([])
@@ -128,10 +133,14 @@ const searchTerms = reactive<Record<keyof typeof statuses, string>>({
 })
 
 function filtered(key: keyof typeof statuses) {
-  const status = statuses[key]
   let list = applications.value
-    .filter(a => a.status === status)
-    .sort((a, b) => a.timestamp - b.timestamp)
+  if (key === 'ARCHIVED') {
+    list = list.filter(a => a.archived)
+  } else {
+    const status = statuses[key]
+    list = list.filter(a => a.status === status)
+  }
+  list = list.sort((a, b) => a.timestamp - b.timestamp)
 
   const term = searchTerms[key].toLowerCase()
   if (term) {
@@ -218,7 +227,11 @@ async function archiveApplication(app: Application) {
     method: 'POST',
     credentials: 'include'
   })
+<<<<<<< kexp8n-codex/add-archiving-button-and-category
+  app.archived = { by: 'Admin', timestamp: Date.now() }
+=======
   app.status = statuses.ARCHIVED
+>>>>>>> main
 }
 </script>
 

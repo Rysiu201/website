@@ -58,6 +58,7 @@ function loadDb() {
         if (!('rejectionReason' in app)) app.rejectionReason = '';
         if (!('adminNotes' in app)) app.adminNotes = '';
         if (!('interviewNotes' in app)) app.interviewNotes = '';
+        if (!('archived' in app)) app.archived = null;
       });
     }
     if (!data.playerNotes) data.playerNotes = {};
@@ -93,11 +94,19 @@ function autoArchiveOldApplications(db) {
   const now = Date.now();
   let changed = false;
   for (const app of db.applications) {
+<<<<<<< kexp8n-codex/add-archiving-button-and-category
+    if (!app.archived) {
+      const last = (app.history && app.history[app.history.length - 1]) || null;
+      const ts = last ? last.timestamp : Number(app.id);
+      if (now - ts >= WEEK) {
+        app.archived = { timestamp: now, by: 'System' };
+=======
     if (app.status !== STATUS.ARCHIVED) {
       const last = (app.history && app.history[app.history.length - 1]) || null;
       const ts = last ? last.timestamp : Number(app.id);
       if (now - ts >= WEEK) {
         app.status = STATUS.ARCHIVED;
+>>>>>>> main
         app.history = app.history || [];
         app.history.push({
           status: STATUS.ARCHIVED,
@@ -308,6 +317,7 @@ app.get('/api/status', (req, res) => {
     status: appEntry ? appEntry.status : null,
     rejectionReason: appEntry ? appEntry.rejectionReason || '' : '',
     history: appEntry ? appEntry.history || [] : [],
+    archived: appEntry ? appEntry.archived || null : null,
     reapplyAfter: appEntry ? appEntry.reapplyAfter || null : null,
     baseCooldownHours: REAPPLY_COOLDOWN_HOURS,
     extraCooldownHours: EXTRA_COOLDOWN_HOURS,
@@ -516,7 +526,8 @@ app.get('/api/admin/applications', async (req, res) => {
       discord: a.data?.ooc?.discord || '',
       status: a.status,
       timestamp: a.ts,
-      number: counts[a.userId]
+      number: counts[a.userId],
+      archived: a.archived || null
     };
   });
 
@@ -597,8 +608,13 @@ app.post('/api/admin/archive/:id', async (req, res) => {
     return res.status(404).json({ success: false });
   }
 
+<<<<<<< kexp8n-codex/add-archiving-button-and-category
+  if (!appEntry.archived) {
+    appEntry.archived = { timestamp: Date.now(), by: req.user.username };
+=======
   if (appEntry.status !== STATUS.ARCHIVED) {
     appEntry.status = STATUS.ARCHIVED;
+>>>>>>> main
     appEntry.history = appEntry.history || [];
     appEntry.history.push({
       status: STATUS.ARCHIVED,
