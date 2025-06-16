@@ -11,11 +11,19 @@
         class="status-column"
       >
         <h2>{{ col.label }} ({{ filtered(col.key).length }})</h2>
+        <div class="search-box">
+          <input
+            v-model="searchTerms[col.key]"
+            placeholder="Nazwa"
+            @keyup.enter="performSearch(col.key)"
+          />
+          <button @click="performSearch(col.key)">Szukaj</button>
+        </div>
         <div class="apps" :class="{ scrollable: showMore[col.key] }">
           <div
             v-for="app in displayed(col.key)"
             :key="app.id"
-            class="app-card"
+            :class="['app-card', { highlight: isHighlighted(app, col.key) }]"
           >
           <p class="app-discord"><b>Nazwa:</b> {{ cleanDiscord(app.discord) }}</p>
           <p class="app-time"><b>Data:</b> {{ formatDate(app.timestamp) }}</p>
@@ -32,6 +40,13 @@
           @click="showAll(col.key)"
         >
           Pokaż więcej
+        </button>
+        <button
+          v-if="showMore[col.key]"
+          class="show-more-btn"
+          @click="showLess(col.key)"
+        >
+          Pokaż mniej
         </button>
       </div>
     </div>
@@ -88,20 +103,54 @@ const showMore = reactive<Record<keyof typeof statuses, boolean>>({
   REJECTED: false
 })
 
+const searchTerms = reactive<Record<keyof typeof statuses, string>>({
+  SENT: '',
+  PENDING: '',
+  IN_REVIEW: '',
+  APPROVED: '',
+  REJECTED: ''
+})
+
 function filtered(key: keyof typeof statuses) {
   const status = statuses[key]
-  return applications.value
+  let list = applications.value
     .filter(a => a.status === status)
     .sort((a, b) => a.timestamp - b.timestamp)
+
+  const term = searchTerms[key].toLowerCase()
+  if (term) {
+    list = list.filter(a =>
+      cleanDiscord(a.discord).toLowerCase().includes(term)
+    )
+  }
+  return list
 }
 
 function displayed(key: keyof typeof statuses) {
   const list = filtered(key)
+  if (searchTerms[key]) return list
   return showMore[key] ? list : list.slice(0, 3)
 }
 
 function showAll(key: keyof typeof statuses) {
   showMore[key] = true
+}
+
+function showLess(key: keyof typeof statuses) {
+  showMore[key] = false
+}
+
+function performSearch(key: keyof typeof statuses) {
+  searchTerms[key] = searchTerms[key].trim()
+  if (searchTerms[key]) {
+    showMore[key] = true
+  }
+}
+
+function isHighlighted(app: Application, key: keyof typeof statuses) {
+  const term = searchTerms[key].toLowerCase()
+  if (!term) return false
+  return cleanDiscord(app.discord).toLowerCase().includes(term)
 }
 
 function cleanDiscord(d: string) {
@@ -203,6 +252,39 @@ async function openDetail(app: Application) {
 .apps.scrollable {
   max-height: 60vh;
   overflow-y: auto;
+}
+
+.search-box {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.search-box input {
+  padding: 0.4rem;
+  border-radius: 4px;
+  border: 1px solid rgba(138, 43, 226, 0.3);
+  background: rgba(0, 0, 0, 0.2);
+  color: #fff;
+}
+
+.search-box button {
+  padding: 0.4rem 0.8rem;
+  color: #fff;
+  background: rgba(138, 43, 226, 0.3);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.search-box button:hover {
+  background: rgba(138, 43, 226, 0.5);
+}
+
+.highlight {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .app-card {
