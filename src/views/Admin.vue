@@ -54,6 +54,12 @@
           <span>Zaarchiwizowane podania</span>
         </RouterLink>
       </div>
+      <div class="admin-extra">
+        <RouterLink class="admin-section" to="/admin/unban">
+          <i class="fa-solid fa-box-archive"></i>
+          <span>Wnioski o odbanowanie (W trakcie pracy)</span>
+        </RouterLink>
+      </div>
     </div>
   </main>
 </template>
