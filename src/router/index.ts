@@ -202,7 +202,48 @@ const router = createRouter({
       component: AdminApplications,
       meta: {
         title: 'Lista Podań - AetherRP',
-        requiresAuth: true
+        requiresAuth: true,
+        type: 'whitelist'
+      }
+    },
+    {
+      path: '/admin/checker-applications',
+      name: 'checker-applications',
+      component: AdminApplications,
+      meta: {
+        title: 'Lista Podań Checkerów - AetherRP',
+        requiresAuth: true,
+        type: 'checker'
+      }
+    },
+    {
+      path: '/admin/moderator-applications',
+      name: 'moderator-applications',
+      component: AdminApplications,
+      meta: {
+        title: 'Lista Podań Moderatorów - AetherRP',
+        requiresAuth: true,
+        type: 'moderator'
+      }
+    },
+    {
+      path: '/admin/administrator-applications',
+      name: 'administrator-applications',
+      component: AdminApplications,
+      meta: {
+        title: 'Lista Podań Administratorów - AetherRP',
+        requiresAuth: true,
+        type: 'administrator'
+      }
+    },
+    {
+      path: '/admin/developer-applications',
+      name: 'developer-applications',
+      component: AdminApplications,
+      meta: {
+        title: 'Lista Podań Developerów - AetherRP',
+        requiresAuth: true,
+        type: 'developer'
       }
     },
     {

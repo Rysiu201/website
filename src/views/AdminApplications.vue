@@ -79,9 +79,11 @@ interface Application {
 
 const applications = ref<Application[]>([])
 const router = useRouter()
+const route = useRoute()
+const appType = computed(() => (route.meta.type as string) || 'whitelist')
 
 onMounted(async () => {
-  const res = await fetch('/api/admin/applications', {
+  const res = await fetch(`/api/admin/applications?type=${appType.value}`, {
     credentials: 'include'
   })
   if (res.ok) {
@@ -98,7 +100,6 @@ const statuses = {
   REJECTED: 'Negatywnie',
   ARCHIVED: 'Zarchiwizowane'
 }
-const route = useRoute()
 const showArchivedOnly = computed(() => route.path.includes('archived'))
 
 const columns = computed<{ key: keyof typeof statuses; label: string }[]>(() =>
