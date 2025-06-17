@@ -584,14 +584,15 @@ app.get('/api/admin/applications', async (req, res) => {
 
   const counts = {};
   const result = sorted.map(a => {
-    counts[a.userId] = (counts[a.userId] || 0) + 1;
+    const typeKey = `${a.userId}:${a.type || 'whitelist'}`;
+    counts[typeKey] = (counts[typeKey] || 0) + 1;
     return {
       id: a.id,
       userId: a.userId,
       discord: a.data?.ooc?.discord || a.data?.discord || '',
       status: a.status,
       timestamp: a.ts,
-      number: counts[a.userId],
+      number: counts[typeKey],
       archived: a.archived || null,
       type: a.type || 'whitelist'
     };
