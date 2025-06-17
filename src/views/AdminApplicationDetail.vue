@@ -46,16 +46,22 @@
         <h2>Zarządzanie</h2>
         <table class="app-table">
           <tr>
-            <th>Co to jest zdrowa struktura administracyjna?</th>
-            <td>{{ app.data.healthyStructure }}</td>
+            <th colspan="2" class="question-cell">Co to jest zdrowa struktura administracyjna?</th>
           </tr>
           <tr>
-            <th>Czy jesteś skory do współpracy z rolami wyżej? Jak to sobie wyobrażasz?</th>
-            <td>{{ app.data.cooperation }}</td>
+            <td colspan="2" class="answer-cell">{{ app.data.healthyStructure }}</td>
           </tr>
           <tr>
-            <th>Co Twoim zdaniem warto byłoby usprawnić w administracji?</th>
-            <td>{{ app.data.improvements }}</td>
+            <th colspan="2" class="question-cell">Czy jesteś skory do współpracy z rolami wyżej? Jak to sobie wyobrażasz?</th>
+          </tr>
+          <tr>
+            <td colspan="2" class="answer-cell">{{ app.data.cooperation }}</td>
+          </tr>
+          <tr>
+            <th colspan="2" class="question-cell">Co Twoim zdaniem warto byłoby usprawnić w administracji?</th>
+          </tr>
+          <tr>
+            <td colspan="2" class="answer-cell">{{ app.data.improvements }}</td>
           </tr>
         </table>
         <h2>Zgody</h2>
@@ -91,50 +97,70 @@
         <h2>Doświadczenie i podejście</h2>
         <table class="app-table">
           <tr>
-            <th>Czy pełniłaś/eś wcześniej funkcję moderatora? Gdzie i jak wyglądała ta rola?</th>
-            <td>{{ app.data.moderatorExp }}</td>
+            <th colspan="2" class="question-cell">Czy pełniłaś/eś wcześniej funkcję moderatora? Gdzie i jak wyglądała ta rola?</th>
           </tr>
           <tr>
-            <th>Dlaczego chcesz zostać Moderatorem u nas?</th>
-            <td>{{ app.data.motivation }}</td>
+            <td colspan="2" class="answer-cell">{{ app.data.moderatorExp }}</td>
           </tr>
           <tr>
-            <th>Jakie są Twoje mocne strony w kontakcie z ludźmi?</th>
-            <td>{{ app.data.strengths }}</td>
+            <th colspan="2" class="question-cell">Dlaczego chcesz zostać Moderatorem u nas?</th>
+          </tr>
+          <tr>
+            <td colspan="2" class="answer-cell">{{ app.data.motivation }}</td>
+          </tr>
+          <tr>
+            <th colspan="2" class="question-cell">Jakie są Twoje mocne strony w kontakcie z ludźmi?</th>
+          </tr>
+          <tr>
+            <td colspan="2" class="answer-cell">{{ app.data.strengths }}</td>
           </tr>
         </table>
         <h2>Sytuacje i zachowanie</h2>
         <table class="app-table">
           <tr>
-            <th>Jak reagujesz, gdy użytkownik prowokuje innych, ale nie łamie regulaminu bezpośrednio?</th>
-            <td>{{ app.data.provocation }}</td>
+            <th colspan="2" class="question-cell">Jak reagujesz, gdy użytkownik prowokuje innych, ale nie łamie regulaminu bezpośrednio?</th>
           </tr>
           <tr>
-            <th>Co robisz, jeśli ktoś wysyła zgłoszenie w stylu "XD lol" – bez konkretów?</th>
-            <td>{{ app.data.lolReport }}</td>
+            <td colspan="2" class="answer-cell">{{ app.data.provocation }}</td>
           </tr>
           <tr>
-            <th>Jak rozpoznać, że zgłoszenie nie jest trollowaniem, tylko realnym problemem?</th>
-            <td>{{ app.data.realProblem }}</td>
+            <th colspan="2" class="question-cell">Co robisz, jeśli ktoś wysyła zgłoszenie w stylu "XD lol" – bez konkretów?</th>
           </tr>
           <tr>
-            <th class="question-cell"><pre>{{ app.data.scenario }}</pre></th>
-            <td class="answer-cell"><pre>{{ app.data.randomAnswer }}</pre></td>
+            <td colspan="2" class="answer-cell">{{ app.data.lolReport }}</td>
+          </tr>
+          <tr>
+            <th colspan="2" class="question-cell">Jak rozpoznać, że zgłoszenie nie jest trollowaniem, tylko realnym problemem?</th>
+          </tr>
+          <tr>
+            <td colspan="2" class="answer-cell">{{ app.data.realProblem }}</td>
+          </tr>
+          <tr>
+            <th colspan="2" class="question-cell"><pre>{{ app.data.scenario }}</pre></th>
+          </tr>
+          <tr>
+            <td colspan="2" class="answer-cell"><pre>{{ app.data.randomAnswer }}</pre></td>
           </tr>
         </table>
         <h2>Praca w zespole</h2>
         <table class="app-table">
           <tr>
-            <th>Jak widzisz współpracę z innymi członkami zespołu, takimi jak Community Manager, Admin czy Developer?</th>
-            <td>{{ app.data.teamwork }}</td>
+            <th colspan="2" class="question-cell">Jak widzisz współpracę z innymi członkami zespołu, takimi jak Community Manager, Admin czy Developer?</th>
           </tr>
           <tr>
-            <th>Jak rozumiesz swoją rolę w przekazywaniu zgłoszeń dalej? Kiedy decydujesz się rozwiązać coś samodzielnie, a kiedy informujesz innych członków zespołu?</th>
-            <td>{{ app.data.escalation }}</td>
+            <td colspan="2" class="answer-cell">{{ app.data.teamwork }}</td>
           </tr>
           <tr>
-            <th>Czy potrafisz pozostać neutralny, nawet gdy temat dotyczy znajomej osoby?</th>
-            <td>{{ app.data.neutrality }}</td>
+            <th colspan="2" class="question-cell">Jak rozumiesz swoją rolę w przekazywaniu zgłoszeń dalej? Kiedy decydujesz się rozwiązać coś samodzielnie, a kiedy informujesz innych członków zespołu?</th>
+          </tr>
+          <tr>
+            <td colspan="2" class="answer-cell">{{ app.data.escalation }}</td>
+          </tr>
+          <tr>
+            <th colspan="2" class="question-cell">Czy potrafisz pozostać neutralny, nawet gdy temat dotyczy znajomej osoby?</th>
+          </tr>
+          <tr>
+            <td colspan="2" class="answer-cell">{{ app.data.neutrality }}</td>
           </tr>
         </table>
         <h2>Zgody</h2>
@@ -165,35 +191,49 @@
         <h2>Doświadczenie i podejście</h2>
         <table class="app-table">
           <tr>
-            <th>Czy miałeś styczność z weryfikacją lub selekcją graczy?</th>
-            <td>{{ app.data.verificationExp }}</td>
+            <th colspan="2" class="question-cell">Czy miałeś styczność z weryfikacją lub selekcją graczy?</th>
           </tr>
           <tr>
-            <th>Jak rozpoznać gracza, który "tylko wypełnił, żeby wejść", od gracza z potencjałem?</th>
-            <td>{{ app.data.differentiate }}</td>
+            <td colspan="2" class="answer-cell">{{ app.data.verificationExp }}</td>
           </tr>
           <tr>
-            <th>Na co zwracasz uwagę przy czytaniu podania na WL?</th>
-            <td>{{ app.data.reviewFocus }}</td>
+            <th colspan="2" class="question-cell">Jak rozpoznać gracza, który "tylko wypełnił, żeby wejść", od gracza z potencjałem?</th>
           </tr>
           <tr>
-            <th>Co Twoim zdaniem oznacza dobre RP i jakbyś je promował?</th>
-            <td>{{ app.data.goodRp }}</td>
+            <td colspan="2" class="answer-cell">{{ app.data.differentiate }}</td>
+          </tr>
+          <tr>
+            <th colspan="2" class="question-cell">Na co zwracasz uwagę przy czytaniu podania na WL?</th>
+          </tr>
+          <tr>
+            <td colspan="2" class="answer-cell">{{ app.data.reviewFocus }}</td>
+          </tr>
+          <tr>
+            <th colspan="2" class="question-cell">Co Twoim zdaniem oznacza dobre RP i jakbyś je promował?</th>
+          </tr>
+          <tr>
+            <td colspan="2" class="answer-cell">{{ app.data.goodRp }}</td>
           </tr>
         </table>
         <h2>Praca</h2>
         <table class="app-table">
           <tr>
-            <th>Ile podań jesteś w stanie realnie sprawdzić dziennie / tygodniowo?</th>
-            <td>{{ app.data.workload }}</td>
+            <th colspan="2" class="question-cell">Ile podań jesteś w stanie realnie sprawdzić dziennie / tygodniowo?</th>
           </tr>
           <tr>
-            <th>Co robisz, jeśli masz wątpliwości co do kandydata?</th>
-            <td>{{ app.data.doubts }}</td>
+            <td colspan="2" class="answer-cell">{{ app.data.workload }}</td>
           </tr>
           <tr>
-            <th>Wolisz działać samodzielnie czy w parze z innym Checkerem?</th>
-            <td>{{ app.data.teamwork }}</td>
+            <th colspan="2" class="question-cell">Co robisz, jeśli masz wątpliwości co do kandydata?</th>
+          </tr>
+          <tr>
+            <td colspan="2" class="answer-cell">{{ app.data.doubts }}</td>
+          </tr>
+          <tr>
+            <th colspan="2" class="question-cell">Wolisz działać samodzielnie czy w parze z innym Checkerem?</th>
+          </tr>
+          <tr>
+            <td colspan="2" class="answer-cell">{{ app.data.teamwork }}</td>
           </tr>
         </table>
         <h2>Zgody</h2>
@@ -220,40 +260,58 @@
         <h2>Doświadczenie i umiejętności</h2>
         <table class="app-table">
           <tr>
-            <th>Jakie języki programowania znasz?</th>
-            <td>{{ app.data.languages }}</td>
+            <th colspan="2" class="question-cell">Jakie języki programowania znasz?</th>
           </tr>
           <tr>
-            <th>Czy pracowałeś wcześniej z zasobami FiveM? Jakimi?</th>
-            <td>{{ app.data.fivemExp }}</td>
+            <td colspan="2" class="answer-cell">{{ app.data.languages }}</td>
           </tr>
           <tr>
-            <th>Jak wygląda Twoja organizacja pracy przy większych zadaniach?</th>
-            <td>{{ app.data.workOrg }}</td>
+            <th colspan="2" class="question-cell">Czy pracowałeś wcześniej z zasobami FiveM? Jakimi?</th>
           </tr>
           <tr>
-            <th>Opisz projekt/skrypt, z którego jesteś najbardziej dumny/a.</th>
-            <td>{{ app.data.proudProject }}</td>
+            <td colspan="2" class="answer-cell">{{ app.data.fivemExp }}</td>
           </tr>
           <tr>
-            <th>Jak reagujesz, gdy ktoś zgłasza błąd w Twoim kodzie?</th>
-            <td>{{ app.data.bugResponse }}</td>
+            <th colspan="2" class="question-cell">Jak wygląda Twoja organizacja pracy przy większych zadaniach?</th>
           </tr>
           <tr>
-            <th>Czy potrafisz kodować pod cudze wymagania?</th>
-            <td>{{ app.data.requirements }}</td>
+            <td colspan="2" class="answer-cell">{{ app.data.workOrg }}</td>
           </tr>
           <tr>
-            <th>Jakie obszary Cię najbardziej interesują? (UI, systemy RP, joby, zasoby)</th>
-            <td>{{ app.data.interests }}</td>
+            <th colspan="2" class="question-cell">Opisz projekt/skrypt, z którego jesteś najbardziej dumny/a.</th>
           </tr>
           <tr>
-            <th>Czy potrafisz przeprowadzać testy jednostkowe i techniczne?</th>
-            <td>{{ app.data.testing }}</td>
+            <td colspan="2" class="answer-cell">{{ app.data.proudProject }}</td>
           </tr>
           <tr>
-            <th>🔗 Link do portfolio (GitHub, Discord bot, skrypt, demo)</th>
-            <td>{{ app.data.portfolio }}</td>
+            <th colspan="2" class="question-cell">Jak reagujesz, gdy ktoś zgłasza błąd w Twoim kodzie?</th>
+          </tr>
+          <tr>
+            <td colspan="2" class="answer-cell">{{ app.data.bugResponse }}</td>
+          </tr>
+          <tr>
+            <th colspan="2" class="question-cell">Czy potrafisz kodować pod cudze wymagania?</th>
+          </tr>
+          <tr>
+            <td colspan="2" class="answer-cell">{{ app.data.requirements }}</td>
+          </tr>
+          <tr>
+            <th colspan="2" class="question-cell">Jakie obszary Cię najbardziej interesują? (UI, systemy RP, joby, zasoby)</th>
+          </tr>
+          <tr>
+            <td colspan="2" class="answer-cell">{{ app.data.interests }}</td>
+          </tr>
+          <tr>
+            <th colspan="2" class="question-cell">Czy potrafisz przeprowadzać testy jednostkowe i techniczne?</th>
+          </tr>
+          <tr>
+            <td colspan="2" class="answer-cell">{{ app.data.testing }}</td>
+          </tr>
+          <tr>
+            <th colspan="2" class="question-cell">🔗 Link do portfolio (GitHub, Discord bot, skrypt, demo)</th>
+          </tr>
+          <tr>
+            <td colspan="2" class="answer-cell">{{ app.data.portfolio }}</td>
           </tr>
         </table>
         <h2>Zgody</h2>
