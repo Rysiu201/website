@@ -37,6 +37,18 @@
           >
             Podanie Moderatora
           </p>
+          <p
+            v-else-if="showArchivedOnly && app.type === 'checker'"
+            class="app-type"
+          >
+            Podanie WhiteListCheckera
+          </p>
+          <p
+            v-else-if="showArchivedOnly && app.type === 'developer'"
+            class="app-type"
+          >
+            Podanie Developera
+          </p>
           <button
             v-if="!app.archived &&
               (app.status === statuses.APPROVED || app.status === statuses.REJECTED)"
