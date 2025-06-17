@@ -625,9 +625,11 @@ const decisionInfo = computed(() => {
 
 .question-cell {
   font-weight: 600;
+  white-space: pre-wrap;
 }
 
 .answer-cell {
   white-space: pre-wrap;
+  word-break: break-word;
 }
 </style>
