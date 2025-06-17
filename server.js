@@ -563,9 +563,12 @@ app.get('/api/admin/applications', async (req, res) => {
   const db = loadDb();
   const type = req.query.type || 'whitelist';
   autoArchiveOldApplications(db);
-  const filteredApps = db.applications.filter(
-    a => (a.type || 'whitelist') === type
-  );
+  let filteredApps = db.applications;
+  if (type && type !== 'all') {
+    filteredApps = filteredApps.filter(
+      a => (a.type || 'whitelist') === type
+    );
+  }
   const sorted = filteredApps
     .map(a => ({
       ...a,
