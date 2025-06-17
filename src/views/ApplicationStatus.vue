@@ -8,7 +8,7 @@
         <b><span :class="statusClass">{{ status }}</span></b>
       </h1>
       <p v-if="status === statuses.APPROVED" class="approved-msg">
-        <template v-if="appType === 'administrator'">
+        <template v-if="appType === 'administrator' || appType === 'moderator'">
           Gratulacje! Twoje podanie zostało rozpatrzone {{ status }}. Poniżej znajdziesz kolejne kroki.
         </template>
         <template v-else>
@@ -146,8 +146,36 @@ const adminSteps = [
   }
 ]
 
+const moderatorSteps = [
+  {
+    id: 1,
+    title: 'Skontaktuj się na kanale',
+    description: 'Użyj wskazanego kanału Discord aby umówić się na rozmowę.',
+    icon: 'fa-brands fa-discord',
+    link: undefined
+  },
+  {
+    id: 2,
+    title: 'Poczekaj na swoją kolej',
+    description: 'Gdy nadejdzie Twoja kolej przejdź rozmowę kwalifikacyjną.',
+    icon: 'fa-solid fa-comments',
+    link: undefined
+  },
+  {
+    id: 3,
+    title: 'Wspomagaj serwer',
+    description: 'Angażuj się i pomagaj innym tworzyć lepszą społeczność.',
+    icon: 'fa-solid fa-handshake',
+    link: undefined
+  }
+]
+
 const joinSteps = computed(() =>
-  appType.value === 'administrator' ? adminSteps : defaultSteps
+  appType.value === 'administrator'
+    ? adminSteps
+    : appType.value === 'moderator'
+      ? moderatorSteps
+      : defaultSteps
 )
 
 const route = useRoute()
@@ -168,7 +196,7 @@ const rejectedHistory = computed(() =>
   history.value.filter(h => h.status === statuses.REJECTED)
 )
 const cooldownText = computed(() =>
-  appType.value === 'administrator'
+  appType.value === 'administrator' || appType.value === 'moderator'
     ? `${Math.round(cooldownHours.value / 24)} dni`
     : `${cooldownHours.value}h`
 )
@@ -195,7 +223,9 @@ onMounted(async () => {
     headerText.value =
       appType.value === 'administrator'
         ? 'Twoje podanie na Administratora zostało wysłane'
-        : 'Twoje podanie zostało Wysłane'
+        : appType.value === 'moderator'
+          ? 'Twoje podanie na Moderatora zostało wysłane'
+          : 'Twoje podanie zostało Wysłane'
   }
   updateRemaining()
   if (reapplyAfter.value && Date.now() < reapplyAfter.value) {
