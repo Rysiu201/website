@@ -248,7 +248,8 @@ async function openDetail(app: Application) {
     checker: '/admin/checker-applications',
     moderator: '/admin/moderator-applications',
     administrator: '/admin/administrator-applications',
-    developer: '/admin/developer-applications'
+    developer: '/admin/developer-applications',
+    unban: '/admin/unban'
   }
   const typeForDetail = showArchivedOnly.value ? (app.type || 'whitelist') : appType.value
   const prefix = map[typeForDetail] || '/admin/applications'
