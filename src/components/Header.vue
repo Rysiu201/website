@@ -15,7 +15,14 @@
           <li><router-link to="/staff" class="nav-link" active-class="active"><i class="fa-solid fa-users"></i> Zespół</router-link></li>
           <li><router-link to="/rules" class="nav-link" active-class="active"><i class="fa-solid fa-file-contract"></i> Zasady</router-link></li>
           <li><router-link to="/join" class="nav-link" active-class="active"><i class="fa-solid fa-book"></i> Jak dołączyć</router-link></li>
-          <li v-if="isLoggedIn"><router-link to="/applications" class="nav-link" active-class="active"><i class="fa-solid fa-file-signature"></i> Złóż podanie</router-link></li>
+          <li v-if="isLoggedIn" class="dropdown-wrapper">
+            <router-link to="/applications" class="nav-link" active-class="active"><i class="fa-solid fa-file-signature"></i> Złóż podanie</router-link>
+            <ul class="dropdown">
+              <li>
+                <router-link to="/apply-unban" class="dropdown-link"><span class="emoji">📝</span> Odwołanie od bana</router-link>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <div class="header-actions">
@@ -47,6 +54,7 @@
         <li><router-link to="/rules" @click="closeMenu"><i class="fa-solid fa-file-contract"></i> Zasady</router-link></li>
         <li><router-link to="/join" @click="closeMenu"><i class="fa-solid fa-book"></i> Jak dołączyć</router-link></li>
         <li v-if="isLoggedIn"><router-link to="/applications" @click="closeMenu"><i class="fa-solid fa-file-signature"></i> Złóż podanie</router-link></li>
+        <li v-if="isLoggedIn"><router-link to="/apply-unban" @click="closeMenu"><i class="fa-solid fa-ban"></i> Odwołanie od bana</router-link></li>
         <li v-if="isAdmin"><router-link to="/admin" @click="closeMenu"><i class="fa-solid fa-screwdriver-wrench"></i> Administrowanie</router-link></li>
       </ul>
       <div class="mobile-social-icons">
@@ -275,6 +283,43 @@ onMounted(() => {
 .nav-link:hover::after,
 .nav-link.active::after {
   width: 100%;
+}
+
+.dropdown-wrapper {
+  position: relative;
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+  background: rgba(18, 18, 18, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  min-width: 180px;
+  z-index: 100;
+}
+
+.dropdown-wrapper:hover .dropdown {
+  display: block;
+}
+
+.dropdown-link {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  color: #e0e0e0;
+  white-space: nowrap;
+}
+
+.dropdown-link:hover {
+  background: rgba(138, 43, 226, 0.2);
+  color: #fff;
 }
 
 .header-actions {

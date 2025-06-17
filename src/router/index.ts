@@ -138,6 +138,15 @@ const router = createRouter({
       }
     },
     {
+      path: '/apply-unban',
+      name: 'apply-unban',
+      component: () => import('../views/ApplyUnban.vue'),
+      meta: {
+        title: 'Odwołanie od bana - AetherRP',
+        requiresAuth: true,
+      }
+    },
+    {
       path: '/status',
       name: 'status',
       component: ApplicationStatus,
@@ -184,6 +193,16 @@ const router = createRouter({
         title: 'Status Podania Developera - AetherRP',
         requiresAuth: true,
         type: 'developer'
+      }
+    },
+    {
+      path: '/status-unban',
+      name: 'status-unban',
+      component: ApplicationStatus,
+      meta: {
+        title: 'Status Wniosku o odbanowanie - AetherRP',
+        requiresAuth: true,
+        type: 'unban'
       }
     },
     {
@@ -247,6 +266,16 @@ const router = createRouter({
       }
     },
     {
+      path: '/admin/unban',
+      name: 'unban-applications',
+      component: AdminApplications,
+      meta: {
+        title: 'Wnioski o Odbanowanie - AetherRP',
+        requiresAuth: true,
+        type: 'unban'
+      }
+    },
+    {
       path: '/admin/archived',
       name: 'archived-applications',
       component: AdminApplications,
@@ -307,6 +336,16 @@ const router = createRouter({
       }
     },
     {
+      path: '/admin/unban/:id',
+      name: 'unban-detail',
+      component: AdminApplicationDetail,
+      meta: {
+        title: 'Wniosek o odbanowanie - AetherRP',
+        requiresAuth: true,
+        type: 'unban'
+      }
+    },
+    {
       path: '/admin/player-notes',
       name: 'player-notes',
       component: AdminPlayerNotes,
@@ -352,7 +391,8 @@ router.beforeEach(async (to, _from, next) => {
       type: 'administrator',
       statusPath: '/status-administrator'
     },
-    '/apply-developer': { type: 'developer', statusPath: '/status-developer' }
+    '/apply-developer': { type: 'developer', statusPath: '/status-developer' },
+    '/apply-unban': { type: 'unban', statusPath: '/status-unban' }
   };
   if (applyRoutes[to.path]) {
     const { type, statusPath } = applyRoutes[to.path];

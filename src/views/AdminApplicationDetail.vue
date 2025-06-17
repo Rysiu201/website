@@ -320,14 +320,49 @@
             <th>Zgoda na przetwarzanie danych (Discord ID)</th>
             <td>{{ app.data.consentData ? 'Tak' : 'Nie' }}</td>
           </tr>
-          <tr>
-            <th>Akceptuję zakres obowiązków Developera</th>
-            <td>{{ app.data.consentDuties ? 'Tak' : 'Nie' }}</td>
-          </tr>
-          <tr>
-            <th>Potwierdzam prawdziwość podanych informacji</th>
-            <td>{{ app.data.consentTruth ? 'Tak' : 'Nie' }}</td>
-          </tr>
+        <tr>
+          <th>Akceptuję zakres obowiązków Developera</th>
+          <td>{{ app.data.consentDuties ? 'Tak' : 'Nie' }}</td>
+        </tr>
+        <tr>
+          <th>Potwierdzam prawdziwość podanych informacji</th>
+          <td>{{ app.data.consentTruth ? 'Tak' : 'Nie' }}</td>
+        </tr>
+      </table>
+      </template>
+      <template v-else-if="app.type === 'unban'">
+        <h2>Dane Gracza</h2>
+        <table class="app-table">
+          <tr><th>Nick Discord + ID</th><td>{{ discordField }}</td></tr>
+          <tr><th>SteamID</th><td>{{ app.data.steamId }}</td></tr>
+          <tr><th>Nick w momencie bana</th><td>{{ app.data.serverNick }}</td></tr>
+          <tr><th>Data bana</th><td>{{ app.data.banDate }}</td></tr>
+        </table>
+        <h2>Szczegóły Bana</h2>
+        <table class="app-table">
+          <tr><th>Kto nałożył bana</th><td>{{ app.data.bannedBy }}</td></tr>
+          <tr><th>Powód bana</th><td>{{ app.data.banReason }}</td></tr>
+        </table>
+        <h2>Wyjaśnienie</h2>
+        <table class="app-table">
+          <tr><th colspan="2" class="question-cell">Twoja wersja wydarzeń</th></tr>
+          <tr><td colspan="2" class="answer-cell">{{ app.data.events }}</td></tr>
+          <tr><th colspan="2" class="question-cell">Czy przyznajesz się do złamania zasad?</th></tr>
+          <tr><td colspan="2" class="answer-cell">{{ app.data.admit }}</td></tr>
+          <tr><th colspan="2" class="question-cell">Co zmieniło się od momentu bana?</th></tr>
+          <tr><td colspan="2" class="answer-cell">{{ app.data.change }}</td></tr>
+        </table>
+        <h2>Dodatki</h2>
+        <table class="app-table">
+          <tr><th colspan="2" class="question-cell">Dowody/screeny/nagrania</th></tr>
+          <tr><td colspan="2" class="answer-cell">{{ app.data.evidence }}</td></tr>
+          <tr><th colspan="2" class="question-cell">Dodatkowe uwagi</th></tr>
+          <tr><td colspan="2" class="answer-cell">{{ app.data.notes }}</td></tr>
+        </table>
+        <h2>Zgody</h2>
+        <table class="app-table">
+          <tr><th>Oświadczenie o prawdziwości danych</th><td>{{ app.data.consentTruth ? 'Tak' : 'Nie' }}</td></tr>
+          <tr><th>Zapoznanie z regulaminem</th><td>{{ app.data.consentRules ? 'Tak' : 'Nie' }}</td></tr>
         </table>
       </template>
       <template v-else>
@@ -481,7 +516,8 @@ const backPath = computed(() => {
     checker: '/admin/checker-applications',
     moderator: '/admin/moderator-applications',
     administrator: '/admin/administrator-applications',
-    developer: '/admin/developer-applications'
+    developer: '/admin/developer-applications',
+    unban: '/admin/unban'
   }
   const type = (route.meta.type as string) || 'whitelist'
   return map[type] || '/admin/applications'

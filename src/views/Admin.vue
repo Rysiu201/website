@@ -56,8 +56,8 @@
       </div>
       <div class="admin-extra">
         <RouterLink class="admin-section" to="/admin/unban">
-          <i class="fa-solid fa-box-archive"></i>
-          <span>Wnioski o odbanowanie (W trakcie pracy)</span>
+          <i class="fa-solid fa-ban"></i>
+          <span>Wnioski o odbanowanie</span>
         </RouterLink>
       </div>
     </div>

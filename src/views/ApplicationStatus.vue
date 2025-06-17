@@ -232,7 +232,9 @@ onMounted(async () => {
             ? 'Twoje podanie na WhiteListCheckera zostało wysłane'
             : appType.value === 'developer'
               ? 'Twoje podanie na Developera zostało wysłane'
-              : 'Twoje podanie zostało Wysłane'
+              : appType.value === 'unban'
+                ? 'Twój wniosek o odbanowanie został wysłany'
+                : 'Twoje podanie zostało Wysłane'
   }
   updateRemaining()
   if (reapplyAfter.value && Date.now() < reapplyAfter.value) {
@@ -276,7 +278,8 @@ function gotoApply() {
       checker: '/apply-checker',
       moderator: '/apply-moderator',
       administrator: '/apply-administrator',
-      developer: '/apply-developer'
+      developer: '/apply-developer',
+      unban: '/apply-unban'
     }
     window.location.href = paths[appType.value] || '/apply'
   }
