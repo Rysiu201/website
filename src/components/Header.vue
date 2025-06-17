@@ -301,6 +301,7 @@ onMounted(() => {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   min-width: 180px;
+  width: 100%;
   z-index: 100;
 }
 
@@ -315,11 +316,27 @@ onMounted(() => {
   padding: 0.4rem 0.8rem;
   color: #e0e0e0;
   white-space: nowrap;
+  position: relative;
 }
 
 .dropdown-link:hover {
   background: rgba(138, 43, 226, 0.2);
   color: #fff;
+}
+
+.dropdown-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #8A2BE2, #00FFFF);
+  transition: width 0.3s ease;
+}
+
+.dropdown-link:hover::after {
+  width: 100%;
 }
 
 .header-actions {

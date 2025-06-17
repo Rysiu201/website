@@ -4,7 +4,8 @@
     <div class="status-content">
       <h1>{{ headerText }}</h1>
       <h1>
-        Obecny status twojego zgłoszenia:
+        <template v-if="appType === 'unban'">Obecny status twojego wniosku:</template>
+        <template v-else>Obecny status twojego zgłoszenia:</template>
         <b><span :class="statusClass">{{ status }}</span></b>
       </h1>
       <p v-if="status === statuses.APPROVED" class="approved-msg">
@@ -47,7 +48,12 @@
           <p>{{ rejectionReason }}</p>
         </div>
         <p v-if="timeRemaining">
-          W ciągu {{ cooldownText }} możesz ponownie złożyć podanie.
+          <template v-if="appType === 'unban'">
+            Czas, w którym możesz ponownie złożyć odwołanie: {{ cooldownText }}
+          </template>
+          <template v-else>
+            W ciągu {{ cooldownText }} możesz ponownie złożyć podanie.
+          </template>
         </p>
         <button
           class="reapply-btn"
@@ -59,7 +65,7 @@
         </button>
       </div>
 
-      <div v-if="rejectedHistory.length" class="history">
+      <div v-if="rejectedHistory.length && appType !== 'unban'" class="history">
         <h2>Historia podań</h2>
         <ul>
           <li v-for="(h, idx) in rejectedHistory" :key="idx">
@@ -195,14 +201,19 @@ const rejectionsBeforeExtra = ref(0)
 const rejectedHistory = computed(() =>
   history.value.filter(h => h.status === statuses.REJECTED)
 )
-const cooldownText = computed(() =>
-  appType.value === 'administrator' ||
-  appType.value === 'moderator' ||
-  appType.value === 'checker' ||
-  appType.value === 'developer'
+const cooldownText = computed(() => {
+  if (
+    appType.value === 'administrator' ||
+    appType.value === 'moderator' ||
+    appType.value === 'checker' ||
+    appType.value === 'developer'
+  ) {
+    return `${Math.round(cooldownHours.value / 24)} dni`;
+  }
+  return cooldownHours.value >= 24
     ? `${Math.round(cooldownHours.value / 24)} dni`
-    : `${cooldownHours.value}h`
-)
+    : `${cooldownHours.value}h`;
+})
 let interval: number | null = null
 
 onMounted(async () => {

@@ -2,7 +2,7 @@
   <main class="apply-page" :style="{ backgroundImage: `url(${backgroundImageUrl})` }">
     <div class="apply-overlay"></div>
     <div class="apply-container">
-      <h1>Wniosek o odbanowanie</h1>
+      <h1><span class="logo-accent">Wniosek o odbanowanie</span></h1>
       <form @submit.prevent="submitForm" class="app-form">
         <h2>1. Dane Gracza</h2>
         <label>
@@ -20,6 +20,10 @@
         <label>
           Data bana
           <input type="date" v-model="form.banDate" required />
+        </label>
+        <label>
+          Długość bana w dniach
+          <input type="number" min="0" v-model.number="form.banDurationDays" required />
         </label>
 
         <h2>2. Szczegóły Bana</h2>
@@ -92,6 +96,7 @@ interface FormData {
   banDate: string
   bannedBy: string
   banReason: string
+  banDurationDays: number
   events: string
   admit: string
   change: string
@@ -108,6 +113,7 @@ const form = ref<FormData>({
   banDate: '',
   bannedBy: '',
   banReason: '',
+  banDurationDays: 0,
   events: '',
   admit: '',
   change: '',

@@ -28,7 +28,8 @@ const {
   EXTRA_COOLDOWN_HOURS,
   REJECTION_HISTORY_WINDOW_HOURS,
   REJECTIONS_BEFORE_EXTRA_COOLDOWN,
-  ADMIN_REAPPLY_COOLDOWN_DAYS
+  ADMIN_REAPPLY_COOLDOWN_DAYS,
+  UNBAN_COOLDOWN_PERCENT
 } = config;
 
 const DB_FILE = path.join(process.cwd(), 'database.json');
@@ -527,7 +528,11 @@ app.post('/api/admin/status', async (req, res) => {
       appEntry.type === 'checker' ||
       appEntry.type === 'developer'
         ? ADMIN_REAPPLY_COOLDOWN_DAYS * 24
-        : REAPPLY_COOLDOWN_HOURS;
+        : appEntry.type === 'unban'
+          ? (appEntry.data.banDurationDays
+              ? appEntry.data.banDurationDays * 24 * UNBAN_COOLDOWN_PERCENT
+              : REAPPLY_COOLDOWN_HOURS)
+          : REAPPLY_COOLDOWN_HOURS;
     appEntry.reapplyAfter = computeReapplyAfter(appEntry.history, base);
   } else {
     delete appEntry.reapplyAfter;
