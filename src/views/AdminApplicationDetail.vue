@@ -30,10 +30,10 @@
         <table class="app-table">
           <template v-for="(qa, idx) in scenarioPairs" :key="idx">
             <tr>
-              <th colspan="2" class="question-cell">{{ qa.question }}</th>
+              <th colspan="2" class="question-cell"><pre>{{ qa.question }}</pre></th>
             </tr>
             <tr>
-              <td colspan="2" class="answer-cell">{{ qa.answer }}</td>
+              <td colspan="2" class="answer-cell"><pre>{{ qa.answer }}</pre></td>
             </tr>
           </template>
         </table>
@@ -69,7 +69,10 @@
           <tr><th>Prowokacja</th><td>{{ app.data.provocation }}</td></tr>
           <tr><th>Zgłoszenie "XD lol"</th><td>{{ app.data.lolReport }}</td></tr>
           <tr><th>Rozpoznanie realnego problemu</th><td>{{ app.data.realProblem }}</td></tr>
-          <tr><th>{{ app.data.scenario }}</th><td>{{ app.data.randomAnswer }}</td></tr>
+          <tr>
+            <th class="question-cell"><pre>{{ app.data.scenario }}</pre></th>
+            <td class="answer-cell"><pre>{{ app.data.randomAnswer }}</pre></td>
+          </tr>
         </table>
         <h2>Praca w zespole</h2>
         <table class="app-table">
@@ -163,10 +166,10 @@
         <table class="app-table">
           <template v-for="(qa, idx) in scenarioPairs" :key="idx">
             <tr>
-              <th colspan="2" class="question-cell">{{ qa.question }}</th>
+              <th colspan="2" class="question-cell"><pre>{{ qa.question }}</pre></th>
             </tr>
             <tr>
-              <td colspan="2" class="answer-cell">{{ qa.answer }}</td>
+              <td colspan="2" class="answer-cell"><pre>{{ qa.answer }}</pre></td>
             </tr>
           </template>
         </table>
@@ -625,9 +628,18 @@ const decisionInfo = computed(() => {
 
 .question-cell {
   font-weight: 600;
+  white-space: pre-wrap;
+}
+
+.question-cell pre,
+.answer-cell pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .answer-cell {
   white-space: pre-wrap;
+  word-break: break-word;
 }
 </style>
