@@ -50,6 +50,40 @@
           <tr><th>Prawdziwość</th><td>{{ app.data.consentTruth ? 'Tak' : 'Nie' }}</td></tr>
         </table>
       </template>
+      <template v-else-if="app.type === 'moderator'">
+        <h2>Informacje OOC</h2>
+        <table class="app-table">
+          <tr><th>Discord</th><td>{{ discordField }}</td></tr>
+          <tr><th>Wiek</th><td>{{ app.data.age }}</td></tr>
+          <tr><th>Od kiedy na serwerze</th><td>{{ app.data.serverTime }}</td></tr>
+          <tr><th>Aktywność na Discordzie</th><td>{{ app.data.activeTime }}</td></tr>
+        </table>
+        <h2>Doświadczenie i podejście</h2>
+        <table class="app-table">
+          <tr><th>Doświadczenie jako moderator</th><td>{{ app.data.moderatorExp }}</td></tr>
+          <tr><th>Dlaczego chcesz zostać Moderatorem?</th><td>{{ app.data.motivation }}</td></tr>
+          <tr><th>Mocne strony</th><td>{{ app.data.strengths }}</td></tr>
+        </table>
+        <h2>Sytuacje i zachowanie</h2>
+        <table class="app-table">
+          <tr><th>Prowokacja</th><td>{{ app.data.provocation }}</td></tr>
+          <tr><th>Zgłoszenie "XD lol"</th><td>{{ app.data.lolReport }}</td></tr>
+          <tr><th>Rozpoznanie realnego problemu</th><td>{{ app.data.realProblem }}</td></tr>
+          <tr><th>{{ app.data.scenario }}</th><td>{{ app.data.randomAnswer }}</td></tr>
+        </table>
+        <h2>Praca w zespole</h2>
+        <table class="app-table">
+          <tr><th>Współpraca w zespole</th><td>{{ app.data.teamwork }}</td></tr>
+          <tr><th>Przekazywanie zgłoszeń</th><td>{{ app.data.escalation }}</td></tr>
+          <tr><th>Neutralność</th><td>{{ app.data.neutrality }}</td></tr>
+        </table>
+        <h2>Zgody</h2>
+        <table class="app-table">
+          <tr><th>Dane</th><td>{{ app.data.consentData ? 'Tak' : 'Nie' }}</td></tr>
+          <tr><th>Obowiązki</th><td>{{ app.data.consentDuties ? 'Tak' : 'Nie' }}</td></tr>
+          <tr><th>Prawdziwość</th><td>{{ app.data.consentTruth ? 'Tak' : 'Nie' }}</td></tr>
+        </table>
+      </template>
       <template v-else>
         <h2 v-if="app.data.ic">Informacje IC</h2>
         <table v-if="app.data.ic" class="app-table">
@@ -92,22 +126,6 @@
           <tr><th>Frakcja</th><td>{{ app.data.extra.faction }}</td></tr>
         </table>
       </template>
-      <h2>Pytania sytuacyjne</h2>
-      <table class="app-table">
-        <template v-for="(qa, idx) in scenarioPairs" :key="idx">
-          <tr>
-            <th colspan="2" class="question-cell">{{ qa.question }}</th>
-          </tr>
-          <tr>
-            <td colspan="2" class="answer-cell">{{ qa.answer }}</td>
-          </tr>
-        </template>
-      </table>
-      <h2 v-if="app.data.extra">Dodatkowo</h2>
-      <table v-if="app.data.extra" class="app-table">
-        <tr><th>Portfolio</th><td>{{ app.data.extra.portfolio }}</td></tr>
-        <tr><th>Frakcja</th><td>{{ app.data.extra.faction }}</td></tr>
-      </table>
       <div class="decision-box">
         <label for="status-select">Decyzja</label>
         <select id="status-select" v-model="selectedStatus">
