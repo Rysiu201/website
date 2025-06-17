@@ -31,6 +31,12 @@
           >
             Podanie Administratora
           </p>
+          <p
+            v-else-if="showArchivedOnly && app.type === 'moderator'"
+            class="app-type"
+          >
+            Podanie Moderatora
+          </p>
           <button
             v-if="!app.archived &&
               (app.status === statuses.APPROVED || app.status === statuses.REJECTED)"
