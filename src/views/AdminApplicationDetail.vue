@@ -21,16 +21,19 @@
       </table>
       <template v-if="app.type === 'administrator'">
         <h2>Informacje OOC</h2>
-        <table class="app-table qa-table">
-          <tr><th colspan="2">Nick Discord + ID</th></tr>
-<tr><td colspan="2">{{ discordField }}</td></tr>
-          <tr><th colspan="2">Czy byłeś wcześniej adminem na serwerze RP lub społecznościowym?</th></tr>
-<tr><td colspan="2">{{ app.data.previousAdmin }}</td></tr>
-          <tr><th colspan="2">Jakie obszary administracyjne Cię interesują?</th></tr>
-<tr><td colspan="2">{{ app.data.adminAreas }}</td></tr>
+        <table class="app-table">
+          <tr><th>Nick Discord + ID</th><td>{{ discordField }}</td></tr>
+          <tr>
+            <th>Czy byłeś wcześniej adminem na serwerze RP lub społecznościowym?</th>
+            <td>{{ app.data.previousAdmin }}</td>
+          </tr>
+          <tr>
+            <th>Jakie obszary administracyjne Cię interesują?</th>
+            <td>{{ app.data.adminAreas }}</td>
+          </tr>
         </table>
         <h2>Sytuacje organizacyjne</h2>
-        <table class="app-table qa-table">
+        <table class="app-table">
           <template v-for="(qa, idx) in scenarioPairs" :key="idx">
             <tr>
               <th colspan="2" class="question-cell"><pre>{{ qa.question }}</pre></th>
@@ -41,187 +44,268 @@
           </template>
         </table>
         <h2>Zarządzanie</h2>
-        <table class="app-table qa-table">
+        <table class="app-table">
           <tr>
             <th>Co to jest zdrowa struktura administracyjna?</th>
             <td>{{ app.data.healthyStructure }}</td>
           </tr>
-          <tr><th colspan="2">Czy jesteś skory do współpracy z rolami wyżej? Jak to sobie wyobrażasz?</th></tr>
-<tr><td colspan="2">{{ app.data.cooperation }}</td></tr>
-          <tr><th colspan="2">Co Twoim zdaniem warto byłoby usprawnić w administracji?</th></tr>
-<tr><td colspan="2">{{ app.data.improvements }}</td></tr>
+          <tr>
+            <th>Czy jesteś skory do współpracy z rolami wyżej? Jak to sobie wyobrażasz?</th>
+            <td>{{ app.data.cooperation }}</td>
+          </tr>
+          <tr>
+            <th>Co Twoim zdaniem warto byłoby usprawnić w administracji?</th>
+            <td>{{ app.data.improvements }}</td>
+          </tr>
         </table>
         <h2>Zgody</h2>
-        <table class="app-table qa-table">
-          <tr><th colspan="2">Zgoda na przetwarzanie danych (Discord ID)</th></tr>
-<tr><td colspan="2">{{ app.data.consentData ? 'Tak' : 'Nie' }}</td></tr>
-          <tr><th colspan="2">Akceptuję obowiązki Administratora</th></tr>
-<tr><td colspan="2">{{ app.data.consentDuties ? 'Tak' : 'Nie' }}</td></tr>
-          <tr><th colspan="2">Potwierdzam prawdziwość podanych informacji</th></tr>
-<tr><td colspan="2">{{ app.data.consentTruth ? 'Tak' : 'Nie' }}</td></tr>
+        <table class="app-table">
+          <tr>
+            <th>Zgoda na przetwarzanie danych (Discord ID)</th>
+            <td>{{ app.data.consentData ? 'Tak' : 'Nie' }}</td>
+          </tr>
+          <tr>
+            <th>Akceptuję obowiązki Administratora</th>
+            <td>{{ app.data.consentDuties ? 'Tak' : 'Nie' }}</td>
+          </tr>
+          <tr>
+            <th>Potwierdzam prawdziwość podanych informacji</th>
+            <td>{{ app.data.consentTruth ? 'Tak' : 'Nie' }}</td>
+          </tr>
         </table>
       </template>
       <template v-else-if="app.type === 'moderator'">
         <h2>Informacje OOC</h2>
-        <table class="app-table qa-table">
-          <tr><th colspan="2">Nick Discord + ID</th></tr>
-<tr><td colspan="2">{{ discordField }}</td></tr>
-          <tr><th colspan="2">Wiek</th></tr>
-<tr><td colspan="2">{{ app.data.age }}</td></tr>
-          <tr><th colspan="2">Od jak dawna jesteś na serwerze?</th></tr>
-<tr><td colspan="2">{{ app.data.serverTime }}</td></tr>
-          <tr><th colspan="2">Ile czasu dziennie jesteś aktywny/a na Discordzie?</th></tr>
-<tr><td colspan="2">{{ app.data.activeTime }}</td></tr>
+        <table class="app-table">
+          <tr><th>Nick Discord + ID</th><td>{{ discordField }}</td></tr>
+          <tr><th>Wiek</th><td>{{ app.data.age }}</td></tr>
+          <tr>
+            <th>Od jak dawna jesteś na serwerze?</th>
+            <td>{{ app.data.serverTime }}</td>
+          </tr>
+          <tr>
+            <th>Ile czasu dziennie jesteś aktywny/a na Discordzie?</th>
+            <td>{{ app.data.activeTime }}</td>
+          </tr>
         </table>
         <h2>Doświadczenie i podejście</h2>
-        <table class="app-table qa-table">
-          <tr><th colspan="2">Czy pełniłaś/eś wcześniej funkcję moderatora? Gdzie i jak wyglądała ta rola?</th></tr>
-<tr><td colspan="2">{{ app.data.moderatorExp }}</td></tr>
-          <tr><th colspan="2">Dlaczego chcesz zostać Moderatorem u nas?</th></tr>
-<tr><td colspan="2">{{ app.data.motivation }}</td></tr>
-          <tr><th colspan="2">Jakie są Twoje mocne strony w kontakcie z ludźmi?</th></tr>
-<tr><td colspan="2">{{ app.data.strengths }}</td></tr>
+        <table class="app-table">
+          <tr>
+            <th>Czy pełniłaś/eś wcześniej funkcję moderatora? Gdzie i jak wyglądała ta rola?</th>
+            <td>{{ app.data.moderatorExp }}</td>
+          </tr>
+          <tr>
+            <th>Dlaczego chcesz zostać Moderatorem u nas?</th>
+            <td>{{ app.data.motivation }}</td>
+          </tr>
+          <tr>
+            <th>Jakie są Twoje mocne strony w kontakcie z ludźmi?</th>
+            <td>{{ app.data.strengths }}</td>
+          </tr>
         </table>
         <h2>Sytuacje i zachowanie</h2>
-        <table class="app-table qa-table">
-          <tr><th colspan="2">Jak reagujesz, gdy użytkownik prowokuje innych, ale nie łamie regulaminu bezpośrednio?</th></tr>
-<tr><td colspan="2">{{ app.data.provocation }}</td></tr>
-          <tr><th colspan="2">Co robisz, jeśli ktoś wysyła zgłoszenie w stylu "XD lol" – bez konkretów?</th></tr>
-<tr><td colspan="2">{{ app.data.lolReport }}</td></tr>
-          <tr><th colspan="2">Jak rozpoznać, że zgłoszenie nie jest trollowaniem, tylko realnym problemem?</th></tr>
-<tr><td colspan="2">{{ app.data.realProblem }}</td></tr>
+        <table class="app-table">
+          <tr>
+            <th>Jak reagujesz, gdy użytkownik prowokuje innych, ale nie łamie regulaminu bezpośrednio?</th>
+            <td>{{ app.data.provocation }}</td>
+          </tr>
+          <tr>
+            <th>Co robisz, jeśli ktoś wysyła zgłoszenie w stylu "XD lol" – bez konkretów?</th>
+            <td>{{ app.data.lolReport }}</td>
+          </tr>
+          <tr>
+            <th>Jak rozpoznać, że zgłoszenie nie jest trollowaniem, tylko realnym problemem?</th>
+            <td>{{ app.data.realProblem }}</td>
+          </tr>
           <tr>
             <th class="question-cell"><pre>{{ app.data.scenario }}</pre></th>
             <td class="answer-cell"><pre>{{ app.data.randomAnswer }}</pre></td>
           </tr>
         </table>
         <h2>Praca w zespole</h2>
-        <table class="app-table qa-table">
-          <tr><th colspan="2">Jak widzisz współpracę z innymi członkami zespołu, takimi jak Community Manager, Admin czy Developer?</th></tr>
-<tr><td colspan="2">{{ app.data.teamwork }}</td></tr>
-          <tr><th colspan="2">Jak rozumiesz swoją rolę w przekazywaniu zgłoszeń dalej? Kiedy decydujesz się rozwiązać coś samodzielnie, a kiedy informujesz innych członków zespołu?</th></tr>
-<tr><td colspan="2">{{ app.data.escalation }}</td></tr>
-          <tr><th colspan="2">Czy potrafisz pozostać neutralny, nawet gdy temat dotyczy znajomej osoby?</th></tr>
-<tr><td colspan="2">{{ app.data.neutrality }}</td></tr>
+        <table class="app-table">
+          <tr>
+            <th>Jak widzisz współpracę z innymi członkami zespołu, takimi jak Community Manager, Admin czy Developer?</th>
+            <td>{{ app.data.teamwork }}</td>
+          </tr>
+          <tr>
+            <th>Jak rozumiesz swoją rolę w przekazywaniu zgłoszeń dalej? Kiedy decydujesz się rozwiązać coś samodzielnie, a kiedy informujesz innych członków zespołu?</th>
+            <td>{{ app.data.escalation }}</td>
+          </tr>
+          <tr>
+            <th>Czy potrafisz pozostać neutralny, nawet gdy temat dotyczy znajomej osoby?</th>
+            <td>{{ app.data.neutrality }}</td>
+          </tr>
         </table>
         <h2>Zgody</h2>
-        <table class="app-table qa-table">
-          <tr><th colspan="2">Zgoda na przetwarzanie danych (Discord ID)</th></tr>
-<tr><td colspan="2">{{ app.data.consentData ? 'Tak' : 'Nie' }}</td></tr>
-          <tr><th colspan="2">Akceptuję obowiązki Moderatora</th></tr>
-<tr><td colspan="2">{{ app.data.consentDuties ? 'Tak' : 'Nie' }}</td></tr>
-          <tr><th colspan="2">Potwierdzam prawdziwość podanych informacji</th></tr>
-<tr><td colspan="2">{{ app.data.consentTruth ? 'Tak' : 'Nie' }}</td></tr>
+        <table class="app-table">
+          <tr>
+            <th>Zgoda na przetwarzanie danych (Discord ID)</th>
+            <td>{{ app.data.consentData ? 'Tak' : 'Nie' }}</td>
+          </tr>
+          <tr>
+            <th>Akceptuję obowiązki Moderatora</th>
+            <td>{{ app.data.consentDuties ? 'Tak' : 'Nie' }}</td>
+          </tr>
+          <tr>
+            <th>Potwierdzam prawdziwość podanych informacji</th>
+            <td>{{ app.data.consentTruth ? 'Tak' : 'Nie' }}</td>
+          </tr>
       </table>
       </template>
       <template v-else-if="app.type === 'checker'">
         <h2>Informacje OOC</h2>
-        <table class="app-table qa-table">
-          <tr><th colspan="2">Nick Discord + ID</th></tr>
-<tr><td colspan="2">{{ discordField }}</td></tr>
-          <tr><th colspan="2">Od jak dawna jesteś na naszym serwerze?</th></tr>
-<tr><td colspan="2">{{ app.data.serverTime }}</td></tr>
+        <table class="app-table">
+          <tr><th>Nick Discord + ID</th><td>{{ discordField }}</td></tr>
+          <tr>
+            <th>Od jak dawna jesteś na naszym serwerze?</th>
+            <td>{{ app.data.serverTime }}</td>
+          </tr>
         </table>
         <h2>Doświadczenie i podejście</h2>
-        <table class="app-table qa-table">
-          <tr><th colspan="2">Czy miałeś styczność z weryfikacją lub selekcją graczy?</th></tr>
-<tr><td colspan="2">{{ app.data.verificationExp }}</td></tr>
-          <tr><th colspan="2">Jak rozpoznać gracza, który "tylko wypełnił, żeby wejść", od gracza z potencjałem?</th></tr>
-<tr><td colspan="2">{{ app.data.differentiate }}</td></tr>
-          <tr><th colspan="2">Na co zwracasz uwagę przy czytaniu podania na WL?</th></tr>
-<tr><td colspan="2">{{ app.data.reviewFocus }}</td></tr>
-          <tr><th colspan="2">Co Twoim zdaniem oznacza dobre RP i jakbyś je promował?</th></tr>
-<tr><td colspan="2">{{ app.data.goodRp }}</td></tr>
+        <table class="app-table">
+          <tr>
+            <th>Czy miałeś styczność z weryfikacją lub selekcją graczy?</th>
+            <td>{{ app.data.verificationExp }}</td>
+          </tr>
+          <tr>
+            <th>Jak rozpoznać gracza, który "tylko wypełnił, żeby wejść", od gracza z potencjałem?</th>
+            <td>{{ app.data.differentiate }}</td>
+          </tr>
+          <tr>
+            <th>Na co zwracasz uwagę przy czytaniu podania na WL?</th>
+            <td>{{ app.data.reviewFocus }}</td>
+          </tr>
+          <tr>
+            <th>Co Twoim zdaniem oznacza dobre RP i jakbyś je promował?</th>
+            <td>{{ app.data.goodRp }}</td>
+          </tr>
         </table>
         <h2>Praca</h2>
-        <table class="app-table qa-table">
-          <tr><th colspan="2">Ile podań jesteś w stanie realnie sprawdzić dziennie / tygodniowo?</th></tr>
-<tr><td colspan="2">{{ app.data.workload }}</td></tr>
-          <tr><th colspan="2">Co robisz, jeśli masz wątpliwości co do kandydata?</th></tr>
-<tr><td colspan="2">{{ app.data.doubts }}</td></tr>
-          <tr><th colspan="2">Wolisz działać samodzielnie czy w parze z innym Checkerem?</th></tr>
-<tr><td colspan="2">{{ app.data.teamwork }}</td></tr>
+        <table class="app-table">
+          <tr>
+            <th>Ile podań jesteś w stanie realnie sprawdzić dziennie / tygodniowo?</th>
+            <td>{{ app.data.workload }}</td>
+          </tr>
+          <tr>
+            <th>Co robisz, jeśli masz wątpliwości co do kandydata?</th>
+            <td>{{ app.data.doubts }}</td>
+          </tr>
+          <tr>
+            <th>Wolisz działać samodzielnie czy w parze z innym Checkerem?</th>
+            <td>{{ app.data.teamwork }}</td>
+          </tr>
         </table>
         <h2>Zgody</h2>
-        <table class="app-table qa-table">
-          <tr><th colspan="2">Zgoda na przetwarzanie danych (Discord ID)</th></tr>
-<tr><td colspan="2">{{ app.data.consentData ? 'Tak' : 'Nie' }}</td></tr>
-          <tr><th colspan="2">Akceptuję obowiązki Checkera</th></tr>
-<tr><td colspan="2">{{ app.data.consentDuties ? 'Tak' : 'Nie' }}</td></tr>
-          <tr><th colspan="2">Potwierdzam prawdziwość podanych informacji</th></tr>
-<tr><td colspan="2">{{ app.data.consentTruth ? 'Tak' : 'Nie' }}</td></tr>
+        <table class="app-table">
+          <tr>
+            <th>Zgoda na przetwarzanie danych (Discord ID)</th>
+            <td>{{ app.data.consentData ? 'Tak' : 'Nie' }}</td>
+          </tr>
+          <tr>
+            <th>Akceptuję obowiązki Checkera</th>
+            <td>{{ app.data.consentDuties ? 'Tak' : 'Nie' }}</td>
+          </tr>
+          <tr>
+            <th>Potwierdzam prawdziwość podanych informacji</th>
+            <td>{{ app.data.consentTruth ? 'Tak' : 'Nie' }}</td>
+          </tr>
         </table>
       </template>
       <template v-else-if="app.type === 'developer'">
         <h2>Informacje OOC</h2>
-        <table class="app-table qa-table">
-          <tr><th colspan="2">Nick Discord + ID</th></tr>
-<tr><td colspan="2">{{ discordField }}</td></tr>
+        <table class="app-table">
+          <tr><th>Nick Discord + ID</th><td>{{ discordField }}</td></tr>
         </table>
         <h2>Doświadczenie i umiejętności</h2>
-        <table class="app-table qa-table">
-          <tr><th colspan="2">Jakie języki programowania znasz?</th></tr>
-<tr><td colspan="2">{{ app.data.languages }}</td></tr>
-          <tr><th colspan="2">Czy pracowałeś wcześniej z zasobami FiveM? Jakimi?</th></tr>
-<tr><td colspan="2">{{ app.data.fivemExp }}</td></tr>
-          <tr><th colspan="2">Jak wygląda Twoja organizacja pracy przy większych zadaniach?</th></tr>
-<tr><td colspan="2">{{ app.data.workOrg }}</td></tr>
-          <tr><th colspan="2">Opisz projekt/skrypt, z którego jesteś najbardziej dumny/a.</th></tr>
-<tr><td colspan="2">{{ app.data.proudProject }}</td></tr>
-          <tr><th colspan="2">Jak reagujesz, gdy ktoś zgłasza błąd w Twoim kodzie?</th></tr>
-<tr><td colspan="2">{{ app.data.bugResponse }}</td></tr>
-          <tr><th colspan="2">Czy potrafisz kodować pod cudze wymagania?</th></tr>
-<tr><td colspan="2">{{ app.data.requirements }}</td></tr>
-          <tr><th colspan="2">Jakie obszary Cię najbardziej interesują? (UI, systemy RP, joby, zasoby)</th></tr>
-<tr><td colspan="2">{{ app.data.interests }}</td></tr>
-          <tr><th colspan="2">Czy potrafisz przeprowadzać testy jednostkowe i techniczne?</th></tr>
-<tr><td colspan="2">{{ app.data.testing }}</td></tr>
-          <tr><th colspan="2">🔗 Link do portfolio (GitHub, Discord bot, skrypt, demo)</th></tr>
-<tr><td colspan="2">{{ app.data.portfolio }}</td></tr>
+        <table class="app-table">
+          <tr>
+            <th>Jakie języki programowania znasz?</th>
+            <td>{{ app.data.languages }}</td>
+          </tr>
+          <tr>
+            <th>Czy pracowałeś wcześniej z zasobami FiveM? Jakimi?</th>
+            <td>{{ app.data.fivemExp }}</td>
+          </tr>
+          <tr>
+            <th>Jak wygląda Twoja organizacja pracy przy większych zadaniach?</th>
+            <td>{{ app.data.workOrg }}</td>
+          </tr>
+          <tr>
+            <th>Opisz projekt/skrypt, z którego jesteś najbardziej dumny/a.</th>
+            <td>{{ app.data.proudProject }}</td>
+          </tr>
+          <tr>
+            <th>Jak reagujesz, gdy ktoś zgłasza błąd w Twoim kodzie?</th>
+            <td>{{ app.data.bugResponse }}</td>
+          </tr>
+          <tr>
+            <th>Czy potrafisz kodować pod cudze wymagania?</th>
+            <td>{{ app.data.requirements }}</td>
+          </tr>
+          <tr>
+            <th>Jakie obszary Cię najbardziej interesują? (UI, systemy RP, joby, zasoby)</th>
+            <td>{{ app.data.interests }}</td>
+          </tr>
+          <tr>
+            <th>Czy potrafisz przeprowadzać testy jednostkowe i techniczne?</th>
+            <td>{{ app.data.testing }}</td>
+          </tr>
+          <tr>
+            <th>🔗 Link do portfolio (GitHub, Discord bot, skrypt, demo)</th>
+            <td>{{ app.data.portfolio }}</td>
+          </tr>
         </table>
         <h2>Zgody</h2>
-        <table class="app-table qa-table">
-          <tr><th colspan="2">Zgoda na przetwarzanie danych (Discord ID)</th></tr>
-<tr><td colspan="2">{{ app.data.consentData ? 'Tak' : 'Nie' }}</td></tr>
-          <tr><th colspan="2">Akceptuję zakres obowiązków Developera</th></tr>
-<tr><td colspan="2">{{ app.data.consentDuties ? 'Tak' : 'Nie' }}</td></tr>
-          <tr><th colspan="2">Potwierdzam prawdziwość podanych informacji</th></tr>
-<tr><td colspan="2">{{ app.data.consentTruth ? 'Tak' : 'Nie' }}</td></tr>
+        <table class="app-table">
+          <tr>
+            <th>Zgoda na przetwarzanie danych (Discord ID)</th>
+            <td>{{ app.data.consentData ? 'Tak' : 'Nie' }}</td>
+          </tr>
+          <tr>
+            <th>Akceptuję zakres obowiązków Developera</th>
+            <td>{{ app.data.consentDuties ? 'Tak' : 'Nie' }}</td>
+          </tr>
+          <tr>
+            <th>Potwierdzam prawdziwość podanych informacji</th>
+            <td>{{ app.data.consentTruth ? 'Tak' : 'Nie' }}</td>
+          </tr>
         </table>
       </template>
       <template v-else>
         <h2 v-if="app.data.ic">Informacje IC</h2>
-        <table v-if="app.data.ic" class="app-table qa-table">
-          <tr><th colspan="2">Imię i nazwisko</th></tr>
-<tr><td colspan="2">{{ app.data.ic.name }}</td></tr>
-          <tr><th colspan="2">Wiek</th></tr>
-<tr><td colspan="2">{{ app.data.ic.age }}</td></tr>
-          <tr><th colspan="2">Historia</th></tr>
-<tr><td colspan="2">{{ app.data.ic.story }}</td></tr>
-          <tr><th colspan="2">Charakter</th></tr>
-<tr><td colspan="2">{{ app.data.ic.personality }}</td></tr>
-          <tr><th colspan="2">Umiejętności</th></tr>
-<tr><td colspan="2">{{ app.data.ic.skills }}</td></tr>
-          <tr><th colspan="2">Motywacja</th></tr>
-<tr><td colspan="2">{{ app.data.ic.motivation }}</td></tr>
+        <table v-if="app.data.ic" class="app-table">
+          <tr><th>Imię i nazwisko</th><td>{{ app.data.ic.name }}</td></tr>
+          <tr><th>Wiek</th><td>{{ app.data.ic.age }}</td></tr>
+          <tr><th>Historia</th><td>{{ app.data.ic.story }}</td></tr>
+          <tr><th>Charakter</th><td>{{ app.data.ic.personality }}</td></tr>
+          <tr><th>Umiejętności</th><td>{{ app.data.ic.skills }}</td></tr>
+          <tr><th>Motywacja</th><td>{{ app.data.ic.motivation }}</td></tr>
         </table>
         <h2 v-if="app.data && (app.data.ooc || app.data.discord)">Informacje OOC</h2>
-        <table v-if="app.data && (app.data.ooc || app.data.discord)" class="app-table qa-table">
-          <tr><th colspan="2">Nick Discord + ID</th></tr>
-<tr><td colspan="2">{{ discordField }}</td></tr>
+        <table v-if="app.data && (app.data.ooc || app.data.discord)" class="app-table">
+          <tr><th>Nick Discord + ID</th><td>{{ discordField }}</td></tr>
           <template v-if="app.data.ooc">
-            <tr><th colspan="2">Doświadczenie w RP</th></tr>
-<tr><td colspan="2">{{ app.data.ooc.experience }}</td></tr>
-            <tr><th colspan="2">Zgoda na przetwarzanie danych (Discord ID)</th></tr>
-<tr><td colspan="2">{{ app.data.consents.data ? 'Tak' : 'Nie' }}</td></tr>
-            <tr><th colspan="2">Znam zasady RP i Akceptuję regulamin serwera</th></tr>
-<tr><td colspan="2">{{ app.data.consents.rules ? 'Tak' : 'Nie' }}</td></tr>
-            <tr><th colspan="2">Potwierdzam prawdziwość podanych informacji</th></tr>
-<tr><td colspan="2">{{ app.data.consents.truth ? 'Tak' : 'Nie' }}</td></tr>
+            <tr>
+              <th>Doświadczenie w RP</th>
+              <td>{{ app.data.ooc.experience }}</td>
+            </tr>
+            <tr>
+              <th>Zgoda na przetwarzanie danych (Discord ID)</th>
+              <td>{{ app.data.consents.data ? 'Tak' : 'Nie' }}</td>
+            </tr>
+            <tr>
+              <th>Znam zasady RP i Akceptuję regulamin serwera</th>
+              <td>{{ app.data.consents.rules ? 'Tak' : 'Nie' }}</td>
+            </tr>
+            <tr>
+              <th>Potwierdzam prawdziwość podanych informacji</th>
+              <td>{{ app.data.consents.truth ? 'Tak' : 'Nie' }}</td>
+            </tr>
           </template>
         </table>
         <h2>Pytania sytuacyjne</h2>
-        <table class="app-table qa-table">
+        <table class="app-table">
           <template v-for="(qa, idx) in scenarioPairs" :key="idx">
             <tr>
               <th colspan="2" class="question-cell"><pre>{{ qa.question }}</pre></th>
@@ -232,11 +316,9 @@
           </template>
         </table>
         <h2 v-if="app.data.extra">Dodatkowo</h2>
-        <table v-if="app.data.extra" class="app-table qa-table">
-          <tr><th colspan="2">Portfolio</th></tr>
-<tr><td colspan="2">{{ app.data.extra.portfolio }}</td></tr>
-          <tr><th colspan="2">Frakcja</th></tr>
-<tr><td colspan="2">{{ app.data.extra.faction }}</td></tr>
+        <table v-if="app.data.extra" class="app-table">
+          <tr><th>Portfolio</th><td>{{ app.data.extra.portfolio }}</td></tr>
+          <tr><th>Frakcja</th><td>{{ app.data.extra.faction }}</td></tr>
         </table>
       </template>
       <div class="decision-box">
@@ -585,15 +667,6 @@ const decisionInfo = computed(() => {
 }
 .app-table th {
   color: #5bc0de;
-}
-.qa-table tr {
-  display: flex;
-  flex-direction: column;
-}
-.qa-table th,
-.qa-table td {
-  display: block;
-  width: 100%;
 }
 .gray {
   color: gray;
