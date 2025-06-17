@@ -173,7 +173,7 @@ const moderatorSteps = [
 const joinSteps = computed(() =>
   appType.value === 'administrator'
     ? adminSteps
-    : appType.value === 'moderator'
+    : appType.value === 'moderator' || appType.value === 'checker'
       ? moderatorSteps
       : defaultSteps
 )

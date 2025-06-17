@@ -236,6 +236,7 @@ async function submitForm() {
 
 .question {
   font-weight: 600;
+  white-space: pre-wrap;
 }
 
 .submit-btn {
