@@ -252,7 +252,8 @@ const router = createRouter({
       component: AdminApplications,
       meta: {
         title: 'Zaarchiwizowane Podania - AetherRP',
-        requiresAuth: true
+        requiresAuth: true,
+        type: 'all'
       }
     },
     {

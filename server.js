@@ -27,7 +27,8 @@ const {
   REAPPLY_COOLDOWN_HOURS,
   EXTRA_COOLDOWN_HOURS,
   REJECTION_HISTORY_WINDOW_HOURS,
-  REJECTIONS_BEFORE_EXTRA_COOLDOWN
+  REJECTIONS_BEFORE_EXTRA_COOLDOWN,
+  ADMIN_REAPPLY_COOLDOWN_DAYS
 } = config;
 
 const DB_FILE = path.join(process.cwd(), 'database.json');
@@ -73,7 +74,7 @@ function saveDb(db) {
   fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2));
 }
 
-function computeReapplyAfter(history) {
+function computeReapplyAfter(history, baseHours = REAPPLY_COOLDOWN_HOURS) {
   const rejections = (history || []).filter(
     h => normalizeStatus(h.status) === STATUS.REJECTED
   );
@@ -83,7 +84,7 @@ function computeReapplyAfter(history) {
     r => last.timestamp - r.timestamp <= REJECTION_HISTORY_WINDOW_HOURS * 3600 * 1000
   );
 
-  let cooldown = REAPPLY_COOLDOWN_HOURS;
+  let cooldown = baseHours;
   if (recent.length >= REJECTIONS_BEFORE_EXTRA_COOLDOWN) {
     cooldown += EXTRA_COOLDOWN_HOURS;
   }
@@ -349,7 +350,10 @@ app.get('/api/status', (req, res) => {
     history: appEntry ? appEntry.history || [] : [],
     archived: appEntry ? appEntry.archived || null : null,
     reapplyAfter: appEntry ? appEntry.reapplyAfter || null : null,
-    baseCooldownHours: REAPPLY_COOLDOWN_HOURS,
+    baseCooldownHours:
+      type === 'administrator'
+        ? ADMIN_REAPPLY_COOLDOWN_DAYS * 24
+        : REAPPLY_COOLDOWN_HOURS,
     extraCooldownHours: EXTRA_COOLDOWN_HOURS,
     recentRejections: appEntry
       ? appEntry.history.filter(
@@ -514,7 +518,11 @@ app.post('/api/admin/status', async (req, res) => {
   }
 
   if (status === STATUS.REJECTED) {
-    appEntry.reapplyAfter = computeReapplyAfter(appEntry.history);
+    const base =
+      appEntry.type === 'administrator'
+        ? ADMIN_REAPPLY_COOLDOWN_DAYS * 24
+        : REAPPLY_COOLDOWN_HOURS;
+    appEntry.reapplyAfter = computeReapplyAfter(appEntry.history, base);
   } else {
     delete appEntry.reapplyAfter;
   }
@@ -555,9 +563,12 @@ app.get('/api/admin/applications', async (req, res) => {
   const db = loadDb();
   const type = req.query.type || 'whitelist';
   autoArchiveOldApplications(db);
-  const filteredApps = db.applications.filter(
-    a => (a.type || 'whitelist') === type
-  );
+  let filteredApps = db.applications;
+  if (type && type !== 'all') {
+    filteredApps = filteredApps.filter(
+      a => (a.type || 'whitelist') === type
+    );
+  }
   const sorted = filteredApps
     .map(a => ({
       ...a,
