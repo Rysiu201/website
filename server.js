@@ -351,7 +351,10 @@ app.get('/api/status', (req, res) => {
     archived: appEntry ? appEntry.archived || null : null,
     reapplyAfter: appEntry ? appEntry.reapplyAfter || null : null,
     baseCooldownHours:
-      type === 'administrator' || type === 'moderator'
+      type === 'administrator' ||
+      type === 'moderator' ||
+      type === 'checker' ||
+      type === 'developer'
         ? ADMIN_REAPPLY_COOLDOWN_DAYS * 24
         : REAPPLY_COOLDOWN_HOURS,
     extraCooldownHours: EXTRA_COOLDOWN_HOURS,
@@ -519,7 +522,10 @@ app.post('/api/admin/status', async (req, res) => {
 
   if (status === STATUS.REJECTED) {
     const base =
-      appEntry.type === 'administrator' || appEntry.type === 'moderator'
+      appEntry.type === 'administrator' ||
+      appEntry.type === 'moderator' ||
+      appEntry.type === 'checker' ||
+      appEntry.type === 'developer'
         ? ADMIN_REAPPLY_COOLDOWN_DAYS * 24
         : REAPPLY_COOLDOWN_HOURS;
     appEntry.reapplyAfter = computeReapplyAfter(appEntry.history, base);

@@ -79,6 +79,56 @@
         </table>
         <h2>Zgody</h2>
         <table class="app-table">
+        <tr><th>Dane</th><td>{{ app.data.consentData ? 'Tak' : 'Nie' }}</td></tr>
+        <tr><th>Obowiązki</th><td>{{ app.data.consentDuties ? 'Tak' : 'Nie' }}</td></tr>
+        <tr><th>Prawdziwość</th><td>{{ app.data.consentTruth ? 'Tak' : 'Nie' }}</td></tr>
+      </table>
+      </template>
+      <template v-else-if="app.type === 'checker'">
+        <h2>Informacje OOC</h2>
+        <table class="app-table">
+          <tr><th>Discord</th><td>{{ discordField }}</td></tr>
+          <tr><th>Od kiedy na serwerze</th><td>{{ app.data.serverTime }}</td></tr>
+        </table>
+        <h2>Doświadczenie i podejście</h2>
+        <table class="app-table">
+          <tr><th>Doświadczenie w weryfikacji</th><td>{{ app.data.verificationExp }}</td></tr>
+          <tr><th>Rozpoznawanie kandydatów</th><td>{{ app.data.differentiate }}</td></tr>
+          <tr><th>Na co zwracasz uwagę</th><td>{{ app.data.reviewFocus }}</td></tr>
+          <tr><th>Dobre RP</th><td>{{ app.data.goodRp }}</td></tr>
+        </table>
+        <h2>Praca</h2>
+        <table class="app-table">
+          <tr><th>Możliwa liczba podań</th><td>{{ app.data.workload }}</td></tr>
+          <tr><th>Wątpliwości co do kandydata</th><td>{{ app.data.doubts }}</td></tr>
+          <tr><th>Praca w zespole</th><td>{{ app.data.teamwork }}</td></tr>
+        </table>
+        <h2>Zgody</h2>
+        <table class="app-table">
+          <tr><th>Dane</th><td>{{ app.data.consentData ? 'Tak' : 'Nie' }}</td></tr>
+          <tr><th>Obowiązki</th><td>{{ app.data.consentDuties ? 'Tak' : 'Nie' }}</td></tr>
+          <tr><th>Prawdziwość</th><td>{{ app.data.consentTruth ? 'Tak' : 'Nie' }}</td></tr>
+        </table>
+      </template>
+      <template v-else-if="app.type === 'developer'">
+        <h2>Informacje OOC</h2>
+        <table class="app-table">
+          <tr><th>Discord</th><td>{{ discordField }}</td></tr>
+        </table>
+        <h2>Doświadczenie i umiejętności</h2>
+        <table class="app-table">
+          <tr><th>Języki programowania</th><td>{{ app.data.languages }}</td></tr>
+          <tr><th>Doświadczenie z FiveM</th><td>{{ app.data.fivemExp }}</td></tr>
+          <tr><th>Organizacja pracy</th><td>{{ app.data.workOrg }}</td></tr>
+          <tr><th>Najlepszy projekt</th><td>{{ app.data.proudProject }}</td></tr>
+          <tr><th>Reakcja na błąd</th><td>{{ app.data.bugResponse }}</td></tr>
+          <tr><th>Kodowanie pod wymagania</th><td>{{ app.data.requirements }}</td></tr>
+          <tr><th>Zainteresowania</th><td>{{ app.data.interests }}</td></tr>
+          <tr><th>Testowanie</th><td>{{ app.data.testing }}</td></tr>
+          <tr><th>Portfolio</th><td>{{ app.data.portfolio }}</td></tr>
+        </table>
+        <h2>Zgody</h2>
+        <table class="app-table">
           <tr><th>Dane</th><td>{{ app.data.consentData ? 'Tak' : 'Nie' }}</td></tr>
           <tr><th>Obowiązki</th><td>{{ app.data.consentDuties ? 'Tak' : 'Nie' }}</td></tr>
           <tr><th>Prawdziwość</th><td>{{ app.data.consentTruth ? 'Tak' : 'Nie' }}</td></tr>

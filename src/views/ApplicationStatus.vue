@@ -196,7 +196,10 @@ const rejectedHistory = computed(() =>
   history.value.filter(h => h.status === statuses.REJECTED)
 )
 const cooldownText = computed(() =>
-  appType.value === 'administrator' || appType.value === 'moderator'
+  appType.value === 'administrator' ||
+  appType.value === 'moderator' ||
+  appType.value === 'checker' ||
+  appType.value === 'developer'
     ? `${Math.round(cooldownHours.value / 24)} dni`
     : `${cooldownHours.value}h`
 )
@@ -225,7 +228,11 @@ onMounted(async () => {
         ? 'Twoje podanie na Administratora zostało wysłane'
         : appType.value === 'moderator'
           ? 'Twoje podanie na Moderatora zostało wysłane'
-          : 'Twoje podanie zostało Wysłane'
+          : appType.value === 'checker'
+            ? 'Twoje podanie na WhiteListCheckera zostało wysłane'
+            : appType.value === 'developer'
+              ? 'Twoje podanie na Developera zostało wysłane'
+              : 'Twoje podanie zostało Wysłane'
   }
   updateRemaining()
   if (reapplyAfter.value && Date.now() < reapplyAfter.value) {
