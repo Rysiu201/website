@@ -534,6 +534,63 @@ app.post('/api/admin/status', async (req, res) => {
   }
 
   saveDb(db);
+
+  if (process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID) {
+    const rolesToUpdate = [];
+    switch (appEntry.type) {
+      case 'whitelist':
+        if (process.env.PENDING_WHITELIST_ROLE_ID) {
+          rolesToUpdate.push(process.env.PENDING_WHITELIST_ROLE_ID);
+        }
+        break;
+      case 'checker':
+        if (process.env.PENDING_ROLES_ROLE_ID) {
+          rolesToUpdate.push(process.env.PENDING_ROLES_ROLE_ID);
+        }
+        if (process.env.PENDING_CHECKER_ROLE_ID) {
+          rolesToUpdate.push(process.env.PENDING_CHECKER_ROLE_ID);
+        }
+        break;
+      case 'moderator':
+        if (process.env.PENDING_ROLES_ROLE_ID) {
+          rolesToUpdate.push(process.env.PENDING_ROLES_ROLE_ID);
+        }
+        if (process.env.PENDING_MODERATOR_ROLE_ID) {
+          rolesToUpdate.push(process.env.PENDING_MODERATOR_ROLE_ID);
+        }
+        break;
+      case 'administrator':
+        if (process.env.PENDING_ROLES_ROLE_ID) {
+          rolesToUpdate.push(process.env.PENDING_ROLES_ROLE_ID);
+        }
+        if (process.env.PENDING_ADMIN_ROLE_ID) {
+          rolesToUpdate.push(process.env.PENDING_ADMIN_ROLE_ID);
+        }
+        break;
+      case 'developer':
+        if (process.env.PENDING_ROLES_ROLE_ID) {
+          rolesToUpdate.push(process.env.PENDING_ROLES_ROLE_ID);
+        }
+        if (process.env.PENDING_DEVELOPER_ROLE_ID) {
+          rolesToUpdate.push(process.env.PENDING_DEVELOPER_ROLE_ID);
+        }
+        break;
+    }
+
+    for (const roleId of rolesToUpdate) {
+      const roleUrl =
+        `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${appEntry.userId}/roles/${roleId}`;
+      try {
+        await fetch(roleUrl, {
+          method: status === STATUS.APPROVED ? 'PUT' : 'DELETE',
+          headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` }
+        });
+      } catch (err) {
+        console.error(`Failed to update role ${roleId}`, err);
+      }
+    }
+  }
+
   res.json({ success: true });
 });
 
