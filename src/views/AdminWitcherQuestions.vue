@@ -4,16 +4,18 @@
       <i class="fa-solid fa-arrow-left"></i> Powrót
     </RouterLink>
     <h1 class="section-title"><span class="accent">Pytania</span></h1>
+    <select v-model="activeType" class="type-select">
+      <option v-for="(label, type) in labels" :key="type" :value="type">
+        {{ label }}
+      </option>
+    </select>
     <div class="actions">
       <button v-if="!editing" class="edit-btn" @click="editing = true">Edytuj</button>
       <button v-else class="save-btn" @click="saveQuestions">Zapisz</button>
     </div>
-    <div class="lists">
-      <div class="list" v-for="type in Object.keys(questions)" :key="type">
-        <h2>{{ labels[type] }}</h2>
-        <div v-for="(_, i) in questions[type]" :key="i" class="item">
-          <textarea v-model="questions[type][i]" :disabled="!editing"></textarea>
-        </div>
+    <div class="questions-frame" :class="{ editing }">
+      <div v-for="(_, i) in displayedQuestions" :key="i" class="item">
+        <textarea v-model="questions[activeType][i]" :disabled="!editing"></textarea>
       </div>
     </div>
     <p v-if="message" class="save-message">{{ message }}</p>
@@ -22,28 +24,43 @@
 
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 
 const editing = ref(false)
 const message = ref('')
+const activeType = ref('whitelist')
+const visibleCount = 10
 
 const questions = ref<Record<string, string[]>>({
   whitelist: [],
+  checker: [],
   moderator: [],
-  administrator: []
+  administrator: [],
+  developer: []
 })
 
 const labels: Record<string, string> = {
-  whitelist: 'Podania WL',
-  moderator: 'Podania Moderator',
-  administrator: 'Podania Administrator'
+  whitelist: 'WhiteLista',
+  checker: 'WhiteListChecker',
+  moderator: 'Moderator',
+  administrator: 'Administrator',
+  developer: 'Developer'
 }
 
+const displayedQuestions = computed(() => {
+  const list = questions.value[activeType.value] || []
+  return editing.value ? list : list.slice(0, visibleCount)
+})
+
 onMounted(async () => {
-  const res = await fetch('/api/admin/witcher-questions', { credentials: 'include' })
+  const res = await fetch('/api/admin/witcher-questions', {
+    credentials: 'include'
+  })
   if (res.ok) {
     const data = await res.json()
-    if (data.questions) questions.value = data.questions
+    if (data.questions) {
+      questions.value = { ...questions.value, ...data.questions }
+    }
   }
 })
 
@@ -111,16 +128,27 @@ async function saveQuestions() {
   cursor: pointer;
 }
 
-.lists {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  max-width: 800px;
-  margin: 0 auto;
+.type-select {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto 1rem;
+  padding: 0.5rem;
+  background: #222;
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 4px;
 }
 
-.list h2 {
-  margin-bottom: 0.5rem;
+.questions-frame {
+  max-width: 800px;
+  margin: 0 auto;
+  max-height: 400px;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.questions-frame.editing {
+  overflow-y: auto;
 }
 
 .item textarea {
@@ -129,6 +157,9 @@ async function saveQuestions() {
   padding: 0.4rem;
   border-radius: 4px;
   margin-bottom: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: inherit;
 }
 
 .save-message {

@@ -58,6 +58,7 @@ export default {
       'Jaki wpływ ma realność RP na immersję graczy?',
       'Czy możesz prowadzić grupę przestępczą bez zgody administracji?'
     ],
+    checker: [],
     moderator: [
       'Ktoś pisze na publicznym czacie: „admin to idiota”.',
       'Gracz spamuje memami w poważnej dyskusji mimo ostrzeżeń.',
@@ -101,6 +102,7 @@ export default {
       'CM prowadzi event, ale gracze go wyśmiewają – jak pomagasz?',
       'Zgłasza się osoba z inną rangą, że nie chce pracować z danym Developerem.',
       'Gracze IC wynoszą OOC dramy – jak jako admin reagujesz?'
-    ]
+    ],
+    developer: []
   }
 };

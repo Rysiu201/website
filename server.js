@@ -301,7 +301,13 @@ app.get('/api/questions', (req, res) => {
 
   const type = req.query.type || 'whitelist';
   const key = `${req.user.id}:${type}`;
-  const countMap = { whitelist: 5, moderator: 1, administrator: 3 };
+  const countMap = {
+    whitelist: 5,
+    checker: 5,
+    moderator: 1,
+    administrator: 3,
+    developer: 3
+  };
   const pool = (config.QUESTIONS && config.QUESTIONS[type]) || [];
   const count = countMap[type] || 5;
 
@@ -957,7 +963,7 @@ app.post('/api/admin/witcher-questions', async (req, res) => {
   }
   if (!isAdmin) return res.status(403).json({ success: false });
 
-  const allowed = ['whitelist', 'moderator', 'administrator'];
+  const allowed = ['whitelist', 'checker', 'moderator', 'administrator', 'developer'];
   for (const t of allowed) {
     if (Array.isArray(req.body[t])) {
       config.QUESTIONS[t] = req.body[t].map(q => String(q));
