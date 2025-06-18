@@ -21,6 +21,7 @@
       </tbody>
     </table>
     <button class="save-btn" @click="saveSettings">Zapisz</button>
+    <p v-if="message" class="save-message">{{ message }}</p>
   </main>
 </template>
 
@@ -74,6 +75,7 @@ const settings = ref<Setting[]>([
   }
 ])
 
+const message = ref('')
 onMounted(async () => {
   const res = await fetch('/api/admin/witcher-settings', {
     credentials: 'include'
@@ -92,12 +94,16 @@ async function saveSettings() {
   settings.value.forEach(s => {
     payload[s.key] = s.value
   })
-  await fetch('/api/admin/witcher-settings', {
+  const res = await fetch('/api/admin/witcher-settings', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
     body: JSON.stringify(payload)
   })
+  if (res.ok) {
+    message.value = 'Zapisano zmiany'
+    setTimeout(() => (message.value = ''), 3000)
+  }
 }
 </script>
 
@@ -163,5 +169,11 @@ async function saveSettings() {
   border: none;
   border-radius: 6px;
   cursor: pointer;
+}
+
+.save-message {
+  text-align: center;
+  margin-top: 0.5rem;
+  color: #0f0;
 }
 </style>
