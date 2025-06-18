@@ -950,7 +950,10 @@ app.post('/api/admin/witcher-settings', async (req, res) => {
   const fileContent =
     'export default ' + JSON.stringify(config, null, 2) + '\n';
   fs.writeFileSync(configPath, fileContent);
+<<<<<<< 2dknpw-codex/add-time-variable-table-and-editor
   recomputeAllReapplyAfter();
+=======
+>>>>>>> main
   res.json({ success: true, settings: { ...config } });
 });
 

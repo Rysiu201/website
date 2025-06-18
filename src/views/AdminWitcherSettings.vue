@@ -76,7 +76,6 @@ const settings = ref<Setting[]>([
 ])
 
 const message = ref('')
-
 onMounted(async () => {
   const res = await fetch('/api/admin/witcher-settings', {
     credentials: 'include'
