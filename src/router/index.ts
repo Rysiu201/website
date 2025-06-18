@@ -381,6 +381,12 @@ const router = createRouter({
       name: 'admin-changelog',
       component: AdminChangelog,
       meta: { title: 'Changelog - AetherRP', requiresAuth: true }
+    },
+    {
+      path: '/panel/changelog',
+      name: 'panel-changelog',
+      component: AdminChangelog,
+      meta: { title: 'Changelog - AetherRP', requiresAuth: true }
     }
   ]
 })
