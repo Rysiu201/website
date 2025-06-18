@@ -17,13 +17,11 @@
       </div>
       <button class="save-btn" @click="save">💾 Zapisz</button>
     </div>
-    <Footer />
   </main>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import Footer from '../components/Footer.vue'
 
 const labels: Record<string, string> = {
   REAPPLY_COOLDOWN_HOURS: 'Czas ponownego zgłoszenia (godz.)',
@@ -104,7 +102,7 @@ async function save() {
 
 .input {
   @apply bg-white/10 border border-white/20 rounded px-2 py-1 w-24;
-  color: #ccc;
+  color: #fff;
 }
 
 .save-btn {
@@ -113,5 +111,6 @@ async function save() {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  margin: 0 auto;
 }
 </style>
