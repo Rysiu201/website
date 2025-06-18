@@ -13,13 +13,11 @@
     </select>
     <textarea v-model="text" rows="10" class="textarea"></textarea>
     <button class="save-btn" @click="save">💾 Zapisz</button>
-    <Footer />
   </main>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import Footer from '../components/Footer.vue'
 
 const section = ref('whitelist')
 const text = ref('')
@@ -84,12 +82,12 @@ textarea {
 
 .select {
   @apply bg-white/10 border border-white/20 rounded p-2;
-  color: #ccc;
+  color: #fff;
 }
 
 .textarea {
   @apply bg-white/10 border border-white/20 rounded p-2;
-  color: #ccc;
+  color: #fff;
 }
 
 .save-btn {
@@ -98,5 +96,6 @@ textarea {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  margin: 0 auto;
 }
 </style>

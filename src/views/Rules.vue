@@ -89,14 +89,12 @@
     </div>
     
     <!-- 引入页脚组件 -->
-    <Footer />
   </div>
   <!-- close rules-page container -->
   </div>
 </template>
 
 <script setup lang="ts">
-import Footer from '../components/Footer.vue';
 import { ref, onMounted, onUnmounted } from 'vue';
 import AOS from 'aos';
 
