@@ -146,59 +146,7 @@ function recomputeAllReapplyAfter() {
   if (changed) saveDb(db);
 }
 
-// Pool of possible scenario questions
-const allQuestions = [
-  'Co zrobisz, jeśli zobaczysz gracza łamiącego zasady roleplayu (np. powergaming)?',
-  'Jak zareagujesz, gdy Twój znajomy z OOC przekaże Ci informacje IC?',
-  'Podaj przykład, jak prawidłowo użyć komendy /me w sytuacji przeszukania.',
-  'Co wpiszesz w /do, gdy Twoja postać zostaje zatrzymana do kontroli przez policję?',
-  'Twoja postać została postrzelona – jak odgrywasz taką sytuację IC?',
-  'Co oznacza skrót NVL i jak rozumiesz jego zastosowanie?',
-  'Gracz ucieka z miejsca zdarzenia po wypadku – jak powinieneś się zachować jako świadek?',
-  'Jak wygląda różnica między IC a OOC i dlaczego ważne jest ich oddzielenie?',
-  'Kto podejmuje decyzję w sytuacji konfliktowej – IC czy administracja OOC?',
-  'Czy Twoja postać może wiedzieć, kto ją zabił, jeśli została zastrzelona z zaskoczenia? Uzasadnij.',
-  'Gracz używa voice chatu, by przekazać coś spoza gry – jak powinieneś zareagować?',
-  'Czy możesz napisać na czacie OOC "dlaczego mnie zabiłeś?"? Jeśli nie, to gdzie to zgłosić?',
-  'Twoja postać traci przytomność – jakie działania podejmujesz jako gracz?',
-  'Podaj przykład zachowania, które uznajesz za powergaming.',
-  'Czy Twoja postać może znać lokalizację kogoś, kogo nie widziała od kilku dni? Wyjaśnij.',
-  'Masz 3 osoby celujące do Ciebie z broni – co robisz i jak to odgrywasz?',
-  'Czy możesz zmienić postać i kontynuować zemstę na kimś, kto zabił Twoją poprzednią? (nawiązanie do new life rule)',
-  'Jakie są konsekwencje odgrywania scen, które są niezgodne z lore/realizmem serwera?',
-  'Podaj przykład poprawnego odgrywania sceny handlu narkotykami.',
-  'Czy masz obowiązek zapisać swoją postać po śmierci permanentnej? Co to oznacza?',
-  'Czy Twoja postać może mieć wspomnienia po śmierci permanentnej?',
-  'Jakie znasz zasady związane z porwaniami innych graczy?',
-  'Czy można napaść na LSPD bez zaplanowanej akcji IC? Dlaczego tak/nie?',
-  'Czy można wjechać na teren frakcji bez uzasadnienia IC?',
-  'Podaj przykład metagamingu w rozmowie głosowej.',
-  'Czy Twoja postać może wiedzieć, że ktoś handluje narkotykami, jeśli nikt jej tego nie powiedział IC?',
-  'W jaki sposób zgłaszasz łamanie zasad, jeśli nie chcesz eskalować konfliktu?',
-  'Podczas RP ktoś używa obraźliwego języka OOC – co robisz?',
-  'Twoja postać jest świadkiem napadu – czy możesz to od razu zgłosić IC? Jak?',
-  'Czy Twoja postać może znać cenę broni, jeśli nie była w sklepie IC?',
-  'Podaj przykład łamania zasady Fail RP.',
-  'Co oznacza skrót VDM?',
-  'Czy Twoja postać może rozpoznać kogoś tylko po ubraniu i masce?',
-  'Czy odgrywanie choroby psychicznej wymaga zgody administracji?',
-  'Jakie zachowania są niedozwolone w scenach z udziałem medyków?',
-  'Czy możesz rozłączyć się z gry w trakcie aresztowania? Co jeśli to przypadek?',
-  'Masz 2 postacie – czy mogą się znać lub współpracować?',
-  'Jakich działań nie wolno podejmować, by uniknąć konsekwencji IC?',
-  'Czy możesz przywrócić swoją postać po permie, jeśli „umarła przypadkiem”?',
-  'Co robisz, jeśli przez przypadek złamiesz zasadę, np. przypadkowy metagaming?',
-  'Podaj przykład dobrze rozegranego napadu IC.',
-  'W jaki sposób Twoja postać może poznać członka gangu?',
-  'Czy możesz przeprowadzić transakcję bronią przy komendzie LSPD?',
-  'Jak należy odgrywać użycie broni palnej w miejscu publicznym?',
-  'Czy zemsta OOC na kimś IC jest dozwolona?',
-  'Czy można stosować szantaż OOC? Jeśli nie – co robić, gdy się to zdarzy?',
-  'Twoja postać została pobita, ale nie zgłosiła tego – czy może później się mścić IC?',
-  'Czy każda postać musi mieć unikalną historię? Dlaczego?',
-  'Jaki wpływ ma realność RP na immersję graczy?',
-  'Czy możesz prowadzić grupę przestępczą bez zgody administracji?'
-];
+// Pytania scenariuszowe znajdują się w pliku config.js
 
 // Get the directory path of the current file
 const __filename = fileURLToPath(import.meta.url);
@@ -351,14 +299,18 @@ app.get('/api/questions', (req, res) => {
     return res.status(401).json({ questions: [] });
   }
 
-  // Check if the user already has questions assigned
-  if (!userQuestions.has(req.user.id)) {
-    // Shuffle and assign 5 questions
-    const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
-    userQuestions.set(req.user.id, shuffled.slice(0, 5));
+  const type = req.query.type || 'whitelist';
+  const key = `${req.user.id}:${type}`;
+  const countMap = { whitelist: 5, moderator: 1, administrator: 3 };
+  const pool = (config.QUESTIONS && config.QUESTIONS[type]) || [];
+  const count = countMap[type] || 5;
+
+  if (!userQuestions.has(key)) {
+    const shuffled = [...pool].sort(() => Math.random() - 0.5);
+    userQuestions.set(key, shuffled.slice(0, count));
   }
 
-  res.json({ questions: userQuestions.get(req.user.id) });
+  res.json({ questions: userQuestions.get(key) });
 });
 
 // Return application status for the logged in user
@@ -955,6 +907,68 @@ app.post('/api/admin/witcher-settings', async (req, res) => {
 =======
 >>>>>>> main
   res.json({ success: true, settings: { ...config } });
+});
+
+// Fetch question pools
+app.get('/api/admin/witcher-questions', async (req, res) => {
+  if (!req.user) return res.status(401).json({ questions: null });
+  let isAdmin = false;
+  if (process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID) {
+    try {
+      const response = await fetch(
+        `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${req.user.id}`,
+        { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        const roles = data.roles || [];
+        isAdmin =
+          roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
+          roles.includes(process.env.STAFF_ROLE_ID || '');
+      }
+    } catch (err) {
+      console.error('Failed to check admin roles', err);
+    }
+  }
+  if (!isAdmin) return res.status(403).json({ questions: null });
+  res.json({ questions: { ...config.QUESTIONS } });
+});
+
+// Update question pools
+app.post('/api/admin/witcher-questions', async (req, res) => {
+  if (!req.user) return res.status(401).json({ success: false });
+  let isAdmin = false;
+  if (process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID) {
+    try {
+      const response = await fetch(
+        `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${req.user.id}`,
+        { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        const roles = data.roles || [];
+        isAdmin =
+          roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
+          roles.includes(process.env.STAFF_ROLE_ID || '');
+      }
+    } catch (err) {
+      console.error('Failed to check admin roles', err);
+    }
+  }
+  if (!isAdmin) return res.status(403).json({ success: false });
+
+  const allowed = ['whitelist', 'moderator', 'administrator'];
+  for (const t of allowed) {
+    if (Array.isArray(req.body[t])) {
+      config.QUESTIONS[t] = req.body[t].map(q => String(q));
+    }
+  }
+
+  const configPath = path.join(process.cwd(), 'config.js');
+  const fileContent = 'export default ' + JSON.stringify(config, null, 2) + '\n';
+  fs.writeFileSync(configPath, fileContent);
+  userQuestions.clear();
+  res.json({ success: true, questions: { ...config.QUESTIONS } });
 });
 
 // Serve static files
