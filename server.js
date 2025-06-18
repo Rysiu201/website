@@ -23,14 +23,7 @@ const STATUS = {
 };
 
 // Configurable cooldown settings loaded from config.js
-const {
-  REAPPLY_COOLDOWN_HOURS,
-  EXTRA_COOLDOWN_HOURS,
-  REJECTION_HISTORY_WINDOW_HOURS,
-  REJECTIONS_BEFORE_EXTRA_COOLDOWN,
-  ADMIN_REAPPLY_COOLDOWN_DAYS,
-  UNBAN_COOLDOWN_PERCENT
-} = config;
+// Values may be updated at runtime so always reference the config object
 
 const DB_FILE = path.join(process.cwd(), 'database.json');
 
@@ -75,19 +68,24 @@ function saveDb(db) {
   fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2));
 }
 
-function computeReapplyAfter(history, baseHours = REAPPLY_COOLDOWN_HOURS) {
+function computeReapplyAfter(
+  history,
+  baseHours = config.REAPPLY_COOLDOWN_HOURS
+) {
   const rejections = (history || []).filter(
     h => normalizeStatus(h.status) === STATUS.REJECTED
   );
   if (rejections.length === 0) return null;
   const last = rejections[rejections.length - 1];
   const recent = rejections.filter(
-    r => last.timestamp - r.timestamp <= REJECTION_HISTORY_WINDOW_HOURS * 3600 * 1000
+    r =>
+      last.timestamp - r.timestamp <=
+      config.REJECTION_HISTORY_WINDOW_HOURS * 3600 * 1000
   );
 
   let cooldown = baseHours;
-  if (recent.length >= REJECTIONS_BEFORE_EXTRA_COOLDOWN) {
-    cooldown += EXTRA_COOLDOWN_HOURS;
+  if (recent.length >= config.REJECTIONS_BEFORE_EXTRA_COOLDOWN) {
+    cooldown += config.EXTRA_COOLDOWN_HOURS;
   }
   return last.timestamp + cooldown * 3600 * 1000;
 }
@@ -113,6 +111,36 @@ function autoArchiveOldApplications(db) {
         });
         changed = true;
       }
+    }
+  }
+  if (changed) saveDb(db);
+}
+
+function recomputeAllReapplyAfter() {
+  const db = loadDb();
+  let changed = false;
+  for (const app of db.applications) {
+    if (!Array.isArray(app.history) || app.history.length === 0) continue;
+    const base =
+      app.type === 'administrator' ||
+      app.type === 'moderator' ||
+      app.type === 'checker' ||
+      app.type === 'developer'
+        ? config.ADMIN_REAPPLY_COOLDOWN_DAYS * 24
+        : app.type === 'unban'
+          ? (app.data?.banDurationDays
+              ? app.data.banDurationDays * 24 * config.UNBAN_COOLDOWN_PERCENT
+              : config.REAPPLY_COOLDOWN_HOURS)
+          : config.REAPPLY_COOLDOWN_HOURS;
+    const newVal = computeReapplyAfter(app.history, base);
+    if (newVal) {
+      if (app.reapplyAfter !== newVal) {
+        app.reapplyAfter = newVal;
+        changed = true;
+      }
+    } else if (app.reapplyAfter) {
+      delete app.reapplyAfter;
+      changed = true;
     }
   }
   if (changed) saveDb(db);
@@ -356,18 +384,18 @@ app.get('/api/status', (req, res) => {
       type === 'moderator' ||
       type === 'checker' ||
       type === 'developer'
-        ? ADMIN_REAPPLY_COOLDOWN_DAYS * 24
-        : REAPPLY_COOLDOWN_HOURS,
-    extraCooldownHours: EXTRA_COOLDOWN_HOURS,
+        ? config.ADMIN_REAPPLY_COOLDOWN_DAYS * 24
+        : config.REAPPLY_COOLDOWN_HOURS,
+    extraCooldownHours: config.EXTRA_COOLDOWN_HOURS,
     recentRejections: appEntry
       ? appEntry.history.filter(
           h =>
             h.status === STATUS.REJECTED &&
             Date.now() - h.timestamp <=
-              REJECTION_HISTORY_WINDOW_HOURS * 3600 * 1000
+              config.REJECTION_HISTORY_WINDOW_HOURS * 3600 * 1000
         ).length
       : 0,
-    rejectionsBeforeExtra: REJECTIONS_BEFORE_EXTRA_COOLDOWN
+    rejectionsBeforeExtra: config.REJECTIONS_BEFORE_EXTRA_COOLDOWN
   });
 });
 
@@ -527,12 +555,12 @@ app.post('/api/admin/status', async (req, res) => {
       appEntry.type === 'moderator' ||
       appEntry.type === 'checker' ||
       appEntry.type === 'developer'
-        ? ADMIN_REAPPLY_COOLDOWN_DAYS * 24
+        ? config.ADMIN_REAPPLY_COOLDOWN_DAYS * 24
         : appEntry.type === 'unban'
           ? (appEntry.data.banDurationDays
-              ? appEntry.data.banDurationDays * 24 * UNBAN_COOLDOWN_PERCENT
-              : REAPPLY_COOLDOWN_HOURS)
-          : REAPPLY_COOLDOWN_HOURS;
+              ? appEntry.data.banDurationDays * 24 * config.UNBAN_COOLDOWN_PERCENT
+              : config.REAPPLY_COOLDOWN_HOURS)
+          : config.REAPPLY_COOLDOWN_HOURS;
     appEntry.reapplyAfter = computeReapplyAfter(appEntry.history, base);
   } else {
     delete appEntry.reapplyAfter;
@@ -850,6 +878,80 @@ app.get('/api/admin/player-notes/:userId', async (req, res) => {
 
   const db = loadDb();
   res.json({ notes: db.playerNotes[req.params.userId] || '' });
+});
+
+// Fetch cooldown-related settings from config
+app.get('/api/admin/witcher-settings', async (req, res) => {
+  if (!req.user) return res.status(401).json({ settings: null });
+  let isAdmin = false;
+  if (process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID) {
+    try {
+      const response = await fetch(
+        `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${req.user.id}`,
+        { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        const roles = data.roles || [];
+        isAdmin =
+          roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
+          roles.includes(process.env.STAFF_ROLE_ID || '');
+      }
+    } catch (err) {
+      console.error('Failed to check admin roles', err);
+    }
+  }
+  if (!isAdmin) return res.status(403).json({ settings: null });
+  res.json({ settings: { ...config } });
+});
+
+// Update cooldown-related settings
+app.post('/api/admin/witcher-settings', async (req, res) => {
+  if (!req.user) return res.status(401).json({ success: false });
+  let isAdmin = false;
+  if (process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID) {
+    try {
+      const response = await fetch(
+        `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${req.user.id}`,
+        { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        const roles = data.roles || [];
+        isAdmin =
+          roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
+          roles.includes(process.env.STAFF_ROLE_ID || '');
+      }
+    } catch (err) {
+      console.error('Failed to check admin roles', err);
+    }
+  }
+  if (!isAdmin) return res.status(403).json({ success: false });
+
+  const allowedKeys = [
+    'REAPPLY_COOLDOWN_HOURS',
+    'EXTRA_COOLDOWN_HOURS',
+    'REJECTION_HISTORY_WINDOW_HOURS',
+    'REJECTIONS_BEFORE_EXTRA_COOLDOWN',
+    'ADMIN_REAPPLY_COOLDOWN_DAYS',
+    'UNBAN_COOLDOWN_PERCENT'
+  ];
+
+  for (const key of allowedKeys) {
+    if (key in req.body) {
+      const value = Number(req.body[key]);
+      if (!Number.isNaN(value)) {
+        config[key] = value;
+      }
+    }
+  }
+
+  const configPath = path.join(process.cwd(), 'config.js');
+  const fileContent =
+    'export default ' + JSON.stringify(config, null, 2) + '\n';
+  fs.writeFileSync(configPath, fileContent);
+  recomputeAllReapplyAfter();
+  res.json({ success: true, settings: { ...config } });
 });
 
 // Serve static files
