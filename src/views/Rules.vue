@@ -91,6 +91,8 @@
     <!-- 引入页脚组件 -->
     <Footer />
   </div>
+  <!-- close rules-page container -->
+  </div>
 </template>
 
 <script setup lang="ts">
