@@ -96,6 +96,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
+import Footer from '../components/Footer.vue';
 import AOS from 'aos';
 
 // 返回顶部按钮状态
