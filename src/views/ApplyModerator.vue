@@ -100,29 +100,6 @@ const appType = 'moderator'
 const success = ref(false)
 const router = useRouter()
 
-const scenarioPool = [
-  'Ktoś pisze na publicznym czacie: „admin to idiota”.',
-  'Gracz spamuje memami w poważnej dyskusji mimo ostrzeżeń.',
-  'Ktoś wstawia wulgarną nazwę użytkownika i pisze nią na czacie.',
-  'Gracz podaje link do innego serwera Discord.',
-  'Rozpoczyna się kłótnia między dwiema frakcjami — Discord płonie.',
-  'Gracz prowokuje pytaniami typu „ile macie IQ?” wśród innych.',
-  'Ktoś zgłasza rasistowski lub homofobiczny komentarz — nie ma screena.',
-  'Gracz pisze do Ciebie na DM z groźbą zgłoszenia do właściciela.',
-  'W ticketach ktoś pisze same „XD” i „lol” — nie wiadomo o co chodzi.',
-  'Grupa graczy spamuje jednocześnie w kilku kanałach (np. @everyone, .gif).',
-  'Ktoś zgłasza oszustwo IC na czacie OOC — temat eskaluje.',
-  'Gracz oznacza właściciela bez powodu, mimo ostrzeżeń.',
-  'Ktoś publikuje screen z prywatnej rozmowy z innym graczem.',
-  'Gracz celowo psuje zgłoszenia — usuwa wiadomości, edytuje odpowiedzi.',
-  'Ktoś przesyła zdjęcie kontrowersyjnego contentu NSFW (mimo zakazu).',
-  'Zgłoszenie „moderator nie reaguje, więc piszę tu!” — co robisz?',
-  'Na kanale IC ktoś zaczyna pisać czystym OOC-em i robi burdel.',
-  'Gracz trolluje tickety pisząc o „duchach w systemie” – nic konkretnego.',
-  'Współpracownik z ekipy odpowiada z ironią do gracza — co robisz?',
-  'Ktoś pisze „to nie złamanie regulaminu, ale zachował się jak frajer” — co robisz?'
-]
-
 const randomScenario = ref('')
 
 interface FormData {
@@ -171,7 +148,9 @@ onMounted(async () => {
   if (data.user) {
     form.value.discord = `${data.user.username}#${data.user.id}`
   }
-  randomScenario.value = scenarioPool[Math.floor(Math.random() * scenarioPool.length)]
+  const qRes = await fetch('/api/questions?type=moderator', { credentials: 'include' })
+  const qData = await qRes.json()
+  randomScenario.value = Array.isArray(qData.questions) ? qData.questions[0] || '' : ''
 
   const statusRes = await fetch('/api/status?type=moderator', {
     credentials: 'include'

@@ -71,28 +71,7 @@ const appType = 'administrator'
 const success = ref(false)
 const router = useRouter()
 
-const scenarioPool = [
-  'Gracze zgłaszają, że jedna frakcja dominuje wszystkie inne – jak reagujesz?',
-  'System whitelist się zapchał – 50 podań w 1 dzień, tylko 2 osoby do sprawdzania.',
-  'Trzy osoby z ekipy pokłóciły się w kanale prywatnym – co robisz?',
-  'W środku nocy padła baza danych – Owner śpi, Dev niedostępny.',
-  'Ktoś zmienia handlingi bez zgody – jak dojść kto, i co robisz?',
-  'Gracze oskarżają frakcję o metagaming – zgłoszenie na kanale publicznym.',
-  'Serwer dostał raida na Discordzie – co robisz przez pierwsze 5 minut?',
-  'Tester zgłasza błąd krytyczny na produkcji – jak organizujesz reakcję?',
-  'W evencie bierze udział 50 osób, event się wysypuje – kto odpowiada?',
-  'CM nie odpowiada na ważny temat, mod wchodzi w jego miejsce – co robisz?',
-  'Developer wypuścił niedziałający skrypt i nie odbiera wiadomości.',
-  'Nowy admin zaczyna wprowadzać zmiany bez ustaleń – jak reagujesz?',
-  'Dwie frakcje chcą tę samą lokalizację – jak rozwiązać sprawę?',
-  'Masz za mało adminów – kogo szukasz, jak oceniasz kandydata?',
-  'WLChecker nagle rezygnuje i zostawia nieprzeczytane 60 podań.',
-  'W grze pojawiły się „dzikie pojazdy” spoza listy – jak to zabezpieczasz?',
-  'Kanał z logami przestał działać – co robisz jako pierwsze?',
-  'CM prowadzi event, ale gracze go wyśmiewają – jak pomagasz?',
-  'Zgłasza się osoba z inną rangą, że nie chce pracować z danym Developerem.',
-  'Gracze IC wynoszą OOC dramy – jak jako admin reagujesz?'
-]
+// Lista pytań pobierana jest z API
 
 const scenarioQuestions = ref<string[]>([])
 
@@ -128,8 +107,13 @@ onMounted(async () => {
   if (data.user) {
     form.value.discord = `${data.user.username}#${data.user.id}`
   }
-  const shuffled = [...scenarioPool].sort(() => Math.random() - 0.5)
-  scenarioQuestions.value = shuffled.slice(0, 3)
+  const qRes = await fetch('/api/questions?type=administrator', {
+    credentials: 'include'
+  })
+  const qData = await qRes.json()
+  if (Array.isArray(qData.questions)) {
+    scenarioQuestions.value = qData.questions
+  }
 
   const statusRes = await fetch('/api/status?type=administrator', {
     credentials: 'include'
