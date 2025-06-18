@@ -8,6 +8,9 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import config from './config.js';
 
+// Settings that can be modified at runtime
+let settings = { ...config };
+
 dotenv.config();
 
 // In-memory storage of question sets assigned to users
@@ -65,29 +68,44 @@ function loadDb() {
       });
     }
     if (!data.playerNotes) data.playerNotes = {};
+    if (!data.settings) data.settings = { ...config };
+    if (!data.questions) data.questions = { whitelist: [] };
+    if (!data.changelog) data.changelog = [];
+    settings = { ...config, ...data.settings };
     return data;
   } catch (err) {
-    return { applications: [], playerNotes: {} };
+    const defaults = {
+      applications: [],
+      playerNotes: {},
+      settings: { ...config },
+      questions: { whitelist: [] },
+      changelog: []
+    };
+    settings = { ...config };
+    return defaults;
   }
 }
 
 function saveDb(db) {
+  db.settings = settings;
   fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2));
 }
 
-function computeReapplyAfter(history, baseHours = REAPPLY_COOLDOWN_HOURS) {
+function computeReapplyAfter(history, baseHours = settings.REAPPLY_COOLDOWN_HOURS) {
   const rejections = (history || []).filter(
     h => normalizeStatus(h.status) === STATUS.REJECTED
   );
   if (rejections.length === 0) return null;
   const last = rejections[rejections.length - 1];
   const recent = rejections.filter(
-    r => last.timestamp - r.timestamp <= REJECTION_HISTORY_WINDOW_HOURS * 3600 * 1000
+    r =>
+      last.timestamp - r.timestamp <=
+      settings.REJECTION_HISTORY_WINDOW_HOURS * 3600 * 1000
   );
 
   let cooldown = baseHours;
-  if (recent.length >= REJECTIONS_BEFORE_EXTRA_COOLDOWN) {
-    cooldown += EXTRA_COOLDOWN_HOURS;
+  if (recent.length >= settings.REJECTIONS_BEFORE_EXTRA_COOLDOWN) {
+    cooldown += settings.EXTRA_COOLDOWN_HOURS;
   }
   return last.timestamp + cooldown * 3600 * 1000;
 }
@@ -116,6 +134,29 @@ function autoArchiveOldApplications(db) {
     }
   }
   if (changed) saveDb(db);
+}
+
+async function isUserAdmin(userId) {
+  if (process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID) {
+    try {
+      const response = await fetch(
+        `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${userId}`,
+        { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        const roles = data.roles || [];
+        return (
+          roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
+          roles.includes(process.env.STAFF_ROLE_ID || '') ||
+          roles.includes(process.env.WITCHER_ROLE_ID || '')
+        );
+      }
+    } catch (err) {
+      console.error('Failed to check admin roles', err);
+    }
+  }
+  return false;
 }
 
 // Pool of possible scenario questions
@@ -307,7 +348,8 @@ app.get('/api/user', async (req, res) => {
         roles = data.roles || [];
         isAdmin =
           roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
-          roles.includes(process.env.STAFF_ROLE_ID || '');
+          roles.includes(process.env.STAFF_ROLE_ID || '') ||
+          roles.includes(process.env.WITCHER_ROLE_ID || '');
       }
     } catch (err) {
       console.error('Failed to fetch roles', err);
@@ -356,18 +398,18 @@ app.get('/api/status', (req, res) => {
       type === 'moderator' ||
       type === 'checker' ||
       type === 'developer'
-        ? ADMIN_REAPPLY_COOLDOWN_DAYS * 24
-        : REAPPLY_COOLDOWN_HOURS,
-    extraCooldownHours: EXTRA_COOLDOWN_HOURS,
+        ? settings.ADMIN_REAPPLY_COOLDOWN_DAYS * 24
+        : settings.REAPPLY_COOLDOWN_HOURS,
+    extraCooldownHours: settings.EXTRA_COOLDOWN_HOURS,
     recentRejections: appEntry
       ? appEntry.history.filter(
           h =>
             h.status === STATUS.REJECTED &&
             Date.now() - h.timestamp <=
-              REJECTION_HISTORY_WINDOW_HOURS * 3600 * 1000
+              settings.REJECTION_HISTORY_WINDOW_HOURS * 3600 * 1000
         ).length
       : 0,
-    rejectionsBeforeExtra: REJECTIONS_BEFORE_EXTRA_COOLDOWN
+    rejectionsBeforeExtra: settings.REJECTIONS_BEFORE_EXTRA_COOLDOWN
   });
 });
 
@@ -469,7 +511,8 @@ app.post('/api/admin/status', async (req, res) => {
         const roles = data.roles || [];
         isAdmin =
           roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
-          roles.includes(process.env.STAFF_ROLE_ID || '');
+          roles.includes(process.env.STAFF_ROLE_ID || '') ||
+          roles.includes(process.env.WITCHER_ROLE_ID || '');
       }
     } catch (err) {
       console.error('Failed to check admin roles', err);
@@ -527,12 +570,12 @@ app.post('/api/admin/status', async (req, res) => {
       appEntry.type === 'moderator' ||
       appEntry.type === 'checker' ||
       appEntry.type === 'developer'
-        ? ADMIN_REAPPLY_COOLDOWN_DAYS * 24
+        ? settings.ADMIN_REAPPLY_COOLDOWN_DAYS * 24
         : appEntry.type === 'unban'
           ? (appEntry.data.banDurationDays
-              ? appEntry.data.banDurationDays * 24 * UNBAN_COOLDOWN_PERCENT
-              : REAPPLY_COOLDOWN_HOURS)
-          : REAPPLY_COOLDOWN_HOURS;
+              ? appEntry.data.banDurationDays * 24 * settings.UNBAN_COOLDOWN_PERCENT
+              : settings.REAPPLY_COOLDOWN_HOURS)
+          : settings.REAPPLY_COOLDOWN_HOURS;
     appEntry.reapplyAfter = computeReapplyAfter(appEntry.history, base);
   } else {
     delete appEntry.reapplyAfter;
@@ -617,7 +660,8 @@ app.get('/api/admin/applications', async (req, res) => {
         const roles = data.roles || [];
         isAdmin =
           roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
-          roles.includes(process.env.STAFF_ROLE_ID || '');
+          roles.includes(process.env.STAFF_ROLE_ID || '') ||
+          roles.includes(process.env.WITCHER_ROLE_ID || '');
       }
     } catch (err) {
       console.error('Failed to check admin roles', err);
@@ -681,7 +725,8 @@ app.get('/api/admin/applications/:id', async (req, res) => {
         const roles = data.roles || [];
         isAdmin =
           roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
-          roles.includes(process.env.STAFF_ROLE_ID || '');
+          roles.includes(process.env.STAFF_ROLE_ID || '') ||
+          roles.includes(process.env.WITCHER_ROLE_ID || '');
       }
     } catch (err) {
       console.error('Failed to check admin roles', err);
@@ -720,7 +765,8 @@ app.post('/api/admin/archive/:id', async (req, res) => {
         const roles = data.roles || [];
         isAdmin =
           roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
-          roles.includes(process.env.STAFF_ROLE_ID || '');
+          roles.includes(process.env.STAFF_ROLE_ID || '') ||
+          roles.includes(process.env.WITCHER_ROLE_ID || '');
       }
     } catch (err) {
       console.error('Failed to check admin roles', err);
@@ -768,7 +814,8 @@ app.post('/api/admin/unarchive/:id', async (req, res) => {
         const roles = data.roles || [];
         isAdmin =
           roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
-          roles.includes(process.env.STAFF_ROLE_ID || '');
+          roles.includes(process.env.STAFF_ROLE_ID || '') ||
+          roles.includes(process.env.WITCHER_ROLE_ID || '');
       }
     } catch (err) {
       console.error('Failed to check admin roles', err);
@@ -812,7 +859,8 @@ app.post('/api/admin/player-notes', async (req, res) => {
         const roles = data.roles || [];
         isAdmin =
           roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
-          roles.includes(process.env.STAFF_ROLE_ID || '');
+          roles.includes(process.env.STAFF_ROLE_ID || '') ||
+          roles.includes(process.env.WITCHER_ROLE_ID || '');
       }
     } catch (err) {
       console.error('Failed to check admin roles', err);
@@ -840,7 +888,8 @@ app.get('/api/admin/player-notes/:userId', async (req, res) => {
         const roles = data.roles || [];
         isAdmin =
           roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
-          roles.includes(process.env.STAFF_ROLE_ID || '');
+          roles.includes(process.env.STAFF_ROLE_ID || '') ||
+          roles.includes(process.env.WITCHER_ROLE_ID || '');
       }
     } catch (err) {
       console.error('Failed to check admin roles', err);
@@ -850,6 +899,75 @@ app.get('/api/admin/player-notes/:userId', async (req, res) => {
 
   const db = loadDb();
   res.json({ notes: db.playerNotes[req.params.userId] || '' });
+});
+
+// Admin settings management
+app.get('/api/admin/settings', async (req, res) => {
+  if (!req.user) return res.status(401).json({});
+  if (!(await isUserAdmin(req.user.id))) return res.status(403).json({});
+  res.json(settings);
+});
+
+app.post('/api/admin/settings', async (req, res) => {
+  if (!req.user) return res.status(401).json({ success: false });
+  if (!(await isUserAdmin(req.user.id))) return res.status(403).json({ success: false });
+  const db = loadDb();
+  settings = { ...settings, ...(req.body || {}) };
+  saveDb(db);
+  res.json({ success: true });
+});
+
+// Questions management
+app.get('/api/admin/questions/:section', async (req, res) => {
+  if (!req.user) return res.status(401).json({ questions: [] });
+  if (!(await isUserAdmin(req.user.id))) return res.status(403).json({ questions: [] });
+  const db = loadDb();
+  const section = req.params.section;
+  res.json({ questions: db.questions[section] || [] });
+});
+
+app.post('/api/admin/questions/:section', async (req, res) => {
+  if (!req.user) return res.status(401).json({ success: false });
+  if (!(await isUserAdmin(req.user.id))) return res.status(403).json({ success: false });
+  const db = loadDb();
+  db.questions[req.params.section] = req.body.questions || [];
+  saveDb(db);
+  res.json({ success: true });
+});
+
+// Changelog endpoints
+app.get('/api/changelog', (_req, res) => {
+  const db = loadDb();
+  res.json({ changelog: db.changelog || [] });
+});
+
+app.post('/api/admin/changelog', async (req, res) => {
+  if (!req.user) return res.status(401).json({ success: false });
+  if (!(await isUserAdmin(req.user.id))) return res.status(403).json({ success: false });
+  const db = loadDb();
+  db.changelog.push(req.body);
+  saveDb(db);
+  res.json({ success: true });
+});
+
+app.put('/api/admin/changelog/:index', async (req, res) => {
+  if (!req.user) return res.status(401).json({ success: false });
+  if (!(await isUserAdmin(req.user.id))) return res.status(403).json({ success: false });
+  const db = loadDb();
+  const i = parseInt(req.params.index, 10);
+  if (db.changelog[i]) db.changelog[i] = req.body;
+  saveDb(db);
+  res.json({ success: true });
+});
+
+app.delete('/api/admin/changelog/:index', async (req, res) => {
+  if (!req.user) return res.status(401).json({ success: false });
+  if (!(await isUserAdmin(req.user.id))) return res.status(403).json({ success: false });
+  const db = loadDb();
+  const i = parseInt(req.params.index, 10);
+  if (db.changelog[i]) db.changelog.splice(i, 1);
+  saveDb(db);
+  res.json({ success: true });
 });
 
 // Serve static files

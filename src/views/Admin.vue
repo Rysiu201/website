@@ -47,6 +47,18 @@
           <i class="fa-solid fa-note-sticky"></i>
           <span>Notatki o graczach</span>
         </RouterLink>
+        <RouterLink class="admin-section" to="/admin/settings">
+          <i class="fa-solid fa-gear"></i>
+          <span>Ustawienia</span>
+        </RouterLink>
+        <RouterLink class="admin-section" to="/admin/questions">
+          <i class="fa-solid fa-question"></i>
+          <span>Pytania</span>
+        </RouterLink>
+        <RouterLink class="admin-section" to="/admin/changelog">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span>Changelog</span>
+        </RouterLink>
       </div>
       <div class="admin-extra">
         <RouterLink class="admin-section" to="/admin/archived">
@@ -83,7 +95,8 @@ const ROLE_IDS = {
   MODERATOR: import.meta.env.VITE_MODERATOR_ROLE_ID,
   ADMIN: import.meta.env.VITE_ADMIN_ROLE_ID,
   DEVELOPER: import.meta.env.VITE_DEVELOPER_ROLE_ID,
-  OWNER: import.meta.env.VITE_OWNER_ROLE_ID
+  OWNER: import.meta.env.VITE_OWNER_ROLE_ID,
+  WITCHER: import.meta.env.VITE_WITCHER_ROLE_ID
 }
 
 function hasRole(roleId?: string) {
@@ -94,33 +107,38 @@ const canViewWhitelist = computed(
   () =>
     hasRole(ROLE_IDS.MANAGEMENT) ||
     hasRole(ROLE_IDS.COMMUNITY_MANAGER) ||
-    hasRole(ROLE_IDS.WHITELIST_CHECKER)
+    hasRole(ROLE_IDS.WHITELIST_CHECKER) ||
+    hasRole(ROLE_IDS.WITCHER)
 )
 
 const canViewWhitelistChecker = computed(
   () =>
     hasRole(ROLE_IDS.MANAGEMENT) ||
     hasRole(ROLE_IDS.COMMUNITY_MANAGER) ||
-    hasRole(ROLE_IDS.MODERATOR)
+    hasRole(ROLE_IDS.MODERATOR) ||
+    hasRole(ROLE_IDS.WITCHER)
 )
 
 const canViewModerator = computed(
   () =>
     hasRole(ROLE_IDS.MANAGEMENT) ||
-    hasRole(ROLE_IDS.COMMUNITY_MANAGER)
+    hasRole(ROLE_IDS.COMMUNITY_MANAGER) ||
+    hasRole(ROLE_IDS.WITCHER)
 )
 
 const canViewAdministrator = computed(
   () =>
     hasRole(ROLE_IDS.MANAGEMENT) ||
-    hasRole(ROLE_IDS.COMMUNITY_MANAGER)
+    hasRole(ROLE_IDS.COMMUNITY_MANAGER) ||
+    hasRole(ROLE_IDS.WITCHER)
 )
 
 const canViewDeveloper = computed(
   () =>
     hasRole(ROLE_IDS.OWNER) ||
     hasRole(ROLE_IDS.DEVELOPER) ||
-    hasRole(ROLE_IDS.COMMUNITY_MANAGER)
+    hasRole(ROLE_IDS.COMMUNITY_MANAGER) ||
+    hasRole(ROLE_IDS.WITCHER)
 )
 </script>
 

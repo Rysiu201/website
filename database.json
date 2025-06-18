@@ -1,5 +1,29 @@
 {
-  "applications": [
-  ],
-  "playerNotes": {}
+  "applications": [],
+  "playerNotes": {},
+  "settings": {
+    "REAPPLY_COOLDOWN_HOURS": 24,
+    "EXTRA_COOLDOWN_HOURS": 24,
+    "REJECTION_HISTORY_WINDOW_HOURS": 168,
+    "REJECTIONS_BEFORE_EXTRA_COOLDOWN": 3,
+    "ADMIN_REAPPLY_COOLDOWN_DAYS": 7,
+    "UNBAN_COOLDOWN_PERCENT": 0.15
+  },
+  "questions": {
+    "whitelist": [],
+    "administrator": [],
+    "moderator": []
+  },
+  "changelog": [
+    {
+      "date": "2025-06-13",
+      "title": "Dodano zasady pojazdów",
+      "description": "Wprowadziliśmy nowe zasady dotyczące korzystania z pojazdów i realistycznej jazdy."
+    },
+    {
+      "date": "2025-05-22",
+      "title": "Zaktualizowano wytyczne RP",
+      "description": "Doprecyzowaliśmy oczekiwania co do zachowań w postaci i zasady wartości życia."
+    }
+  ]
 }
