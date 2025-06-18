@@ -47,6 +47,9 @@
           <i class="fa-solid fa-note-sticky"></i>
           <span>Notatki o graczach</span>
         </RouterLink>
+      </div>
+      <div v-if="isWitcher" class="sections">
+        <h2 class="category-title"><i class="fa-solid fa-hat-wizard"></i> Witcher</h2>
         <RouterLink class="admin-section" to="/admin/settings">
           <i class="fa-solid fa-gear"></i>
           <span>Ustawienia</span>
@@ -140,6 +143,8 @@ const canViewDeveloper = computed(
     hasRole(ROLE_IDS.COMMUNITY_MANAGER) ||
     hasRole(ROLE_IDS.WITCHER)
 )
+
+const isWitcher = computed(() => hasRole(ROLE_IDS.WITCHER))
 </script>
 
 <style scoped>
@@ -218,5 +223,15 @@ const canViewDeveloper = computed(
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+
+.category-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #fff;
 }
 </style>

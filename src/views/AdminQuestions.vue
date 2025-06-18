@@ -1,13 +1,18 @@
 <template>
   <main class="questions-page">
-    <h1>Pytania</h1>
-    <select v-model="section">
+    <RouterLink to="/admin" class="back-link">
+      <i class="fa-solid fa-arrow-left"></i> Powrót
+    </RouterLink>
+    <h1 class="page-title">Pytania</h1>
+    <select v-model="section" class="select">
       <option value="whitelist">Whitelist</option>
-      <option value="administrator">Administrator</option>
+      <option value="checker">WhiteListChecker</option>
       <option value="moderator">Moderator</option>
+      <option value="administrator">Administrator</option>
+      <option value="developer">Developer</option>
     </select>
-    <textarea v-model="text" rows="10"></textarea>
-    <button @click="save">Zapisz</button>
+    <textarea v-model="text" rows="10" class="textarea"></textarea>
+    <button class="save-btn" @click="save"><i class="fa-solid fa-floppy-disk"></i> Zapisz</button>
   </main>
 </template>
 
@@ -54,5 +59,35 @@ async function save() {
 }
 textarea {
   width: 100%;
+}
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 1rem;
+  padding: 0.3rem 0.6rem;
+  background: var(--gradient-accent);
+  color: #fff;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.page-title {
+  font-size: 1.5rem;
+}
+
+.select {
+  @apply bg-white/10 border border-white/20 text-white rounded p-2;
+}
+
+.textarea {
+  @apply bg-white/10 border border-white/20 text-white rounded p-2;
+}
+
+.save-btn {
+  @apply mt-2 px-4 py-2 rounded text-white bg-gradient-to-r from-purple-600 to-cyan-500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 </style>
