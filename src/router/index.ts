@@ -15,6 +15,9 @@ import AdminApplications from '../views/AdminApplications.vue'
 import AdminApplicationDetail from '../views/AdminApplicationDetail.vue'
 import AdminPlayerNotes from '../views/AdminPlayerNotes.vue'
 import DiscordRequired from '../views/DiscordRequired.vue'
+import AdminWitcher from '../views/AdminWitcher.vue'
+import AdminWitcherSettings from '../views/AdminWitcherSettings.vue'
+import AdminWitcherQuestions from '../views/AdminWitcherQuestions.vue'
 
 const STATUS = {
   REJECTED: 'Negatywnie'
@@ -343,6 +346,33 @@ const router = createRouter({
         title: 'Wniosek o odbanowanie - AetherRP',
         requiresAuth: true,
         type: 'unban'
+      }
+    },
+    {
+      path: '/admin/witcher',
+      name: 'witcher',
+      component: AdminWitcher,
+      meta: {
+        title: 'The Witcher - AetherRP',
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/admin/witcher/settings',
+      name: 'witcher-settings',
+      component: AdminWitcherSettings,
+      meta: {
+        title: 'Ustawienia Witcher - AetherRP',
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/admin/witcher/questions',
+      name: 'witcher-questions',
+      component: AdminWitcherQuestions,
+      meta: {
+        title: 'Pytania Witcher - AetherRP',
+        requiresAuth: true
       }
     },
     {
