@@ -12,12 +12,14 @@
       <option value="developer">Developer</option>
     </select>
     <textarea v-model="text" rows="10" class="textarea"></textarea>
-    <button class="save-btn" @click="save"><i class="fa-solid fa-floppy-disk"></i> Zapisz</button>
+    <button class="save-btn" @click="save">💾 Zapisz</button>
+    <Footer />
   </main>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import Footer from '../components/Footer.vue'
 
 const section = ref('whitelist')
 const text = ref('')
@@ -74,18 +76,25 @@ textarea {
 
 .page-title {
   font-size: 1.5rem;
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .select {
-  @apply bg-white/10 border border-white/20 text-white rounded p-2;
+  @apply bg-white/10 border border-white/20 rounded p-2;
+  color: #ccc;
 }
 
 .textarea {
-  @apply bg-white/10 border border-white/20 text-white rounded p-2;
+  @apply bg-white/10 border border-white/20 rounded p-2;
+  color: #ccc;
 }
 
 .save-btn {
-  @apply mt-2 px-4 py-2 rounded text-white bg-gradient-to-r from-purple-600 to-cyan-500;
+  @apply mt-2 px-4 py-2 rounded text-white;
+  background: var(--gradient-accent);
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;

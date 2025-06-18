@@ -17,6 +17,7 @@ import AdminPlayerNotes from '../views/AdminPlayerNotes.vue'
 import AdminSettings from '../views/AdminSettings.vue'
 import AdminQuestions from '../views/AdminQuestions.vue'
 import AdminChangelog from '../views/AdminChangelog.vue'
+import AdminWitcher from '../views/AdminWitcher.vue'
 import Changelog from '../views/Changelog.vue'
 import DiscordRequired from '../views/DiscordRequired.vue'
 
@@ -363,6 +364,12 @@ const router = createRouter({
         title: 'Notatki o Graczach - AetherRP',
         requiresAuth: true
       }
+    },
+    {
+      path: '/admin/witcher',
+      name: 'admin-witcher',
+      component: AdminWitcher,
+      meta: { title: 'Witcher - AetherRP', requiresAuth: true }
     },
     {
       path: '/admin/settings',

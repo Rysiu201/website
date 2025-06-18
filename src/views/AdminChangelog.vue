@@ -9,20 +9,22 @@
         <div class="flex gap-2 mb-2">
           <input v-model="entry.date" type="date" class="input" />
           <input v-model="entry.title" placeholder="Tytuł" class="flex-1 input" />
-          <button class="delete-btn" @click="remove(idx)"><i class="fa-solid fa-trash"></i> Usuń</button>
+          <button class="delete-btn" @click="remove(idx)">🗑️ Usuń</button>
         </div>
         <textarea v-model="entry.description" class="textarea"></textarea>
       </div>
     </div>
     <div class="actions">
-      <button class="add-btn" @click="add"><i class="fa-solid fa-plus"></i> Dodaj</button>
-      <button class="save-btn" @click="save"><i class="fa-solid fa-floppy-disk"></i> Zapisz</button>
+      <button class="add-btn" @click="add">➕ Dodaj</button>
+      <button class="save-btn" @click="save">💾 Zapisz</button>
     </div>
+    <Footer />
   </main>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import Footer from '../components/Footer.vue'
 
 interface Entry { date: string; title: string; description: string }
 const changelog = ref<Entry[]>([])
@@ -63,6 +65,8 @@ async function save() {
   min-height: 100vh;
   background: linear-gradient(135deg, #1b1032 0%, #0a0a1a 100%);
   color: #fff;
+  max-width: 700px;
+  margin: 0 auto;
 }
 .log-item {
   margin-bottom: 1rem;
@@ -73,11 +77,13 @@ async function save() {
 }
 
 .input {
-  @apply bg-white/10 border border-white/20 text-white rounded px-2 py-1;
+  @apply bg-white/10 border border-white/20 rounded px-2 py-1;
+  color: #ccc;
 }
 
 .textarea {
-  @apply bg-white/10 border border-white/20 text-white rounded p-2 w-full;
+  @apply bg-white/10 border border-white/20 rounded p-2 w-full;
+  color: #ccc;
 }
 
 .delete-btn {
@@ -89,11 +95,19 @@ async function save() {
 }
 
 .add-btn {
-  @apply px-4 py-2 rounded text-white bg-purple-600 hover:bg-purple-700 flex items-center gap-1;
+  @apply px-4 py-2 rounded text-white;
+  background: var(--gradient-accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .save-btn {
-  @apply px-4 py-2 rounded text-white bg-cyan-600 hover:bg-cyan-700 flex items-center gap-1;
+  @apply px-4 py-2 rounded text-white;
+  background: var(--gradient-accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .back-link {
@@ -111,5 +125,9 @@ async function save() {
 .page-title {
   font-size: 1.5rem;
   margin-bottom: 1rem;
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 </style>
