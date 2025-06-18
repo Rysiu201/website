@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import backgroundImage from '../assets/background.jpg';
 import bannerImage from '../assets/Banner.jpg';
+import Footer from '../components/Footer.vue';
 import AOS from 'aos';
 
 const backgroundImageUrl = ref(backgroundImage);
@@ -214,6 +215,7 @@ const filteredProducts = computed(() => {
     </div>
     
     <!-- 引入页脚组件 -->
+    <Footer />
   </div>
 </template>
 
