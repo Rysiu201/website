@@ -11,8 +11,10 @@
   },
   "questions": {
     "whitelist": [],
+    "checker": [],
+    "moderator": [],
     "administrator": [],
-    "moderator": []
+    "developer": []
   },
   "changelog": [
     {

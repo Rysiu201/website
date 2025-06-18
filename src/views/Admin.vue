@@ -48,21 +48,14 @@
           <span>Notatki o graczach</span>
         </RouterLink>
       </div>
-      <div v-if="isWitcher" class="sections">
-        <h2 class="category-title"><i class="fa-solid fa-hat-wizard"></i> Witcher</h2>
-        <RouterLink class="admin-section" to="/admin/settings">
-          <i class="fa-solid fa-gear"></i>
-          <span>Ustawienia</span>
-        </RouterLink>
-        <RouterLink class="admin-section" to="/admin/questions">
-          <i class="fa-solid fa-question"></i>
-          <span>Pytania</span>
-        </RouterLink>
-        <RouterLink class="admin-section" to="/admin/changelog">
-          <i class="fa-solid fa-clock-rotate-left"></i>
-          <span>Changelog</span>
-        </RouterLink>
-      </div>
+      <RouterLink
+        v-if="isWitcher"
+        class="admin-section"
+        to="/admin/witcher"
+      >
+        <i class="fa-solid fa-hat-wizard"></i>
+        <span>Witcher</span>
+      </RouterLink>
       <div class="admin-extra">
         <RouterLink class="admin-section" to="/admin/archived">
           <i class="fa-solid fa-box-archive"></i>
@@ -77,11 +70,13 @@
       </div>
     </div>
   </main>
+  <Footer />
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
 import { RouterLink } from 'vue-router'
+import Footer from '../components/Footer.vue'
 
 const roles = ref<string[]>([])
 
@@ -144,7 +139,9 @@ const canViewDeveloper = computed(
     hasRole(ROLE_IDS.WITCHER)
 )
 
-const isWitcher = computed(() => hasRole(ROLE_IDS.WITCHER))
+const isWitcher = computed(
+  () => hasRole(ROLE_IDS.WITCHER) || hasRole(ROLE_IDS.OWNER)
+)
 </script>
 
 <style scoped>

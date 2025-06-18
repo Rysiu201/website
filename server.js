@@ -69,7 +69,14 @@ function loadDb() {
     }
     if (!data.playerNotes) data.playerNotes = {};
     if (!data.settings) data.settings = { ...config };
-    if (!data.questions) data.questions = { whitelist: [] };
+    if (!data.questions)
+      data.questions = {
+        whitelist: [],
+        checker: [],
+        moderator: [],
+        administrator: [],
+        developer: []
+      };
     if (!data.changelog) data.changelog = [];
     settings = { ...config, ...data.settings };
     return data;
@@ -78,7 +85,13 @@ function loadDb() {
       applications: [],
       playerNotes: {},
       settings: { ...config },
-      questions: { whitelist: [] },
+      questions: {
+        whitelist: [],
+        checker: [],
+        moderator: [],
+        administrator: [],
+        developer: []
+      },
       changelog: []
     };
     settings = { ...config };
@@ -359,20 +372,25 @@ app.get('/api/user', async (req, res) => {
   res.json({ user, roles, isAdmin });
 });
 
-// Provide a consistent set of questions for each authenticated user
+// Provide questions based on application type
 app.get('/api/questions', (req, res) => {
   if (!req.user) {
     return res.status(401).json({ questions: [] });
   }
 
-  // Check if the user already has questions assigned
-  if (!userQuestions.has(req.user.id)) {
-    // Shuffle and assign 5 questions
-    const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
-    userQuestions.set(req.user.id, shuffled.slice(0, 5));
+  const type = req.query.type || 'whitelist';
+  const db = loadDb();
+  const list = db.questions[type] || [];
+
+  if (list.length === 0 && type === 'whitelist') {
+    if (!userQuestions.has(req.user.id)) {
+      const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
+      userQuestions.set(req.user.id, shuffled.slice(0, 5));
+    }
+    return res.json({ questions: userQuestions.get(req.user.id) });
   }
 
-  res.json({ questions: userQuestions.get(req.user.id) });
+  res.json({ questions: list });
 });
 
 // Return application status for the logged in user
