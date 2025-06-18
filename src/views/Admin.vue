@@ -2,7 +2,8 @@
   <main class="admin-page">
     <h1 class="section-title"><span class="accent">Panel Administracyjny</span></h1>
     <div class="admin-layout">
-      <div class="sections">
+      <div class="admin-column">
+        <h2 class="column-title"><span class="accent">Rekrutacja</span></h2>
         <RouterLink
           class="admin-section"
           v-if="canViewWhitelist"
@@ -43,6 +44,9 @@
           <i class="fa-solid fa-code"></i>
           <span>Sprawdź podania na Developera</span>
         </RouterLink>
+      </div>
+      <div class="admin-column">
+        <h2 class="column-title"><span class="accent">Specjalne</span></h2>        
         <RouterLink
           class="admin-section"
           v-if="canViewWitcher"
@@ -51,18 +55,17 @@
           <i class="fa-solid fa-hat-wizard"></i>
           <span>The Witcher</span>
         </RouterLink>
-        <RouterLink class="admin-section" to="/admin/player-notes">
-          <i class="fa-solid fa-note-sticky"></i>
-          <span>Notatki o graczach</span>
-        </RouterLink>
-      </div>
-      <div class="admin-extra">
         <RouterLink class="admin-section" to="/admin/archived">
           <i class="fa-solid fa-box-archive"></i>
           <span>Zaarchiwizowane podania</span>
         </RouterLink>
       </div>
-      <div class="admin-extra">
+      <div class="admin-column">
+        <h2 class="column-title"><span class="accent">Zarządzanie</span></h2>
+        <RouterLink class="admin-section" to="/admin/player-notes">
+          <i class="fa-solid fa-note-sticky"></i>
+          <span>Notatki o graczach</span>
+        </RouterLink>
         <RouterLink class="admin-section" to="/admin/unban">
           <i class="fa-solid fa-ban"></i>
           <span>Wnioski o odbanowanie</span>
@@ -153,7 +156,7 @@ const canViewWitcher = computed(
 }
 
 .section-title .accent {
-  background: var(--gradient-accent);
+  background: linear-gradient(to right, #9B59B6, #00BCD4);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -167,16 +170,35 @@ const canViewWitcher = computed(
   grid-template-columns: 1fr;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .admin-layout {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
-.sections {
+.admin-column {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+
+.column-title {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.column-title {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.column-title .accent {
+  background: linear-gradient(to right, #9B59B6, #00BCD4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .admin-section {
@@ -185,33 +207,24 @@ const canViewWitcher = computed(
   gap: 0.75rem;
   padding: 1rem 1.25rem;
   border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, #9B59B6, #00bfd8);
+  color: #fff;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, filter 0.2s, box-shadow 0.2s;
 }
 
 .admin-section:hover {
   transform: scale(1.05);
+  filter: brightness(110%);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
 }
 
 .admin-section i {
-  color: var(--primary);
+  color: inherit;
 }
 
 .admin-section span {
-  background: var(--gradient-accent);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.admin-extra {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  color: #fff;
 }
 </style>
