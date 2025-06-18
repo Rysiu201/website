@@ -36,6 +36,25 @@ const {
 } = config;
 
 const DB_FILE = path.join(process.cwd(), 'database.json');
+const QUESTIONS_FILE = path.join(process.cwd(), 'questions.json');
+
+function loadQuestions() {
+  try {
+    return JSON.parse(fs.readFileSync(QUESTIONS_FILE, 'utf8'));
+  } catch {
+    return {
+      whitelist: [],
+      checker: [],
+      moderator: [],
+      administrator: [],
+      developer: []
+    };
+  }
+}
+
+function saveQuestions(data) {
+  fs.writeFileSync(QUESTIONS_FILE, JSON.stringify(data, null, 2));
+}
 
 function normalizeStatus(s) {
   if (!s) return s;
@@ -379,8 +398,8 @@ app.get('/api/questions', (req, res) => {
   }
 
   const type = req.query.type || 'whitelist';
-  const db = loadDb();
-  const list = db.questions[type] || [];
+  const qdb = loadQuestions();
+  const list = qdb[type] || [];
 
   if (list.length === 0 && type === 'whitelist') {
     if (!userQuestions.has(req.user.id)) {
@@ -939,17 +958,17 @@ app.post('/api/admin/settings', async (req, res) => {
 app.get('/api/admin/questions/:section', async (req, res) => {
   if (!req.user) return res.status(401).json({ questions: [] });
   if (!(await isUserAdmin(req.user.id))) return res.status(403).json({ questions: [] });
-  const db = loadDb();
+  const qdb = loadQuestions();
   const section = req.params.section;
-  res.json({ questions: db.questions[section] || [] });
+  res.json({ questions: qdb[section] || [] });
 });
 
 app.post('/api/admin/questions/:section', async (req, res) => {
   if (!req.user) return res.status(401).json({ success: false });
   if (!(await isUserAdmin(req.user.id))) return res.status(403).json({ success: false });
-  const db = loadDb();
-  db.questions[req.params.section] = req.body.questions || [];
-  saveDb(db);
+  const qdb = loadQuestions();
+  qdb[req.params.section] = req.body.questions || [];
+  saveQuestions(qdb);
   res.json({ success: true });
 });
 

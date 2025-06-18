@@ -9,22 +9,26 @@
         <div class="flex gap-2 mb-2">
           <input v-model="entry.date" type="date" class="input" />
           <input v-model="entry.title" placeholder="Tytuł" class="flex-1 input" />
-          <button class="delete-btn" @click="remove(idx)">🗑️ Usuń</button>
+          <button class="delete-btn" @click="remove(idx)">
+            <i class="fa-solid fa-trash"></i> Usuń
+          </button>
         </div>
         <textarea v-model="entry.description" class="textarea"></textarea>
       </div>
     </div>
     <div class="actions">
-      <button class="add-btn" @click="add">➕ Dodaj</button>
-      <button class="save-btn" @click="save">💾 Zapisz</button>
+      <button class="add-btn" @click="add">
+        <i class="fa-solid fa-plus"></i> Dodaj
+      </button>
+      <button class="save-btn" @click="save">
+        <i class="fa-solid fa-floppy-disk"></i> Zapisz
+      </button>
     </div>
-    <Footer />
   </main>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import Footer from '../components/Footer.vue'
 
 interface Entry { date: string; title: string; description: string }
 const changelog = ref<Entry[]>([])
@@ -78,12 +82,12 @@ async function save() {
 
 .input {
   @apply bg-white/10 border border-white/20 rounded px-2 py-1;
-  color: #ccc;
+  color: #fff;
 }
 
 .textarea {
   @apply bg-white/10 border border-white/20 rounded p-2 w-full;
-  color: #ccc;
+  color: #fff;
 }
 
 .delete-btn {
@@ -91,7 +95,7 @@ async function save() {
 }
 
 .actions {
-  @apply mt-4 flex gap-2;
+  @apply mt-4 flex gap-2 justify-center;
 }
 
 .add-btn {
@@ -109,6 +113,7 @@ async function save() {
   align-items: center;
   gap: 0.5rem;
 }
+
 
 .back-link {
   display: inline-flex;

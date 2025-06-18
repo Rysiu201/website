@@ -290,16 +290,14 @@ async function archiveApplication(app: Application) {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-
 .status-columns {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
-  overflow-x: auto;
   margin-top: 1rem;
 }
 
 .status-column {
-  flex: 1;
   min-width: 220px;
 }
 
