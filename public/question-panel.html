@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel pytań</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #121212;
+      color: #e0e0e0;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(90deg, #8A2BE2, #00FFFF);
+    }
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      background: #222;
+      color: #fff;
+      border: 1px solid #444;
+      border-radius: 4px;
+    }
+    .questions-frame {
+      max-height: 400px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .question {
+      margin-bottom: 1rem;
+    }
+    .question textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #444;
+      background: #222;
+      color: #fff;
+      resize: vertical;
+    }
+    .actions {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .actions button {
+      padding: 0.5rem 1rem;
+      background: linear-gradient(90deg, #8A2BE2, #00FFFF);
+      border: none;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+<header>Panel Pytań</header>
+<div class="container">
+  <select id="role-select">
+    <option>WhiteLista</option>
+    <option>WhiteListChecker</option>
+    <option>Moderator</option>
+    <option>Administrator</option>
+    <option>Developer</option>
+  </select>
+
+  <div class="questions-frame" id="questions-frame">
+    <div class="question"><textarea>Pytanie 1</textarea></div>
+    <div class="question"><textarea>Pytanie 2</textarea></div>
+    <div class="question"><textarea>Pytanie 3</textarea></div>
+    <div class="question"><textarea>Pytanie 4</textarea></div>
+    <div class="question"><textarea>Pytanie 5</textarea></div>
+    <div class="question"><textarea>Pytanie 6</textarea></div>
+    <div class="question"><textarea>Pytanie 7</textarea></div>
+    <div class="question"><textarea>Pytanie 8</textarea></div>
+    <div class="question"><textarea>Pytanie 9</textarea></div>
+    <div class="question"><textarea>Pytanie 10</textarea></div>
+    <div class="question"><textarea>Pytanie 11</textarea></div>
+    <div class="question"><textarea>Pytanie 12</textarea></div>
+    <div class="question"><textarea>Pytanie 13</textarea></div>
+    <div class="question"><textarea>Pytanie 14</textarea></div>
+    <div class="question"><textarea>Pytanie 15</textarea></div>
+  </div>
+
+  <div class="actions">
+    <button id="edit-btn">Edytuj</button>
+  </div>
+</div>
+<script>
+  const frame = document.getElementById('questions-frame');
+  const editBtn = document.getElementById('edit-btn');
+  const questions = Array.from(frame.querySelectorAll('.question'));
+  const visibleCount = 10;
+  let editing = false;
+
+  function updateView() {
+    questions.forEach((q, i) => {
+      q.style.display = editing || i < visibleCount ? 'block' : 'none';
+    });
+    frame.style.overflowY = editing ? 'auto' : 'hidden';
+    editBtn.textContent = editing ? 'Zapisz' : 'Edytuj';
+  }
+
+  editBtn.addEventListener('click', () => {
+    editing = !editing;
+    updateView();
+  });
+
+  updateView();
+</script>
+</body>
+</html>
