@@ -852,6 +852,79 @@ app.get('/api/admin/player-notes/:userId', async (req, res) => {
   res.json({ notes: db.playerNotes[req.params.userId] || '' });
 });
 
+// Fetch cooldown-related settings from config
+app.get('/api/admin/witcher-settings', async (req, res) => {
+  if (!req.user) return res.status(401).json({ settings: null });
+  let isAdmin = false;
+  if (process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID) {
+    try {
+      const response = await fetch(
+        `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${req.user.id}`,
+        { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        const roles = data.roles || [];
+        isAdmin =
+          roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
+          roles.includes(process.env.STAFF_ROLE_ID || '');
+      }
+    } catch (err) {
+      console.error('Failed to check admin roles', err);
+    }
+  }
+  if (!isAdmin) return res.status(403).json({ settings: null });
+  res.json({ settings: { ...config } });
+});
+
+// Update cooldown-related settings
+app.post('/api/admin/witcher-settings', async (req, res) => {
+  if (!req.user) return res.status(401).json({ success: false });
+  let isAdmin = false;
+  if (process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID) {
+    try {
+      const response = await fetch(
+        `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${req.user.id}`,
+        { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        const roles = data.roles || [];
+        isAdmin =
+          roles.includes(process.env.MANAGEMENT_ROLE_ID || '') ||
+          roles.includes(process.env.STAFF_ROLE_ID || '');
+      }
+    } catch (err) {
+      console.error('Failed to check admin roles', err);
+    }
+  }
+  if (!isAdmin) return res.status(403).json({ success: false });
+
+  const allowedKeys = [
+    'REAPPLY_COOLDOWN_HOURS',
+    'EXTRA_COOLDOWN_HOURS',
+    'REJECTION_HISTORY_WINDOW_HOURS',
+    'REJECTIONS_BEFORE_EXTRA_COOLDOWN',
+    'ADMIN_REAPPLY_COOLDOWN_DAYS',
+    'UNBAN_COOLDOWN_PERCENT'
+  ];
+
+  for (const key of allowedKeys) {
+    if (key in req.body) {
+      const value = Number(req.body[key]);
+      if (!Number.isNaN(value)) {
+        config[key] = value;
+      }
+    }
+  }
+
+  const configPath = path.join(process.cwd(), 'config.js');
+  const fileContent =
+    'export default ' + JSON.stringify(config, null, 2) + '\n';
+  fs.writeFileSync(configPath, fileContent);
+  res.json({ success: true, settings: { ...config } });
+});
+
 // Serve static files
 app.use(express.static(path.join(__dirname, 'dist')));
 
