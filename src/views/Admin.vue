@@ -47,14 +47,6 @@
           <i class="fa-solid fa-note-sticky"></i>
           <span>Notatki o graczach</span>
         </RouterLink>
-        <RouterLink
-          v-if="isWitcher"
-          class="admin-section"
-          to="/admin/witcher"
-        >
-          <i class="fa-solid fa-hat-wizard"></i>
-          <span>Witcher</span>
-        </RouterLink>
       </div>
       <div class="admin-extra">
         <RouterLink class="admin-section" to="/admin/archived">
@@ -91,8 +83,7 @@ const ROLE_IDS = {
   MODERATOR: import.meta.env.VITE_MODERATOR_ROLE_ID,
   ADMIN: import.meta.env.VITE_ADMIN_ROLE_ID,
   DEVELOPER: import.meta.env.VITE_DEVELOPER_ROLE_ID,
-  OWNER: import.meta.env.VITE_OWNER_ROLE_ID,
-  WITCHER: import.meta.env.VITE_WITCHER_ROLE_ID
+  OWNER: import.meta.env.VITE_OWNER_ROLE_ID
 }
 
 function hasRole(roleId?: string) {
@@ -103,42 +94,33 @@ const canViewWhitelist = computed(
   () =>
     hasRole(ROLE_IDS.MANAGEMENT) ||
     hasRole(ROLE_IDS.COMMUNITY_MANAGER) ||
-    hasRole(ROLE_IDS.WHITELIST_CHECKER) ||
-    hasRole(ROLE_IDS.WITCHER)
+    hasRole(ROLE_IDS.WHITELIST_CHECKER)
 )
 
 const canViewWhitelistChecker = computed(
   () =>
     hasRole(ROLE_IDS.MANAGEMENT) ||
     hasRole(ROLE_IDS.COMMUNITY_MANAGER) ||
-    hasRole(ROLE_IDS.MODERATOR) ||
-    hasRole(ROLE_IDS.WITCHER)
+    hasRole(ROLE_IDS.MODERATOR)
 )
 
 const canViewModerator = computed(
   () =>
     hasRole(ROLE_IDS.MANAGEMENT) ||
-    hasRole(ROLE_IDS.COMMUNITY_MANAGER) ||
-    hasRole(ROLE_IDS.WITCHER)
+    hasRole(ROLE_IDS.COMMUNITY_MANAGER)
 )
 
 const canViewAdministrator = computed(
   () =>
     hasRole(ROLE_IDS.MANAGEMENT) ||
-    hasRole(ROLE_IDS.COMMUNITY_MANAGER) ||
-    hasRole(ROLE_IDS.WITCHER)
+    hasRole(ROLE_IDS.COMMUNITY_MANAGER)
 )
 
 const canViewDeveloper = computed(
   () =>
     hasRole(ROLE_IDS.OWNER) ||
     hasRole(ROLE_IDS.DEVELOPER) ||
-    hasRole(ROLE_IDS.COMMUNITY_MANAGER) ||
-    hasRole(ROLE_IDS.WITCHER)
-)
-
-const isWitcher = computed(
-  () => hasRole(ROLE_IDS.WITCHER) || hasRole(ROLE_IDS.OWNER)
+    hasRole(ROLE_IDS.COMMUNITY_MANAGER)
 )
 </script>
 
@@ -218,15 +200,5 @@ const isWitcher = computed(
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-}
-
-.category-title {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 1rem;
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #fff;
 }
 </style>

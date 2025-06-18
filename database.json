@@ -1,31 +1,298 @@
 {
-  "applications": [],
-  "playerNotes": {},
-  "settings": {
-    "REAPPLY_COOLDOWN_HOURS": 24,
-    "EXTRA_COOLDOWN_HOURS": 24,
-    "REJECTION_HISTORY_WINDOW_HOURS": 168,
-    "REJECTIONS_BEFORE_EXTRA_COOLDOWN": 3,
-    "ADMIN_REAPPLY_COOLDOWN_DAYS": 7,
-    "UNBAN_COOLDOWN_PERCENT": 0.15
-  },
-  "questions": {
-    "whitelist": [],
-    "checker": [],
-    "moderator": [],
-    "administrator": [],
-    "developer": []
-  },
-  "changelog": [
+  "applications": [
     {
-      "date": "2025-06-13",
-      "title": "Dodano zasady pojazdów",
-      "description": "Wprowadziliśmy nowe zasady dotyczące korzystania z pojazdów i realistycznej jazdy."
+      "id": "1750238097600",
+      "userId": "296362977349730305",
+      "data": {
+        "discord": "rysiu201#296362977349730305",
+        "steamId": "asd",
+        "serverNick": "asd",
+        "banDate": "2025-06-01",
+        "bannedBy": "asd",
+        "banReason": "ads",
+        "banDurationDays": 25,
+        "events": "ad",
+        "admit": "das",
+        "change": "asd",
+        "evidence": "asd",
+        "notes": "asd",
+        "consentTruth": true,
+        "consentRules": true,
+        "type": "unban"
+      },
+      "type": "unban",
+      "status": "Negatywnie",
+      "history": [
+        {
+          "status": "Wysłane",
+          "timestamp": 1750238097600,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Przyjęte, oczekuje na rozpatrzenie",
+          "timestamp": 1750238109072,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Negatywnie",
+          "timestamp": 1750238119041,
+          "by": "rysiu201"
+        }
+      ],
+      "rejectionReason": "dsad",
+      "adminNotes": "",
+      "interviewNotes": "",
+      "archived": null,
+      "reapplyAfter": 1750562119041
     },
     {
-      "date": "2025-05-22",
-      "title": "Zaktualizowano wytyczne RP",
-      "description": "Doprecyzowaliśmy oczekiwania co do zachowań w postaci i zasady wartości życia."
+      "id": "1750238407513",
+      "userId": "296362977349730305",
+      "data": {
+        "ic": {
+          "name": "das",
+          "age": 25,
+          "story": "das",
+          "personality": "ads",
+          "skills": "das",
+          "motivation": "asd"
+        },
+        "ooc": {
+          "discord": "rysiu201#296362977349730305",
+          "experience": "ads",
+          "knowsRules": false
+        },
+        "scenarios": [
+          "asd",
+          "asd",
+          "asd",
+          "asd",
+          "das"
+        ],
+        "questions": [
+          "Co oznacza skrót NVL i jak rozumiesz jego zastosowanie?",
+          "Gracz używa voice chatu, by przekazać coś spoza gry – jak powinieneś zareagować?",
+          "Czy można stosować szantaż OOC? Jeśli nie – co robić, gdy się to zdarzy?",
+          "Gracz ucieka z miejsca zdarzenia po wypadku – jak powinieneś się zachować jako świadek?",
+          "Kto podejmuje decyzję w sytuacji konfliktowej – IC czy administracja OOC?"
+        ],
+        "consents": {
+          "data": true,
+          "rules": true,
+          "truth": true
+        },
+        "extra": {
+          "portfolio": "",
+          "faction": ""
+        },
+        "type": "whitelist"
+      },
+      "type": "whitelist",
+      "status": "Pozytywnie",
+      "history": [
+        {
+          "status": "Wysłane",
+          "timestamp": 1750238407513,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Przyjęte, oczekuje na rozpatrzenie",
+          "timestamp": 1750238433783,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Pozytywnie",
+          "timestamp": 1750240816813,
+          "by": "rysiu201"
+        }
+      ],
+      "rejectionReason": "",
+      "adminNotes": "",
+      "interviewNotes": "",
+      "archived": null
+    },
+    {
+      "id": "1750238531885",
+      "userId": "296362977349730305",
+      "data": {
+        "discord": "rysiu201#296362977349730305",
+        "languages": "weq",
+        "fivemExp": "qwe",
+        "workOrg": "qwe",
+        "proudProject": "qwe",
+        "bugResponse": "qwe",
+        "requirements": "qw",
+        "interests": "eqw",
+        "testing": "qwe",
+        "portfolio": "qwe",
+        "consentData": true,
+        "consentDuties": true,
+        "consentTruth": true,
+        "type": "developer"
+      },
+      "type": "developer",
+      "status": "Pozytywnie",
+      "history": [
+        {
+          "status": "Wysłane",
+          "timestamp": 1750238531885,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Przyjęte, oczekuje na rozpatrzenie",
+          "timestamp": 1750238540506,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Pozytywnie",
+          "timestamp": 1750240868622,
+          "by": "rysiu201"
+        }
+      ],
+      "rejectionReason": "",
+      "adminNotes": "",
+      "interviewNotes": "",
+      "archived": null
+    },
+    {
+      "id": "1750240332656",
+      "userId": "296362977349730305",
+      "data": {
+        "discord": "rysiu201#296362977349730305",
+        "serverTime": "asd",
+        "verificationExp": "asd",
+        "differentiate": "asd",
+        "reviewFocus": "asd",
+        "goodRp": "asd",
+        "workload": "asd",
+        "doubts": "asd",
+        "teamwork": "asd",
+        "consentData": true,
+        "consentDuties": true,
+        "consentTruth": true,
+        "type": "checker"
+      },
+      "type": "checker",
+      "status": "Pozytywnie",
+      "history": [
+        {
+          "status": "Wysłane",
+          "timestamp": 1750240332656,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Przyjęte, oczekuje na rozpatrzenie",
+          "timestamp": 1750240825190,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Pozytywnie",
+          "timestamp": 1750240829473,
+          "by": "rysiu201"
+        }
+      ],
+      "rejectionReason": "",
+      "adminNotes": "",
+      "interviewNotes": "",
+      "archived": null
+    },
+    {
+      "id": "1750240359581",
+      "userId": "296362977349730305",
+      "data": {
+        "discord": "rysiu201#296362977349730305",
+        "age": 12,
+        "serverTime": "asd",
+        "activeTime": "das",
+        "moderatorExp": "asd",
+        "motivation": "asd",
+        "strengths": "asd",
+        "provocation": "asd",
+        "lolReport": "asd",
+        "realProblem": "asd",
+        "randomAnswer": "asd",
+        "teamwork": "asd",
+        "escalation": "asd",
+        "neutrality": "asd",
+        "consentData": true,
+        "consentDuties": true,
+        "consentTruth": true,
+        "scenario": "Gracz trolluje tickety pisząc o „duchach w systemie” – nic konkretnego.",
+        "type": "moderator"
+      },
+      "type": "moderator",
+      "status": "Pozytywnie",
+      "history": [
+        {
+          "status": "Wysłane",
+          "timestamp": 1750240359581,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Przyjęte, oczekuje na rozpatrzenie",
+          "timestamp": 1750240837727,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Pozytywnie",
+          "timestamp": 1750240843451,
+          "by": "rysiu201"
+        }
+      ],
+      "rejectionReason": "",
+      "adminNotes": "",
+      "interviewNotes": "",
+      "archived": null
+    },
+    {
+      "id": "1750240371271",
+      "userId": "296362977349730305",
+      "data": {
+        "discord": "rysiu201#296362977349730305",
+        "previousAdmin": "asd",
+        "adminAreas": "asd",
+        "scenarios": [
+          "sda",
+          "asd",
+          "asd"
+        ],
+        "healthyStructure": "asd",
+        "cooperation": "sda",
+        "improvements": "asd",
+        "consentData": true,
+        "consentDuties": true,
+        "consentTruth": true,
+        "type": "administrator",
+        "questions": [
+          "W środku nocy padła baza danych – Owner śpi, Dev niedostępny.",
+          "Gracze IC wynoszą OOC dramy – jak jako admin reagujesz?",
+          "Trzy osoby z ekipy pokłóciły się w kanale prywatnym – co robisz?"
+        ]
+      },
+      "type": "administrator",
+      "status": "Pozytywnie",
+      "history": [
+        {
+          "status": "Wysłane",
+          "timestamp": 1750240371271,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Przyjęte, oczekuje na rozpatrzenie",
+          "timestamp": 1750240852376,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Pozytywnie",
+          "timestamp": 1750240857065,
+          "by": "rysiu201"
+        }
+      ],
+      "rejectionReason": "",
+      "adminNotes": "",
+      "interviewNotes": "",
+      "archived": null
     }
-  ]
+  ],
+  "playerNotes": {}
 }

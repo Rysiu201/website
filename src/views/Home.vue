@@ -3,7 +3,6 @@ import { onMounted, ref } from 'vue';
 import backgroundImage from '../assets/background.jpg';
 import gsap from 'gsap';
 import Footer from '../components/Footer.vue';
-import ChangelogWidget from '../components/ChangelogWidget.vue';
 
 const isLoaded = ref(false);
 const backgroundImageUrl = ref(backgroundImage);
@@ -160,7 +159,6 @@ function typeSubtitle(text: string, speed: number) {
   </section>
 
   <!-- Server Statistics Section -->
-  <ChangelogWidget />
   <!-- 引入页脚组件 -->
   <Footer />
 </template>

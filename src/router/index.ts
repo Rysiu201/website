@@ -14,11 +14,6 @@ import ApplicationStatus from '../views/ApplicationStatus.vue'
 import AdminApplications from '../views/AdminApplications.vue'
 import AdminApplicationDetail from '../views/AdminApplicationDetail.vue'
 import AdminPlayerNotes from '../views/AdminPlayerNotes.vue'
-import AdminSettings from '../views/AdminSettings.vue'
-import AdminQuestions from '../views/AdminQuestions.vue'
-import AdminChangelog from '../views/AdminChangelog.vue'
-import AdminWitcher from '../views/AdminWitcher.vue'
-import Changelog from '../views/Changelog.vue'
 import DiscordRequired from '../views/DiscordRequired.vue'
 
 const STATUS = {
@@ -67,12 +62,6 @@ const router = createRouter({
         description: 'Przeczytaj regulamin AetherRP, aby wspólnie tworzyć przyjazną i uczciwą rozgrywkę.',
         keywords: 'regulamin serwera, zasady społeczności, roleplay'
       }
-    },
-    {
-      path: '/changelog',
-      name: 'changelog',
-      component: Changelog,
-      meta: { title: 'Changelog - AetherRP' }
     },
     {
       path: '/join',
@@ -364,36 +353,6 @@ const router = createRouter({
         title: 'Notatki o Graczach - AetherRP',
         requiresAuth: true
       }
-    },
-    {
-      path: '/admin/witcher',
-      name: 'admin-witcher',
-      component: AdminWitcher,
-      meta: { title: 'Witcher - AetherRP', requiresAuth: true }
-    },
-    {
-      path: '/admin/settings',
-      name: 'admin-settings',
-      component: AdminSettings,
-      meta: { title: 'Ustawienia - AetherRP', requiresAuth: true }
-    },
-    {
-      path: '/admin/questions',
-      name: 'admin-questions',
-      component: AdminQuestions,
-      meta: { title: 'Pytania - AetherRP', requiresAuth: true }
-    },
-    {
-      path: '/admin/changelog',
-      name: 'admin-changelog',
-      component: AdminChangelog,
-      meta: { title: 'Changelog - AetherRP', requiresAuth: true }
-    },
-    {
-      path: '/panel/changelog',
-      name: 'panel-changelog',
-      component: AdminChangelog,
-      meta: { title: 'Changelog - AetherRP', requiresAuth: true }
     }
   ]
 })

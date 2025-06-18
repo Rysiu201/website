@@ -171,10 +171,7 @@ onMounted(async () => {
   if (data.user) {
     form.value.discord = `${data.user.username}#${data.user.id}`
   }
-  const qRes = await fetch('/api/questions?type=moderator', { credentials: 'include' })
-  const qData = await qRes.json()
-  const source = Array.isArray(qData.questions) && qData.questions.length ? qData.questions : scenarioPool
-  randomScenario.value = source[Math.floor(Math.random() * source.length)]
+  randomScenario.value = scenarioPool[Math.floor(Math.random() * scenarioPool.length)]
 
   const statusRes = await fetch('/api/status?type=moderator', {
     credentials: 'include'

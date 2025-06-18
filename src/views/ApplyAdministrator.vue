@@ -128,10 +128,7 @@ onMounted(async () => {
   if (data.user) {
     form.value.discord = `${data.user.username}#${data.user.id}`
   }
-  const qRes = await fetch('/api/questions?type=administrator', { credentials: 'include' })
-  const qData = await qRes.json()
-  const source = Array.isArray(qData.questions) && qData.questions.length ? qData.questions : scenarioPool
-  const shuffled = [...source].sort(() => Math.random() - 0.5)
+  const shuffled = [...scenarioPool].sort(() => Math.random() - 0.5)
   scenarioQuestions.value = shuffled.slice(0, 3)
 
   const statusRes = await fetch('/api/status?type=administrator', {

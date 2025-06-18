@@ -189,7 +189,7 @@ onMounted(async () => {
   }
 
   // Odbierz przypisane do użytkownika pytania
-  const qRes = await fetch(`/api/questions?type=${appType.value}`, { credentials: 'include' })
+  const qRes = await fetch('/api/questions', { credentials: 'include' })
   const qData = await qRes.json()
   if (Array.isArray(qData.questions)) {
     questions.value = qData.questions

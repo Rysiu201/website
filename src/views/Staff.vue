@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import backgroundImage from '../assets/background.jpg';
+import Footer from '../components/Footer.vue';
 import AOS from 'aos';
 import logoImage from '../assets/logo.jpg';
 
@@ -180,6 +181,7 @@ const teamMembers = ref([
     </div>
     
     <!-- 引入页脚组件 -->
+    <Footer />
   </div>
 </template>
 

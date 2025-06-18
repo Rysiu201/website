@@ -4,8 +4,8 @@
     <div class="status-content">
       <h1>{{ headerText }}</h1>
       <h1>
-        <template v-if="appType === 'unban'">Obecny status twojego wniosku:</template>
-        <template v-else>Obecny status twojego zgłoszenia:</template>
+        <template v-if="appType === 'unban'">Obecny status twojego wniosku: </template>
+        <template v-else>Obecny status twojego zgłoszenia: </template>
         <b><span :class="statusClass">{{ status }}</span></b>
       </h1>
       <p v-if="status === statuses.APPROVED" class="approved-msg">
@@ -49,7 +49,7 @@
         </div>
         <p v-if="timeRemaining">
           <template v-if="appType === 'unban'">
-            Czas, w którym możesz ponownie złożyć odwołanie: {{ cooldownText }}
+            Ponowny wniosek o odbanowanie możesz złożyć za:
           </template>
           <template v-else>
             W ciągu {{ cooldownText }} możesz ponownie złożyć podanie.
@@ -131,23 +131,30 @@ const defaultSteps = [
 const adminSteps = [
   {
     id: 1,
-    title: 'Skontaktuj się na kanale',
-    description: 'Użyj wskazanego kanału Discord aby umówić się na rozmowę.',
-    icon: 'fa-brands fa-discord',
+    title: 'Otrzymałeś rangę „🕓 Pending Administrator”',
+    description: 'Gratulacje! Masz nową rangę. Ale to nie +10 do prestiżu — to +10 do odpowiedzialności. Witamy w drużynie porządkowej.',
+    icon: 'fa-solid fa-shield-halved',
     link: undefined
   },
   {
     id: 2,
-    title: 'Poczekaj na swoją kolej',
-    description: 'Gdy nadejdzie Twoja kolej przejdź rozmowę kwalifikacyjną.',
-    icon: 'fa-solid fa-comments',
+    title: 'Zobacz kategorię podań na Administratora',
+    description: 'Kanał #⮮🎩administrator to Twoja baza. Na razie nie rozstawiaj barier. Kliknij „Umów się” i przygotuj się na krótką rozmowę. Bez stresu – to nie rekrutacja do NBP.',
+    icon: 'fa-solid fa-folder-tree',
     link: undefined
   },
   {
     id: 3,
-    title: 'Wspomagaj serwer',
-    description: 'Angażuj się i pomagaj innym tworzyć lepszą społeczność.',
-    icon: 'fa-solid fa-handshake',
+    title: 'Kliknij i pogadaj z nami',
+    description: 'Tak, serio voice. Nie testujemy Cię z Kodeksu RP – chcemy tylko sprawdzić, czy nie jesteś botem z Telegrama i czy wiesz, co to „dobra atmosfera”.',
+    icon: 'fa-solid fa-comments',
+    link: undefined
+  },
+  {
+    id: 4,
+    title: 'Od dziś masz porządek na głowie',
+    description: 'Zgłoszenia, konflikty, pomysły – trafiają do Ciebie. Nie jesteś dowódcą. Jesteś filtrem tego wszystkiego, co inni pomijają. Witamy na froncie.',
+    icon: 'fa-solid fa-broom',
     link: undefined
   }
 ]
@@ -155,23 +162,92 @@ const adminSteps = [
 const moderatorSteps = [
   {
     id: 1,
-    title: 'Skontaktuj się na kanale',
-    description: 'Użyj wskazanego kanału Discord aby umówić się na rozmowę.',
-    icon: 'fa-brands fa-discord',
+    title: 'Otrzymałeś rangę „🕓 Pending Moderator”',
+    description: 'Masz już miotłę, jeszcze nie masz pola do popisu. Spokojnie – zanim zaczniesz sprzątać bałagan, pogadamy.',
+    icon: 'fa-solid fa-user-ninja',
     link: undefined
   },
   {
     id: 2,
-    title: 'Poczekaj na swoją kolej',
-    description: 'Gdy nadejdzie Twoja kolej przejdź rozmowę kwalifikacyjną.',
-    icon: 'fa-solid fa-comments',
+    title: 'Zajrzyj na kategorię podań na Moderatora',
+    description: 'Kliknij #⮮🎎moderator - „Umów się” i przygotuj się na szybki voice. Bez stresu – nikt nie każe Ci znać całego regulaminu na pamięć (jeszcze).',
+    icon: 'fa-solid fa-hashtag',
     link: undefined
   },
   {
     id: 3,
-    title: 'Wspomagaj serwer',
-    description: 'Angażuj się i pomagaj innym tworzyć lepszą społeczność.',
-    icon: 'fa-solid fa-handshake',
+    title: 'Wpadnij na rozmowę (voice, serio)',
+    description: 'Chcemy tylko upewnić się, że masz głowę do ludzi, a nie tylko ban-hammer. Przyjdź, powiedz „cześć” i oddychaj – to tylko Discord.',
+    icon: 'fa-solid fa-headset',
+    link: undefined
+  },
+  {
+    id: 4,
+    title: 'Witaj na pierwszej linii frontu',
+    description: 'Od teraz to Ty filtrujesz tickety, łagodzisz spory i dajesz spokój graczom. Nie jesteś od karania. Jesteś od ogarniania. A w tym jesteśmy najlepsi.',
+    icon: 'fa-solid fa-fire-extinguisher',
+    link: undefined
+  }
+]
+
+const wlCheckerSteps = [
+  {
+    id: 1,
+    title: 'Otrzymałeś rangę „🕓 Pending WhiteListChecker”',
+    description: 'Gratulacje, zostałeś wybrany. Ale spokojnie, to jeszcze nie finał. To jak list z Hogwartu — teraz musisz tylko udowodnić, że to nie pomyłka.',
+    icon: 'fa-solid fa-scroll',
+    link: undefined
+  },
+  {
+    id: 2,
+    title: 'Sprawdź kategorię WLChecker',
+    description: 'Masz nowy pokój #⮮🧮whitelistchecker tylko dla siebie (i nas 👀). Tam czeka guzik do rozmowy. Kliknij, odczekaj, oddychaj.',
+    icon: 'fa-solid fa-door-open',
+    link: undefined
+  },
+  {
+    id: 3,
+    title: 'Umów rozmowę',
+    description: 'Wbij ticket, dogadaj termin i przejdź rozmowę z kimś z załogi. Bez stresu. Nie gryziemy.',
+    icon: 'fa-solid fa-calendar-check',
+    link: undefined
+  },
+  {
+    id: 4,
+    title: 'Witamy w bractwie WL',
+    description: 'Jesteś częścią ekipy, która rozróżnia RP od „ej, przyjmiecie mnie?”. Z wielką siłą przychodzi wielka selekcja.',
+    icon: 'fa-solid fa-user-shield',
+    link: undefined
+  }
+]
+
+const developerSteps = [
+  {
+    id: 1,
+    title: 'Otrzymałeś rangę „🕓 Pending Developer”',
+    description: 'Wreszcie ktoś, kto wie co to print("działa"). Ale zanim dotkniesz kodu — kilka kroków.',
+    icon: 'fa-solid fa-code',
+    link: undefined
+  },
+  {
+    id: 2,
+    title: 'Odwiedź kategorię Developer',
+    description: 'Kanał #⮮⌨️developer to Twoja baza. Kliknij „Umów się” i przygotuj się na voice.',
+    icon: 'fa-solid fa-terminal',
+    link: undefined
+  },
+  {
+    id: 3,
+    title: 'Rozmowa z załogą',
+    description: 'Pokaż, że nie wrzucisz nam 200MB loopa z while true. My pokażemy Ci resztę.',
+    icon: 'fa-solid fa-comments',
+    link: undefined
+  },
+  {
+    id: 4,
+    title: 'Witaj w kodzie rzeczywistości',
+    description: 'Możesz wszystko popsuć — i wszystko naprawić. Tu zaczyna się prawdziwa magia.',
+    icon: 'fa-solid fa-wand-magic-sparkles',
     link: undefined
   }
 ]
@@ -179,9 +255,15 @@ const moderatorSteps = [
 const joinSteps = computed(() =>
   appType.value === 'administrator'
     ? adminSteps
-    : appType.value === 'moderator' || appType.value === 'checker'
-      ? moderatorSteps
-      : defaultSteps
+    : appType.value === 'moderator'
+    ? moderatorSteps
+    : appType.value === 'developer'
+    ? developerSteps
+    : appType.value === 'checker'
+    ? wlCheckerSteps
+    : appType.value === 'whitelist'
+    ? defaultSteps
+    : defaultSteps
 )
 
 const route = useRoute()
@@ -403,9 +485,9 @@ const statusClass = computed(() => {
 
 .steps-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 3rem;
-  margin-top: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;
 }
 
 .step-card {

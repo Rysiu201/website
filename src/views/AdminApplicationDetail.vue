@@ -743,10 +743,6 @@ const decisionInfo = computed(() => {
 .detail-container {
   max-width: 800px;
   margin: 0 auto;
-  background: rgba(0, 0, 0, 0.6);
-  padding: 1rem;
-  border-radius: 1rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
 
 .app-table {
@@ -794,15 +790,6 @@ const decisionInfo = computed(() => {
   min-height: 80px;
   border-radius: 6px;
   padding: 0.4rem;
-}
-
-#status-select {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ccc;
-  border-radius: 6px;
-  padding: 0.4rem;
-  width: 100%;
 }
 .update-msg {
   color: #00ff7f;
