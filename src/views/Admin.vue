@@ -43,6 +43,14 @@
           <i class="fa-solid fa-code"></i>
           <span>Sprawdź podania na Developera</span>
         </RouterLink>
+        <RouterLink
+          class="admin-section"
+          v-if="canViewWitcher"
+          to="/admin/witcher"
+        >
+          <i class="fa-solid fa-hat-wizard"></i>
+          <span>The Witcher</span>
+        </RouterLink>
         <RouterLink class="admin-section" to="/admin/player-notes">
           <i class="fa-solid fa-note-sticky"></i>
           <span>Notatki o graczach</span>
@@ -83,7 +91,8 @@ const ROLE_IDS = {
   MODERATOR: import.meta.env.VITE_MODERATOR_ROLE_ID,
   ADMIN: import.meta.env.VITE_ADMIN_ROLE_ID,
   DEVELOPER: import.meta.env.VITE_DEVELOPER_ROLE_ID,
-  OWNER: import.meta.env.VITE_OWNER_ROLE_ID
+  OWNER: import.meta.env.VITE_OWNER_ROLE_ID,
+  WITCHER: import.meta.env.VITE_WITCHER_ROLE_ID
 }
 
 function hasRole(roleId?: string) {
@@ -121,6 +130,10 @@ const canViewDeveloper = computed(
     hasRole(ROLE_IDS.OWNER) ||
     hasRole(ROLE_IDS.DEVELOPER) ||
     hasRole(ROLE_IDS.COMMUNITY_MANAGER)
+)
+
+const canViewWitcher = computed(
+  () => hasRole(ROLE_IDS.OWNER) || hasRole(ROLE_IDS.WITCHER)
 )
 </script>
 
