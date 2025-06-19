@@ -5,11 +5,37 @@ import Footer from '../components/Footer.vue';
 import AOS from 'aos';
 import logoImage from '../assets/logo.jpg';
 
+const teamSlider = ref<HTMLElement | null>(null);
+
+const scrollSlider = (direction: number) => {
+  const slider = teamSlider.value;
+  if (!slider) return;
+  const card = slider.querySelector<HTMLElement>('.team-card');
+  if (!card) return;
+  const gap = parseInt(getComputedStyle(slider).gap) || 0;
+  const amount = card.offsetWidth + gap;
+  slider.scrollBy({ left: amount * direction, behavior: 'smooth' });
+};
+
 const backgroundImageUrl = ref(backgroundImage);
+
+const loadDiscordInfo = async (member: any) => {
+  try {
+    const res = await fetch(`/api/team-member/${member.discordId}`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.avatar) member.image = data.avatar;
+      if (data.status) member.status = data.status.charAt(0).toUpperCase() + data.status.slice(1);
+    }
+  } catch (err) {
+    console.error('Failed to load Discord info', err);
+  }
+};
 
 onMounted(() => {
   // 重新初始化AOS
   AOS.refresh();
+  teamMembers.value.forEach(m => m.discordId && loadDiscordInfo(m));
 });
 
 // Team members data - 只保留三位成员
@@ -20,8 +46,9 @@ const teamMembers = ref([
     role: 'Właściciel Serwera i Główny Developer',
     bio: 'Typ od wszystkiego — od pisania kodu, przez poprawki bugów, po tworzenie eventów i ogarnianie całego serwera. Głowa projektu, która nie śpi, bo zawsze coś trzeba dopisać albo zoptymalizować. Lubi jak działa szybko, stabilnie i z klimatem. Na serwerze dba o jakość, balans i to, żeby graczom się po prostu dobrze grało.',
     image: logoImage,
-    status: 'Online',
+    status: 'Offline',
     discord: 'rysiu201',
+    discordId: '000000000000000001',
     socialLinks: {
       discord: '#',
       tiktok: '#',
@@ -34,8 +61,9 @@ const teamMembers = ref([
     role: 'Opiekun Społeczności',
     bio: 'Odpowiada za relacje ze społecznością, planowanie eventów i dba o pozytywne doświadczenia graczy.',
     image: logoImage,
-    status: 'Online',
+    status: 'Offline',
     discord: 'Sarah.W#5678',
+    discordId: '000000000000000002',
     socialLinks: {
       discord: '#',
       tiktok: '#'
@@ -47,8 +75,9 @@ const teamMembers = ref([
     role: 'Starszy Administrator',
     bio: 'Nadzoruje moderację, przyjmuje zgłoszenia graczy i pilnuje przestrzegania zasad dla uczciwej rozgrywki.',
     image: logoImage,
-    status: 'Away',
+    status: 'Offline',
     discord: 'MikeC#9012',
+    discordId: '000000000000000003',
     socialLinks: {
       discord: '#',
       instagram: '#'
@@ -99,14 +128,16 @@ const teamMembers = ref([
         <h2 class="section-title" data-aos="fade-up">Nasz <span class="accent">Zespół Zarządzający</span></h2>
         <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Poznaj osobowości zajmujące się serwerem</p>
         
-        <div class="team-grid">
-          <div 
-            v-for="(member, index) in teamMembers" 
-            :key="member.id" 
-            class="team-card"
-            data-aos="fade-up"
-            :data-aos-delay="150 * index"
-          >
+        <div class="team-slider-container">
+          <button class="slider-arrow left" @click="scrollSlider(-1)">◀</button>
+          <div class="team-grid" ref="teamSlider">
+            <div
+              v-for="(member, index) in teamMembers"
+              :key="member.id"
+              class="team-card"
+              data-aos="fade-up"
+              :data-aos-delay="150 * index"
+            >
             <!-- 简化后的卡片，没有翻转功能 -->
             <div class="status-indicator" :class="member.status.toLowerCase()"></div>
             
@@ -131,7 +162,9 @@ const teamMembers = ref([
                 <i class="fa-solid fa-message"></i> Skontaktuj się
               </button>
             </div>
+            </div>
           </div>
+          <button class="slider-arrow right" @click="scrollSlider(1)">▶</button>
         </div>
       </div>
     </div>
@@ -377,12 +410,40 @@ const teamMembers = ref([
   padding: 8rem 0 6rem;
 }
 
-.team-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+.team-slider-container {
   max-width: 1200px;
   margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  overflow-x: hidden;
+}
+
+.team-grid {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 2rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.team-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.slider-arrow {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.slider-arrow:hover {
+  opacity: 1;
 }
 
 /* Team Card */
@@ -394,7 +455,8 @@ const teamMembers = ref([
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
   padding: 2rem 1.5rem;
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease-in-out;
+  flex: 0 0 calc(33.333% - 2rem);
 }
 
 .team-card:hover {
@@ -699,14 +761,14 @@ const teamMembers = ref([
 }
 
 @media (max-width: 992px) {
-  .team-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .team-card {
+    flex: 0 0 calc(50% - 2rem);
   }
 }
 
 @media (max-width: 768px) {
-  .team-grid {
-    grid-template-columns: 1fr;
+  .team-card {
+    flex: 0 0 100%;
     max-width: 450px;
   }
   
