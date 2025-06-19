@@ -365,9 +365,14 @@ app.get('/api/status', (req, res) => {
   const db = loadDb();
   autoArchiveOldApplications(db);
   const type = req.query.type || 'whitelist';
-  const appEntry = db.applications.find(
-    a => a.userId === req.user.id && a.type === type
+  const userApps = db.applications.filter(
+    a => a.userId === req.user.id && (a.type || 'whitelist') === type && !a.archived
   );
+  const appEntry = userApps.sort((a, b) => {
+    const tsA = a.history && a.history[0] ? a.history[0].timestamp : Number(a.id);
+    const tsB = b.history && b.history[0] ? b.history[0].timestamp : Number(b.id);
+    return tsB - tsA;
+  })[0];
   res.json({
     status: appEntry ? appEntry.status : null,
     rejectionReason: appEntry ? appEntry.rejectionReason || '' : '',
@@ -442,6 +447,16 @@ app.post('/api/apply', async (req, res) => {
         return res
           .status(400)
           .json({ success: false, status: latest.status, reapplyAfter });
+      }
+      // Archive the previous rejected application
+      if (!latest.archived) {
+        latest.archived = { timestamp: Date.now(), by: req.user.username };
+        latest.history = latest.history || [];
+        latest.history.push({
+          status: STATUS.ARCHIVED,
+          timestamp: Date.now(),
+          by: req.user.username
+        });
       }
     }
 
@@ -813,6 +828,46 @@ app.post('/api/admin/unarchive/:id', async (req, res) => {
     saveDb(db);
   }
 
+  res.json({ success: true });
+});
+
+// Permanently delete an application
+app.delete('/api/admin/applications/:id', async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ success: false });
+  }
+
+  let canDelete = false;
+  if (process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID) {
+    try {
+      const response = await fetch(
+        `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${req.user.id}`,
+        { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        const roles = data.roles || [];
+        canDelete =
+          roles.includes(process.env.OWNER_ROLE_ID || '') ||
+          roles.includes(process.env.WITCHER_ROLE_ID || '');
+      }
+    } catch (err) {
+      console.error('Failed to check delete roles', err);
+    }
+  }
+
+  if (!canDelete) {
+    return res.status(403).json({ success: false });
+  }
+
+  const db = loadDb();
+  const idx = db.applications.findIndex(a => a.id === req.params.id);
+  if (idx === -1) {
+    return res.status(404).json({ success: false });
+  }
+
+  db.applications.splice(idx, 1);
+  saveDb(db);
   res.json({ success: true });
 });
 
