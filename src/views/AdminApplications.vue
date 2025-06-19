@@ -257,6 +257,13 @@ async function openDetail(app: Application) {
 }
 
 async function archiveApplication(app: Application) {
+  if (
+    !confirm(
+      'Pamiętaj, że przenosząc zgloszenie do archiwizacji, restartujesz czas potrzebny na złożenie nowego pytania do 0. Czy kontynuować?'
+    )
+  ) {
+    return
+  }
   await fetch(`/api/admin/archive/${app.id}`, {
     method: 'POST',
     credentials: 'include'
