@@ -395,14 +395,23 @@ app.get('/api/status', (req, res) => {
   const db = loadDb();
   autoArchiveOldApplications(db);
   const type = req.query.type || 'whitelist';
-  const userApps = db.applications.filter(
-    a => a.userId === req.user.id && (a.type || 'whitelist') === type && !a.archived
-  );
-  const appEntry = userApps.sort((a, b) => {
-    const tsA = a.history && a.history[0] ? a.history[0].timestamp : Number(a.id);
-    const tsB = b.history && b.history[0] ? b.history[0].timestamp : Number(b.id);
-    return tsB - tsA;
-  })[0];
+
+  const allApps = db.applications
+    .filter(a => a.userId === req.user.id && (a.type || 'whitelist') === type)
+    .map(a => ({
+      ...a,
+      ts: a.history && a.history[0] ? a.history[0].timestamp : Number(a.id)
+    }))
+    .sort((a, b) => a.ts - b.ts);
+
+  const appEntry = [...allApps]
+    .filter(a => !a.archived)
+    .sort((a, b) => b.ts - a.ts)[0];
+
+  const historyCombined = allApps
+    .flatMap(a => a.history || [])
+    .sort((a, b) => a.timestamp - b.timestamp)
+    .slice(-9);
   const base =
     type === 'administrator' ||
     type === 'moderator' ||
@@ -424,7 +433,7 @@ app.get('/api/status', (req, res) => {
   res.json({
     status: appEntry ? appEntry.status : null,
     rejectionReason: appEntry ? appEntry.rejectionReason || '' : '',
-    history: appEntry ? appEntry.history || [] : [],
+    history: historyCombined,
     archived: appEntry ? appEntry.archived || null : null,
     reapplyAfter: reapplyAfterGlobal,
     baseCooldownHours: base,
@@ -499,16 +508,6 @@ app.post('/api/apply', async (req, res) => {
         .json({ success: false, status: latest.status, reapplyAfter: globalReapply });
     }
     if (latest && latest.status === STATUS.REJECTED) {
-      // Archive the previous rejected application
-      if (!latest.archived) {
-        latest.archived = { timestamp: Date.now(), by: req.user.username };
-        latest.history = latest.history || [];
-        latest.history.push({
-          status: STATUS.ARCHIVED,
-          timestamp: Date.now(),
-          by: req.user.username
-        });
-      }
       // Archive the previous rejected application
       if (!latest.archived) {
         latest.archived = { timestamp: Date.now(), by: req.user.username };
