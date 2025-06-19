@@ -90,6 +90,31 @@ function computeReapplyAfter(
   return last.timestamp + cooldown * 3600 * 1000;
 }
 
+function computeReapplyAfterForUser(
+  userId,
+  type,
+  db,
+  baseHours = config.REAPPLY_COOLDOWN_HOURS
+) {
+  const allHistories = db.applications
+    .filter(a => a.userId === userId && (a.type || 'whitelist') === type)
+    .flatMap(a => a.history || []);
+  return computeReapplyAfter(allHistories, baseHours);
+}
+
+function countRecentRejections(userId, type, db) {
+  const now = Date.now();
+  const windowMs = config.REJECTION_HISTORY_WINDOW_HOURS * 3600 * 1000;
+  const allHistories = db.applications
+    .filter(a => a.userId === userId && (a.type || 'whitelist') === type)
+    .flatMap(a => a.history || []);
+  return allHistories.filter(
+    h =>
+      normalizeStatus(h.status) === STATUS.REJECTED &&
+      now - h.timestamp <= windowMs
+  ).length;
+}
+
 function autoArchiveOldApplications(db) {
   const WEEK = 7 * 24 * 3600 * 1000;
   const now = Date.now();
@@ -127,12 +152,17 @@ function recomputeAllReapplyAfter() {
       app.type === 'checker' ||
       app.type === 'developer'
         ? config.ADMIN_REAPPLY_COOLDOWN_DAYS * 24
-        : app.type === 'unban'
-          ? (app.data?.banDurationDays
-              ? app.data.banDurationDays * 24 * config.UNBAN_COOLDOWN_PERCENT
-              : config.REAPPLY_COOLDOWN_HOURS)
-          : config.REAPPLY_COOLDOWN_HOURS;
-    const newVal = computeReapplyAfter(app.history, base);
+      : app.type === 'unban'
+        ? (app.data?.banDurationDays
+            ? app.data.banDurationDays * 24 * config.UNBAN_COOLDOWN_PERCENT
+            : config.REAPPLY_COOLDOWN_HOURS)
+        : config.REAPPLY_COOLDOWN_HOURS;
+    const newVal = computeReapplyAfterForUser(
+      app.userId,
+      app.type || 'whitelist',
+      db,
+      base
+    );
     if (newVal) {
       if (app.reapplyAfter !== newVal) {
         app.reapplyAfter = newVal;
@@ -365,31 +395,62 @@ app.get('/api/status', (req, res) => {
   const db = loadDb();
   autoArchiveOldApplications(db);
   const type = req.query.type || 'whitelist';
-  const appEntry = db.applications.find(
-    a => a.userId === req.user.id && a.type === type
+
+  const allApps = db.applications
+    .filter(a => a.userId === req.user.id && (a.type || 'whitelist') === type)
+    .map(a => ({
+      ...a,
+      ts: a.history && a.history[0] ? a.history[0].timestamp : Number(a.id)
+    }))
+    .sort((a, b) => a.ts - b.ts);
+
+  // Prefer any approved application even if archived so users retain
+  // their positive status permanently
+  const approvedEntry = [...allApps]
+    .filter(a => a.status === STATUS.APPROVED)
+    .sort((a, b) => b.ts - a.ts)[0];
+
+  let appEntry = [...allApps]
+    .filter(a => !a.archived)
+    .sort((a, b) => b.ts - a.ts)[0];
+  if (!appEntry && allApps.length) {
+    appEntry = allApps[allApps.length - 1];
+  }
+  if (approvedEntry && (!appEntry || approvedEntry.ts > appEntry.ts)) {
+    appEntry = approvedEntry;
+  }
+
+  const historyCombined = allApps
+    .flatMap(a => a.history || [])
+    .sort((a, b) => a.timestamp - b.timestamp)
+    .slice(-9);
+  const base =
+    type === 'administrator' ||
+    type === 'moderator' ||
+    type === 'checker' ||
+    type === 'developer'
+      ? config.ADMIN_REAPPLY_COOLDOWN_DAYS * 24
+      : type === 'unban'
+        ? (appEntry?.data?.banDurationDays
+            ? appEntry.data.banDurationDays * 24 * config.UNBAN_COOLDOWN_PERCENT
+            : config.REAPPLY_COOLDOWN_HOURS)
+        : config.REAPPLY_COOLDOWN_HOURS;
+  const reapplyAfterGlobal = computeReapplyAfterForUser(
+    req.user.id,
+    type,
+    db,
+    base
   );
+  const recentRej = countRecentRejections(req.user.id, type, db);
   res.json({
     status: appEntry ? appEntry.status : null,
     rejectionReason: appEntry ? appEntry.rejectionReason || '' : '',
-    history: appEntry ? appEntry.history || [] : [],
+    history: historyCombined,
     archived: appEntry ? appEntry.archived || null : null,
-    reapplyAfter: appEntry ? appEntry.reapplyAfter || null : null,
-    baseCooldownHours:
-      type === 'administrator' ||
-      type === 'moderator' ||
-      type === 'checker' ||
-      type === 'developer'
-        ? config.ADMIN_REAPPLY_COOLDOWN_DAYS * 24
-        : config.REAPPLY_COOLDOWN_HOURS,
+    reapplyAfter: reapplyAfterGlobal,
+    baseCooldownHours: base,
     extraCooldownHours: config.EXTRA_COOLDOWN_HOURS,
-    recentRejections: appEntry
-      ? appEntry.history.filter(
-          h =>
-            h.status === STATUS.REJECTED &&
-            Date.now() - h.timestamp <=
-              config.REJECTION_HISTORY_WINDOW_HOURS * 3600 * 1000
-        ).length
-      : 0,
+    recentRejections: recentRej,
     rejectionsBeforeExtra: config.REJECTIONS_BEFORE_EXTRA_COOLDOWN
   });
 });
@@ -427,21 +488,55 @@ app.post('/api/apply', async (req, res) => {
   if (req.user) {
     const db = loadDb();
     const appType = req.body.type || 'whitelist'
-    const userApps = db.applications.filter(
-      a => a.userId === req.user.id && a.type === appType
-    )
+    const userApps = db.applications
+      .filter(a => a.userId === req.user.id && (a.type || 'whitelist') === appType)
+      .map(a => ({
+        ...a,
+        ts: a.history && a.history[0] ? a.history[0].timestamp : Number(a.id)
+      }))
+      .sort((a, b) => a.ts - b.ts)
+
     const latest = userApps[userApps.length - 1];
-    if (latest && latest.status !== STATUS.REJECTED) {
+    const hasApproved = userApps.some(a => a.status === STATUS.APPROVED);
+
+    if (hasApproved || (latest && latest.status !== STATUS.REJECTED)) {
+      const statusToSend = hasApproved
+        ? STATUS.APPROVED
+        : latest.status;
+      return res.status(400).json({ success: false, status: statusToSend });
+    }
+    const base =
+      appType === 'administrator' ||
+      appType === 'moderator' ||
+      appType === 'checker' ||
+      appType === 'developer'
+        ? config.ADMIN_REAPPLY_COOLDOWN_DAYS * 24
+        : appType === 'unban'
+          ? (latest?.data?.banDurationDays
+              ? latest.data.banDurationDays * 24 * config.UNBAN_COOLDOWN_PERCENT
+              : config.REAPPLY_COOLDOWN_HOURS)
+          : config.REAPPLY_COOLDOWN_HOURS;
+    const globalReapply = computeReapplyAfterForUser(
+      req.user.id,
+      appType,
+      db,
+      base
+    ) || 0;
+    if (latest && latest.status === STATUS.REJECTED && Date.now() < globalReapply) {
       return res
         .status(400)
-        .json({ success: false, status: latest.status });
+        .json({ success: false, status: latest.status, reapplyAfter: globalReapply });
     }
     if (latest && latest.status === STATUS.REJECTED) {
-      const reapplyAfter = latest.reapplyAfter || 0;
-      if (Date.now() < reapplyAfter) {
-        return res
-          .status(400)
-          .json({ success: false, status: latest.status, reapplyAfter });
+      // Archive the previous rejected application
+      if (!latest.archived) {
+        latest.archived = { timestamp: Date.now(), by: req.user.username };
+        latest.history = latest.history || [];
+        latest.history.push({
+          status: STATUS.ARCHIVED,
+          timestamp: Date.now(),
+          by: req.user.username
+        });
       }
     }
 
@@ -556,7 +651,12 @@ app.post('/api/admin/status', async (req, res) => {
               ? appEntry.data.banDurationDays * 24 * config.UNBAN_COOLDOWN_PERCENT
               : config.REAPPLY_COOLDOWN_HOURS)
           : config.REAPPLY_COOLDOWN_HOURS;
-    appEntry.reapplyAfter = computeReapplyAfter(appEntry.history, base);
+    appEntry.reapplyAfter = computeReapplyAfterForUser(
+      appEntry.userId,
+      appEntry.type || 'whitelist',
+      db,
+      base
+    );
   } else {
     delete appEntry.reapplyAfter;
   }
@@ -813,6 +913,46 @@ app.post('/api/admin/unarchive/:id', async (req, res) => {
     saveDb(db);
   }
 
+  res.json({ success: true });
+});
+
+// Permanently delete an application
+app.delete('/api/admin/applications/:id', async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ success: false });
+  }
+
+  let canDelete = false;
+  if (process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID) {
+    try {
+      const response = await fetch(
+        `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${req.user.id}`,
+        { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        const roles = data.roles || [];
+        canDelete =
+          roles.includes(process.env.OWNER_ROLE_ID || '') ||
+          roles.includes(process.env.WITCHER_ROLE_ID || '');
+      }
+    } catch (err) {
+      console.error('Failed to check delete roles', err);
+    }
+  }
+
+  if (!canDelete) {
+    return res.status(403).json({ success: false });
+  }
+
+  const db = loadDb();
+  const idx = db.applications.findIndex(a => a.id === req.params.id);
+  if (idx === -1) {
+    return res.status(404).json({ success: false });
+  }
+
+  db.applications.splice(idx, 1);
+  saveDb(db);
   res.json({ success: true });
 });
 
