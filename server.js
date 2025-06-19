@@ -365,9 +365,14 @@ app.get('/api/status', (req, res) => {
   const db = loadDb();
   autoArchiveOldApplications(db);
   const type = req.query.type || 'whitelist';
-  const appEntry = db.applications.find(
-    a => a.userId === req.user.id && a.type === type
+  const userApps = db.applications.filter(
+    a => a.userId === req.user.id && (a.type || 'whitelist') === type && !a.archived
   );
+  const appEntry = userApps.sort((a, b) => {
+    const tsA = a.history && a.history[0] ? a.history[0].timestamp : Number(a.id);
+    const tsB = b.history && b.history[0] ? b.history[0].timestamp : Number(b.id);
+    return tsB - tsA;
+  })[0];
   res.json({
     status: appEntry ? appEntry.status : null,
     rejectionReason: appEntry ? appEntry.rejectionReason || '' : '',
@@ -442,6 +447,16 @@ app.post('/api/apply', async (req, res) => {
         return res
           .status(400)
           .json({ success: false, status: latest.status, reapplyAfter });
+      }
+      // Archive the previous rejected application
+      if (!latest.archived) {
+        latest.archived = { timestamp: Date.now(), by: req.user.username };
+        latest.history = latest.history || [];
+        latest.history.push({
+          status: STATUS.ARCHIVED,
+          timestamp: Date.now(),
+          by: req.user.username
+        });
       }
     }
 
