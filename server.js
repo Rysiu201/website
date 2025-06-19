@@ -90,6 +90,31 @@ function computeReapplyAfter(
   return last.timestamp + cooldown * 3600 * 1000;
 }
 
+function computeReapplyAfterForUser(
+  userId,
+  type,
+  db,
+  baseHours = config.REAPPLY_COOLDOWN_HOURS
+) {
+  const allHistories = db.applications
+    .filter(a => a.userId === userId && (a.type || 'whitelist') === type)
+    .flatMap(a => a.history || []);
+  return computeReapplyAfter(allHistories, baseHours);
+}
+
+function countRecentRejections(userId, type, db) {
+  const now = Date.now();
+  const windowMs = config.REJECTION_HISTORY_WINDOW_HOURS * 3600 * 1000;
+  const allHistories = db.applications
+    .filter(a => a.userId === userId && (a.type || 'whitelist') === type)
+    .flatMap(a => a.history || []);
+  return allHistories.filter(
+    h =>
+      normalizeStatus(h.status) === STATUS.REJECTED &&
+      now - h.timestamp <= windowMs
+  ).length;
+}
+
 function autoArchiveOldApplications(db) {
   const WEEK = 7 * 24 * 3600 * 1000;
   const now = Date.now();
@@ -127,12 +152,17 @@ function recomputeAllReapplyAfter() {
       app.type === 'checker' ||
       app.type === 'developer'
         ? config.ADMIN_REAPPLY_COOLDOWN_DAYS * 24
-        : app.type === 'unban'
-          ? (app.data?.banDurationDays
-              ? app.data.banDurationDays * 24 * config.UNBAN_COOLDOWN_PERCENT
-              : config.REAPPLY_COOLDOWN_HOURS)
-          : config.REAPPLY_COOLDOWN_HOURS;
-    const newVal = computeReapplyAfter(app.history, base);
+      : app.type === 'unban'
+        ? (app.data?.banDurationDays
+            ? app.data.banDurationDays * 24 * config.UNBAN_COOLDOWN_PERCENT
+            : config.REAPPLY_COOLDOWN_HOURS)
+        : config.REAPPLY_COOLDOWN_HOURS;
+    const newVal = computeReapplyAfterForUser(
+      app.userId,
+      app.type || 'whitelist',
+      db,
+      base
+    );
     if (newVal) {
       if (app.reapplyAfter !== newVal) {
         app.reapplyAfter = newVal;
@@ -373,28 +403,33 @@ app.get('/api/status', (req, res) => {
     const tsB = b.history && b.history[0] ? b.history[0].timestamp : Number(b.id);
     return tsB - tsA;
   })[0];
+  const base =
+    type === 'administrator' ||
+    type === 'moderator' ||
+    type === 'checker' ||
+    type === 'developer'
+      ? config.ADMIN_REAPPLY_COOLDOWN_DAYS * 24
+      : type === 'unban'
+        ? (appEntry?.data?.banDurationDays
+            ? appEntry.data.banDurationDays * 24 * config.UNBAN_COOLDOWN_PERCENT
+            : config.REAPPLY_COOLDOWN_HOURS)
+        : config.REAPPLY_COOLDOWN_HOURS;
+  const reapplyAfterGlobal = computeReapplyAfterForUser(
+    req.user.id,
+    type,
+    db,
+    base
+  );
+  const recentRej = countRecentRejections(req.user.id, type, db);
   res.json({
     status: appEntry ? appEntry.status : null,
     rejectionReason: appEntry ? appEntry.rejectionReason || '' : '',
     history: appEntry ? appEntry.history || [] : [],
     archived: appEntry ? appEntry.archived || null : null,
-    reapplyAfter: appEntry ? appEntry.reapplyAfter || null : null,
-    baseCooldownHours:
-      type === 'administrator' ||
-      type === 'moderator' ||
-      type === 'checker' ||
-      type === 'developer'
-        ? config.ADMIN_REAPPLY_COOLDOWN_DAYS * 24
-        : config.REAPPLY_COOLDOWN_HOURS,
+    reapplyAfter: reapplyAfterGlobal,
+    baseCooldownHours: base,
     extraCooldownHours: config.EXTRA_COOLDOWN_HOURS,
-    recentRejections: appEntry
-      ? appEntry.history.filter(
-          h =>
-            h.status === STATUS.REJECTED &&
-            Date.now() - h.timestamp <=
-              config.REJECTION_HISTORY_WINDOW_HOURS * 3600 * 1000
-        ).length
-      : 0,
+    recentRejections: recentRej,
     rejectionsBeforeExtra: config.REJECTIONS_BEFORE_EXTRA_COOLDOWN
   });
 });
@@ -441,12 +476,38 @@ app.post('/api/apply', async (req, res) => {
         .status(400)
         .json({ success: false, status: latest.status });
     }
+    const base =
+      appType === 'administrator' ||
+      appType === 'moderator' ||
+      appType === 'checker' ||
+      appType === 'developer'
+        ? config.ADMIN_REAPPLY_COOLDOWN_DAYS * 24
+        : appType === 'unban'
+          ? (latest?.data?.banDurationDays
+              ? latest.data.banDurationDays * 24 * config.UNBAN_COOLDOWN_PERCENT
+              : config.REAPPLY_COOLDOWN_HOURS)
+          : config.REAPPLY_COOLDOWN_HOURS;
+    const globalReapply = computeReapplyAfterForUser(
+      req.user.id,
+      appType,
+      db,
+      base
+    ) || 0;
+    if (latest && latest.status === STATUS.REJECTED && Date.now() < globalReapply) {
+      return res
+        .status(400)
+        .json({ success: false, status: latest.status, reapplyAfter: globalReapply });
+    }
     if (latest && latest.status === STATUS.REJECTED) {
-      const reapplyAfter = latest.reapplyAfter || 0;
-      if (Date.now() < reapplyAfter) {
-        return res
-          .status(400)
-          .json({ success: false, status: latest.status, reapplyAfter });
+      // Archive the previous rejected application
+      if (!latest.archived) {
+        latest.archived = { timestamp: Date.now(), by: req.user.username };
+        latest.history = latest.history || [];
+        latest.history.push({
+          status: STATUS.ARCHIVED,
+          timestamp: Date.now(),
+          by: req.user.username
+        });
       }
       // Archive the previous rejected application
       if (!latest.archived) {
@@ -571,7 +632,12 @@ app.post('/api/admin/status', async (req, res) => {
               ? appEntry.data.banDurationDays * 24 * config.UNBAN_COOLDOWN_PERCENT
               : config.REAPPLY_COOLDOWN_HOURS)
           : config.REAPPLY_COOLDOWN_HOURS;
-    appEntry.reapplyAfter = computeReapplyAfter(appEntry.history, base);
+    appEntry.reapplyAfter = computeReapplyAfterForUser(
+      appEntry.userId,
+      appEntry.type || 'whitelist',
+      db,
+      base
+    );
   } else {
     delete appEntry.reapplyAfter;
   }
