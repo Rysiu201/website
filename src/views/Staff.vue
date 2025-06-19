@@ -42,12 +42,12 @@ const teamMembers = ref([
   },
   {
     id: 2,
-    name: '9K',
-    role: 'Opiekun Społeczności',
-    bio: 'Odpowiada za relacje ze społecznością, planowanie eventów i dba o pozytywne doświadczenia graczy.',
+    name: 'TheSzatan',
+    role: 'Strażnik Równowagi Społeczności',
+    bio: 'Nie rzuca się w oczy, ale wszystko widzi. Gdy cisza staje się zbyt podejrzana, pojawia się — nieproszona, ale potrzebna. Balansuje między emocjami graczy, atmosferą serwera i cieniem dram. Tam, gdzie Owner decyduje, ona przewiduje skutki. Tam, gdzie Witcher rzuca znak Aksji, TheSzatan łapie reakcje. Nie po to, by rządzić. Po to, by działało.',
     image: logoImage,
     status: 'Online',
-    discord: 'Sarah.W#5678',
+    discord: 'theszatan',
     socialLinks: {
       discord: '#',
       tiktok: '#'
@@ -55,12 +55,25 @@ const teamMembers = ref([
   },
   {
     id: 3,
-    name: '9K',
-    role: 'Starszy Administrator',
-    bio: 'Nadzoruje moderację, przyjmuje zgłoszenia graczy i pilnuje przestrzegania zasad dla uczciwej rozgrywki.',
+    name: 'Wiewior',
+    role: 'Strażnik Równowagi i Porządku',
+    bio: 'Pojawia się wtedy, gdy granica między chaosem a spokojem zaczyna się zacierać. Milczy więcej, niż mówi, ale jedno jego słowo potrafi zakończyć burzę. Zna serwer jak las, przez który przechodzi się tylko z szacunkiem. Gdy trzeba — usuwa toksynę. Gdy można — daje drugą szansę. Nie szuka konfliktów. Ale jeśli przyjdą — jest gotów.',
     image: logoImage,
     status: 'Away',
-    discord: 'MikeC#9012',
+    discord: 'wiewior23',
+    socialLinks: {
+      discord: '#',
+      instagram: '#'
+    }
+  },
+  {
+    id: 3,
+    name: 'Andrzej',
+    role: 'Strażnik Równowagi i Porządku',
+    bio: 'Ten, który widzi więcej, Andrzej nie administruje — on czuwa. Nad flow, nad sprawiedliwością, nad ludźmi. Nie zawsze go widać, ale jego obecność czuć w decyzjach, które porządkują świat. Gdy regulamin przestaje wystarczać, to jego intuicja prowadzi. Nie każdy bohater nosi miecz. On nosi świadomość i odpowiedzialność.',
+    image: logoImage,
+    status: 'Offline',
+    discord: '.andrzej',
     socialLinks: {
       discord: '#',
       instagram: '#'
