@@ -527,6 +527,28 @@ app.post('/api/apply', async (req, res) => {
         .status(400)
         .json({ success: false, status: latest.status, reapplyAfter: globalReapply });
     }
+    const base =
+      appType === 'administrator' ||
+      appType === 'moderator' ||
+      appType === 'checker' ||
+      appType === 'developer'
+        ? config.ADMIN_REAPPLY_COOLDOWN_DAYS * 24
+        : appType === 'unban'
+          ? (latest?.data?.banDurationDays
+              ? latest.data.banDurationDays * 24 * config.UNBAN_COOLDOWN_PERCENT
+              : config.REAPPLY_COOLDOWN_HOURS)
+          : config.REAPPLY_COOLDOWN_HOURS;
+    const globalReapply = computeReapplyAfterForUser(
+      req.user.id,
+      appType,
+      db,
+      base
+    ) || 0;
+    if (latest && latest.status === STATUS.REJECTED && Date.now() < globalReapply) {
+      return res
+        .status(400)
+        .json({ success: false, status: latest.status, reapplyAfter: globalReapply });
+    }
     if (latest && latest.status === STATUS.REJECTED) {
       // Archive the previous rejected application
       if (!latest.archived) {
