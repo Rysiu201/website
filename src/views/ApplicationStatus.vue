@@ -68,7 +68,7 @@
       <div v-if="rejectedHistory.length && appType !== 'unban'" class="history">
         <h2>Historia podań</h2>
         <ul>
-          <li v-for="(h, idx) in rejectedHistory" :key="idx">
+          <li v-for="(h, idx) in limitedHistory" :key="idx">
             {{ formatHistory(h) }}
           </li>
         </ul>
@@ -283,6 +283,10 @@ const rejectionsBeforeExtra = ref(0)
 const rejectedHistory = computed(() =>
   history.value.filter(h => h.status === statuses.REJECTED)
 )
+const limitedHistory = computed(() => {
+  const arr = rejectedHistory.value
+  return arr.slice(-Math.min(3, arr.length))
+})
 const cooldownText = computed(() => {
   if (
     appType.value === 'administrator' ||
