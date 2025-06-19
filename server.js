@@ -404,9 +404,12 @@ app.get('/api/status', (req, res) => {
     }))
     .sort((a, b) => a.ts - b.ts);
 
-  const appEntry = [...allApps]
+  let appEntry = [...allApps]
     .filter(a => !a.archived)
     .sort((a, b) => b.ts - a.ts)[0];
+  if (!appEntry && allApps.length) {
+    appEntry = allApps[allApps.length - 1];
+  }
 
   const historyCombined = allApps
     .flatMap(a => a.history || [])
@@ -476,9 +479,13 @@ app.post('/api/apply', async (req, res) => {
   if (req.user) {
     const db = loadDb();
     const appType = req.body.type || 'whitelist'
-    const userApps = db.applications.filter(
-      a => a.userId === req.user.id && a.type === appType
-    )
+    const userApps = db.applications
+      .filter(a => a.userId === req.user.id && a.type === appType)
+      .map(a => ({
+        ...a,
+        ts: a.history && a.history[0] ? a.history[0].timestamp : Number(a.id)
+      }))
+      .sort((a, b) => a.ts - b.ts)
     const latest = userApps[userApps.length - 1];
     if (latest && latest.status !== STATUS.REJECTED) {
       return res
