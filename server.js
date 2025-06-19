@@ -404,11 +404,20 @@ app.get('/api/status', (req, res) => {
     }))
     .sort((a, b) => a.ts - b.ts);
 
+  // Prefer any approved application even if archived so users retain
+  // their positive status permanently
+  const approvedEntry = [...allApps]
+    .filter(a => a.status === STATUS.APPROVED)
+    .sort((a, b) => b.ts - a.ts)[0];
+
   let appEntry = [...allApps]
     .filter(a => !a.archived)
     .sort((a, b) => b.ts - a.ts)[0];
   if (!appEntry && allApps.length) {
     appEntry = allApps[allApps.length - 1];
+  }
+  if (approvedEntry && (!appEntry || approvedEntry.ts > appEntry.ts)) {
+    appEntry = approvedEntry;
   }
 
   const historyCombined = allApps
@@ -480,17 +489,43 @@ app.post('/api/apply', async (req, res) => {
     const db = loadDb();
     const appType = req.body.type || 'whitelist'
     const userApps = db.applications
-      .filter(a => a.userId === req.user.id && a.type === appType)
+      .filter(a => a.userId === req.user.id && (a.type || 'whitelist') === appType)
       .map(a => ({
         ...a,
         ts: a.history && a.history[0] ? a.history[0].timestamp : Number(a.id)
       }))
       .sort((a, b) => a.ts - b.ts)
+
     const latest = userApps[userApps.length - 1];
-    if (latest && latest.status !== STATUS.REJECTED) {
+    const hasApproved = userApps.some(a => a.status === STATUS.APPROVED);
+
+    if (hasApproved || (latest && latest.status !== STATUS.REJECTED)) {
+      const statusToSend = hasApproved
+        ? STATUS.APPROVED
+        : latest.status;
+      return res.status(400).json({ success: false, status: statusToSend });
+    }
+    const base =
+      appType === 'administrator' ||
+      appType === 'moderator' ||
+      appType === 'checker' ||
+      appType === 'developer'
+        ? config.ADMIN_REAPPLY_COOLDOWN_DAYS * 24
+        : appType === 'unban'
+          ? (latest?.data?.banDurationDays
+              ? latest.data.banDurationDays * 24 * config.UNBAN_COOLDOWN_PERCENT
+              : config.REAPPLY_COOLDOWN_HOURS)
+          : config.REAPPLY_COOLDOWN_HOURS;
+    const globalReapply = computeReapplyAfterForUser(
+      req.user.id,
+      appType,
+      db,
+      base
+    ) || 0;
+    if (latest && latest.status === STATUS.REJECTED && Date.now() < globalReapply) {
       return res
         .status(400)
-        .json({ success: false, status: latest.status });
+        .json({ success: false, status: latest.status, reapplyAfter: globalReapply });
     }
     const base =
       appType === 'administrator' ||
