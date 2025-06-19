@@ -2,6 +2,7 @@
   <main class="admin-page">
     <h1 class="section-title"><span class="accent">Panel Administracyjny</span></h1>
     <div class="admin-layout">
+      <!-- Rekrutacja -->
       <div class="admin-column">
         <h2 class="column-title"><span class="accent">Rekrutacja</span></h2>
         <RouterLink
@@ -9,42 +10,39 @@
           v-if="canViewWhitelist"
           to="/admin/applications"
         >
-          <i class="fa-solid fa-clipboard-check"></i>
-          <span>Sprawdź podania na WhiteListe</span>
+          <span class="emoji-airplane">🛬</span> Sprawdź podania na WhiteListe
         </RouterLink>
         <RouterLink
           class="admin-section"
           v-if="canViewWhitelistChecker"
           to="/admin/checker-applications"
         >
-          <i class="fa-solid fa-user-check"></i>
-          <span>Sprawdź podania na WhiteListCheckera</span>
+          <span class="emoji-scroll">📜</span> Sprawdź podania na WhiteListCheckera
         </RouterLink>
         <RouterLink
           class="admin-section"
           v-if="canViewModerator"
           to="/admin/moderator-applications"
         >
-          <i class="fa-solid fa-shield"></i>
-          <span>Sprawdź podania na Moderatora</span>
+          <span class="emoji-telephone">☎️</span> Sprawdź podania na Moderatora
         </RouterLink>
         <RouterLink
           class="admin-section"
           v-if="canViewAdministrator"
           to="/admin/administrator-applications"
         >
-          <i class="fa-solid fa-user-shield"></i>
-          <span>Sprawdź podania na Administratora</span>
+          <span class="emoji-scales">⚖️</span> Sprawdź podania na Administratora
         </RouterLink>
         <RouterLink
           class="admin-section"
           v-if="canViewDeveloper"
           to="/admin/developer-applications"
         >
-          <i class="fa-solid fa-code"></i>
-          <span>Sprawdź podania na Developera</span>
+          <span class="emoji-gear">⚙️</span> Sprawdź podania na Developera
         </RouterLink>
       </div>
+
+      <!-- Specjalne -->
       <div class="admin-column">
         <h2 class="column-title"><span class="accent">Specjalne</span></h2>        
         <RouterLink
@@ -52,23 +50,21 @@
           v-if="canViewWitcher"
           to="/admin/witcher"
         >
-          <i class="fa-solid fa-hat-wizard"></i>
-          <span>The Witcher</span>
+          <span class="emoji-witcher">🐺</span> The Witcher
         </RouterLink>
         <RouterLink class="admin-section" to="/admin/archived">
-          <i class="fa-solid fa-box-archive"></i>
-          <span>Zaarchiwizowane podania</span>
+          <span class="emoji-file">📜</span> Zaarchiwizowane podania
         </RouterLink>
       </div>
+
+      <!-- Zarządzanie -->
       <div class="admin-column">
         <h2 class="column-title"><span class="accent">Zarządzanie</span></h2>
         <RouterLink class="admin-section" to="/admin/player-notes">
-          <i class="fa-solid fa-note-sticky"></i>
-          <span>Notatki o graczach</span>
+          <span class="emoji-index">📇</span> Notatki o graczach
         </RouterLink>
         <RouterLink class="admin-section" to="/admin/unban">
-          <i class="fa-solid fa-ban"></i>
-          <span>Wnioski o odbanowanie</span>
+          <span class="emoji-postbox">📮</span> Wnioski o odbanowanie
         </RouterLink>
       </div>
     </div>
@@ -106,33 +102,35 @@ const canViewWhitelist = computed(
   () =>
     hasRole(ROLE_IDS.MANAGEMENT) ||
     hasRole(ROLE_IDS.COMMUNITY_MANAGER) ||
-    hasRole(ROLE_IDS.WHITELIST_CHECKER)
+    hasRole(ROLE_IDS.WHITELIST_CHECKER) ||
+    hasRole(ROLE_IDS.ADMIN)
 )
 
 const canViewWhitelistChecker = computed(
   () =>
     hasRole(ROLE_IDS.MANAGEMENT) ||
     hasRole(ROLE_IDS.COMMUNITY_MANAGER) ||
-    hasRole(ROLE_IDS.MODERATOR)
+    hasRole(ROLE_IDS.MODERATOR)||
+    hasRole(ROLE_IDS.ADMIN)
 )
 
 const canViewModerator = computed(
   () =>
     hasRole(ROLE_IDS.MANAGEMENT) ||
-    hasRole(ROLE_IDS.COMMUNITY_MANAGER)
+    hasRole(ROLE_IDS.COMMUNITY_MANAGER) ||
+    hasRole(ROLE_IDS.ADMIN)
 )
 
 const canViewAdministrator = computed(
   () =>
-    hasRole(ROLE_IDS.MANAGEMENT) ||
-    hasRole(ROLE_IDS.COMMUNITY_MANAGER)
+    hasRole(ROLE_IDS.MANAGEMENT)
 )
 
 const canViewDeveloper = computed(
   () =>
     hasRole(ROLE_IDS.OWNER) ||
-    hasRole(ROLE_IDS.DEVELOPER) ||
-    hasRole(ROLE_IDS.COMMUNITY_MANAGER)
+    hasRole(ROLE_IDS.COMMUNITY_MANAGER) ||
+    hasRole(ROLE_IDS.MANAGEMENT)
 )
 
 const canViewWitcher = computed(

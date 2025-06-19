@@ -75,7 +75,7 @@
           <div class="reminder-content">
             <h3>Pamiętaj</h3>
             <p>Dołączając do serwera, akceptujesz obowiązujące zasady. Ich łamanie może skutkować ostrzeżeniem, czasowym banem lub permanentnym usunięciem z serwera. Decyzje administracji są ostateczne — ale zawsze możesz złożyć odwołanie na naszym Discordzie.</p>
-            <a href="#" class="discord-button" data-aos="zoom-in" data-aos-delay="400">
+            <a href="https://discord.gg/DHGnYvvsEt" class="discord-button" data-aos="zoom-in" data-aos-delay="400">
               <i class="fa-brands fa-discord"></i> Dołącz do naszego discorda
             </a>
           </div>

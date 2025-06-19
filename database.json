@@ -88,7 +88,7 @@
         "type": "whitelist"
       },
       "type": "whitelist",
-      "status": "Pozytywnie",
+      "status": "Negatywnie",
       "history": [
         {
           "status": "Wysłane",
@@ -104,12 +104,18 @@
           "status": "Pozytywnie",
           "timestamp": 1750240816813,
           "by": "rysiu201"
+        },
+        {
+          "status": "Negatywnie",
+          "timestamp": 1750296941385,
+          "by": "rysiu201"
         }
       ],
-      "rejectionReason": "",
+      "rejectionReason": "dasd",
       "adminNotes": "",
       "interviewNotes": "",
-      "archived": null
+      "archived": null,
+      "reapplyAfter": 1750296941385
     },
     {
       "id": "1750238531885",
@@ -270,7 +276,7 @@
         ]
       },
       "type": "administrator",
-      "status": "Pozytywnie",
+      "status": "Negatywnie",
       "history": [
         {
           "status": "Wysłane",
@@ -285,6 +291,338 @@
         {
           "status": "Pozytywnie",
           "timestamp": 1750240857065,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Negatywnie",
+          "timestamp": 1750248027931,
+          "by": "rysiu201"
+        }
+      ],
+      "rejectionReason": "asd",
+      "adminNotes": "",
+      "interviewNotes": "",
+      "archived": null,
+      "reapplyAfter": 1750852827931
+    },
+    {
+      "id": "1750244504162",
+      "userId": "168511895848878080",
+      "data": {
+        "ic": {
+          "name": "Test Stetowy Pierwszy",
+          "age": 12,
+          "story": "asd",
+          "personality": "asd",
+          "skills": "asd",
+          "motivation": "asd"
+        },
+        "ooc": {
+          "discord": ".andrzej#168511895848878080",
+          "experience": "asd",
+          "knowsRules": false
+        },
+        "scenarios": [
+          "asd",
+          "asd",
+          "asd",
+          "asd",
+          "asd"
+        ],
+        "questions": [
+          "Podaj przykład łamania zasady Fail RP.",
+          "Gracz używa voice chatu, by przekazać coś spoza gry – jak powinieneś zareagować?",
+          "Masz 2 postacie – czy mogą się znać lub współpracować?",
+          "Co oznacza skrót NVL i jak rozumiesz jego zastosowanie?",
+          "Czy Twoja postać może rozpoznać kogoś tylko po ubraniu i masce?"
+        ],
+        "consents": {
+          "data": true,
+          "rules": true,
+          "truth": true
+        },
+        "extra": {
+          "portfolio": "asd",
+          "faction": "asd"
+        },
+        "type": "whitelist"
+      },
+      "type": "whitelist",
+      "status": "Negatywnie",
+      "history": [
+        {
+          "status": "Wysłane",
+          "timestamp": 1750244504162,
+          "by": ".andrzej"
+        },
+        {
+          "status": "Przyjęte, oczekuje na rozpatrzenie",
+          "timestamp": 1750244699951,
+          "by": ".andrzej"
+        },
+        {
+          "status": "W trakcie rozpatrywania",
+          "timestamp": 1750244706189,
+          "by": ".andrzej"
+        },
+        {
+          "status": "Pozytywnie",
+          "timestamp": 1750244727059,
+          "by": ".andrzej"
+        },
+        {
+          "status": "Negatywnie",
+          "timestamp": 1750244737958,
+          "by": ".andrzej"
+        }
+      ],
+      "rejectionReason": "asdasdasda",
+      "adminNotes": "asdasd",
+      "interviewNotes": "asdasd",
+      "archived": null,
+      "reapplyAfter": 1750244737958
+    },
+    {
+      "id": "1750244610755",
+      "userId": "168511895848878080",
+      "data": {
+        "discord": ".andrzej#168511895848878080",
+        "serverTime": "asd",
+        "verificationExp": "asd",
+        "differentiate": "asd",
+        "reviewFocus": "asd",
+        "goodRp": "asd",
+        "workload": "asd",
+        "doubts": "asd",
+        "teamwork": "asd",
+        "consentData": true,
+        "consentDuties": true,
+        "consentTruth": true,
+        "type": "checker"
+      },
+      "type": "checker",
+      "status": "Pozytywnie",
+      "history": [
+        {
+          "status": "Wysłane",
+          "timestamp": 1750244610755,
+          "by": ".andrzej"
+        },
+        {
+          "status": "Przyjęte, oczekuje na rozpatrzenie",
+          "timestamp": 1750244786912,
+          "by": ".andrzej"
+        },
+        {
+          "status": "W trakcie rozpatrywania",
+          "timestamp": 1750244776126,
+          "by": ".andrzej"
+        },
+        {
+          "status": "Pozytywnie",
+          "timestamp": 1750244818464,
+          "by": ".andrzej"
+        }
+      ],
+      "rejectionReason": "",
+      "adminNotes": "asdasdasdasd",
+      "interviewNotes": "asdasdasdasd",
+      "archived": null
+    },
+    {
+      "id": "1750244642819",
+      "userId": "168511895848878080",
+      "data": {
+        "discord": ".andrzej#168511895848878080",
+        "age": 123,
+        "serverTime": "asd",
+        "activeTime": "asd",
+        "moderatorExp": "asd",
+        "motivation": "asd",
+        "strengths": "asd",
+        "provocation": "asd",
+        "lolReport": "asd",
+        "realProblem": "asd",
+        "randomAnswer": "asd",
+        "teamwork": "asd",
+        "escalation": "asd",
+        "neutrality": "asd",
+        "consentData": true,
+        "consentDuties": true,
+        "consentTruth": true,
+        "scenario": "Gracz oznacza właściciela bez powodu, mimo ostrzeżeń.",
+        "type": "moderator"
+      },
+      "type": "moderator",
+      "status": "Negatywnie",
+      "history": [
+        {
+          "status": "Wysłane",
+          "timestamp": 1750244642819,
+          "by": ".andrzej"
+        },
+        {
+          "status": "Przyjęte, oczekuje na rozpatrzenie",
+          "timestamp": 1750244899497,
+          "by": ".andrzej"
+        },
+        {
+          "status": "W trakcie rozpatrywania",
+          "timestamp": 1750244859552,
+          "by": ".andrzej"
+        },
+        {
+          "status": "Pozytywnie",
+          "timestamp": 1750244874452,
+          "by": ".andrzej"
+        },
+        {
+          "status": "Negatywnie",
+          "timestamp": 1750244921764,
+          "by": ".andrzej"
+        }
+      ],
+      "rejectionReason": "asd",
+      "adminNotes": "asdasd",
+      "interviewNotes": "asdasd",
+      "archived": null,
+      "reapplyAfter": 1750849721764
+    },
+    {
+      "id": "1750244663176",
+      "userId": "168511895848878080",
+      "data": {
+        "discord": ".andrzej#168511895848878080",
+        "languages": "asd",
+        "fivemExp": "asd",
+        "workOrg": "asd",
+        "proudProject": "asd",
+        "bugResponse": "asd",
+        "requirements": "asd",
+        "interests": "asd",
+        "testing": "asd",
+        "portfolio": "asd",
+        "consentData": true,
+        "consentDuties": true,
+        "consentTruth": true,
+        "type": "developer"
+      },
+      "type": "developer",
+      "status": "Wysłane",
+      "history": [
+        {
+          "status": "Wysłane",
+          "timestamp": 1750244663176,
+          "by": ".andrzej"
+        }
+      ],
+      "rejectionReason": "",
+      "adminNotes": "",
+      "interviewNotes": "",
+      "archived": null
+    },
+    {
+      "id": "1750244684536",
+      "userId": "168511895848878080",
+      "data": {
+        "discord": ".andrzej#168511895848878080",
+        "steamId": "asd",
+        "serverNick": "asd",
+        "banDate": "1212-12-12",
+        "bannedBy": "asd",
+        "banReason": "asd",
+        "banDurationDays": 12,
+        "events": "asd",
+        "admit": "asd",
+        "change": "asd",
+        "evidence": "asd",
+        "notes": "asd",
+        "consentTruth": true,
+        "consentRules": true,
+        "type": "unban"
+      },
+      "type": "unban",
+      "status": "Pozytywnie",
+      "history": [
+        {
+          "status": "Wysłane",
+          "timestamp": 1750244684536,
+          "by": ".andrzej"
+        },
+        {
+          "status": "Przyjęte, oczekuje na rozpatrzenie",
+          "timestamp": 1750244949100,
+          "by": ".andrzej"
+        },
+        {
+          "status": "Pozytywnie",
+          "timestamp": 1750245019777,
+          "by": ".andrzej"
+        },
+        {
+          "status": "W trakcie rozpatrywania",
+          "timestamp": 1750244967866,
+          "by": ".andrzej"
+        }
+      ],
+      "rejectionReason": "",
+      "adminNotes": "asdasd",
+      "interviewNotes": "asdasd",
+      "archived": null
+    },
+    {
+      "id": "1750297075657",
+      "userId": "296362977349730305",
+      "data": {
+        "ic": {
+          "name": "das",
+          "age": 123,
+          "story": "asd",
+          "personality": "das",
+          "skills": "asd",
+          "motivation": "asd"
+        },
+        "ooc": {
+          "discord": "rysiu201#296362977349730305",
+          "experience": "das",
+          "knowsRules": false
+        },
+        "scenarios": [
+          "asd",
+          "asd",
+          "asd",
+          "asd",
+          "asd"
+        ],
+        "questions": [
+          "W jaki sposób zgłaszasz łamanie zasad, jeśli nie chcesz eskalować konfliktu?",
+          "Masz 3 osoby celujące do Ciebie z broni – co robisz i jak to odgrywasz?",
+          "Czy możesz przywrócić swoją postać po permie, jeśli „umarła przypadkiem”?",
+          "Podaj przykład łamania zasady Fail RP.",
+          "Podaj przykład zachowania, które uznajesz za powergaming."
+        ],
+        "consents": {
+          "data": true,
+          "rules": true,
+          "truth": true
+        },
+        "extra": {
+          "portfolio": "",
+          "faction": "dsa"
+        },
+        "type": "whitelist"
+      },
+      "type": "whitelist",
+      "status": "Przyjęte, oczekuje na rozpatrzenie",
+      "history": [
+        {
+          "status": "Wysłane",
+          "timestamp": 1750297075657,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Przyjęte, oczekuje na rozpatrzenie",
+          "timestamp": 1750297115479,
           "by": "rysiu201"
         }
       ],

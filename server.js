@@ -293,6 +293,43 @@ app.get('/api/user', async (req, res) => {
   res.json({ user, roles, isAdmin });
 });
 
+// Return avatar and status for a specific Discord user
+app.get('/api/team-member/:id', async (req, res) => {
+  if (!process.env.DISCORD_BOT_TOKEN) {
+    return res.status(500).json({ avatar: null, status: 'offline' });
+  }
+
+  try {
+    const userRes = await fetch(`https://discord.com/api/users/${req.params.id}`, {
+      headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` }
+    });
+    let avatar = null;
+    if (userRes.ok) {
+      const userData = await userRes.json();
+      if (userData.avatar) {
+        avatar = `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`;
+      }
+    }
+
+    let status = 'offline';
+    if (process.env.DISCORD_GUILD_ID) {
+      const memberRes = await fetch(
+        `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${req.params.id}`,
+        { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
+      );
+      if (memberRes.ok) {
+        const memberData = await memberRes.json();
+        status = memberData?.presence?.status || status;
+      }
+    }
+
+    res.json({ avatar, status });
+  } catch (err) {
+    console.error('Failed to fetch team member', err);
+    res.status(500).json({ avatar: null, status: 'offline' });
+  }
+});
+
 // Provide a consistent set of questions for each authenticated user
 app.get('/api/questions', (req, res) => {
   if (!req.user) {
@@ -908,10 +945,7 @@ app.post('/api/admin/witcher-settings', async (req, res) => {
   const fileContent =
     'export default ' + JSON.stringify(config, null, 2) + '\n';
   fs.writeFileSync(configPath, fileContent);
-<<<<<<< 2dknpw-codex/add-time-variable-table-and-editor
   recomputeAllReapplyAfter();
-=======
->>>>>>> main
   res.json({ success: true, settings: { ...config } });
 });
 
