@@ -19,9 +19,23 @@ const scrollSlider = (direction: number) => {
 
 const backgroundImageUrl = ref(backgroundImage);
 
+const loadDiscordInfo = async (member: any) => {
+  try {
+    const res = await fetch(`/api/team-member/${member.discordId}`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.avatar) member.image = data.avatar;
+      if (data.status) member.status = data.status.charAt(0).toUpperCase() + data.status.slice(1);
+    }
+  } catch (err) {
+    console.error('Failed to load Discord info', err);
+  }
+};
+
 onMounted(() => {
   // 重新初始化AOS
   AOS.refresh();
+  teamMembers.value.forEach(m => m.discordId && loadDiscordInfo(m));
 });
 
 // Team members data - 只保留三位成员
@@ -32,8 +46,9 @@ const teamMembers = ref([
     role: 'Właściciel Serwera i Główny Developer',
     bio: 'Typ od wszystkiego — od pisania kodu, przez poprawki bugów, po tworzenie eventów i ogarnianie całego serwera. Głowa projektu, która nie śpi, bo zawsze coś trzeba dopisać albo zoptymalizować. Lubi jak działa szybko, stabilnie i z klimatem. Na serwerze dba o jakość, balans i to, żeby graczom się po prostu dobrze grało.',
     image: logoImage,
-    status: 'Online',
+    status: 'Offline',
     discord: 'rysiu201',
+    discordId: '000000000000000001',
     socialLinks: {
       discord: '#',
       tiktok: '#',
@@ -67,7 +82,7 @@ const teamMembers = ref([
     }
   },
   {
-    id: 3,
+    id: 4,
     name: 'Andrzej',
     role: 'Strażnik Równowagi i Porządku',
     bio: 'Ten, który widzi więcej, Andrzej nie administruje — on czuwa. Nad flow, nad sprawiedliwością, nad ludźmi. Nie zawsze go widać, ale jego obecność czuć w decyzjach, które porządkują świat. Gdy regulamin przestaje wystarczać, to jego intuicja prowadzi. Nie każdy bohater nosi miecz. On nosi świadomość i odpowiedzialność.',
