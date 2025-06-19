@@ -412,6 +412,7 @@ const teamMembers = ref([
   display: flex;
   align-items: center;
   gap: 1rem;
+  overflow-x: hidden;
 }
 
 .team-grid {
@@ -419,6 +420,8 @@ const teamMembers = ref([
   overflow-x: auto;
   scroll-behavior: smooth;
   gap: 2rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .team-grid::-webkit-scrollbar {
@@ -448,7 +451,7 @@ const teamMembers = ref([
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
   padding: 2rem 1.5rem;
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease-in-out;
   flex: 0 0 calc(33.333% - 2rem);
 }
 
