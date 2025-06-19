@@ -436,6 +436,13 @@
         >
           <i class="fa-solid fa-box-open"></i> Przywróć zgłoszenie
         </button>
+        <button
+          v-if="canDelete"
+          @click="deleteApplication"
+          class="delete-btn"
+        >
+          <i class="fa-solid fa-trash"></i> Usuń podanie
+        </button>
         <p v-if="updateMessage" class="update-msg">{{ updateMessage }}</p>
       </div>
       <div v-if="app && app.status === statuses.APPROVED" class="notes-box">
@@ -491,7 +498,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
-import { useRoute, RouterLink } from 'vue-router'
+import { useRoute, useRouter, RouterLink } from 'vue-router'
 
 interface Application {
   id: string
@@ -509,6 +516,8 @@ interface Application {
 const route = useRoute()
 const app = ref<Application | null>(null)
 const currentUser = ref<any>(null)
+const roles = ref<string[]>([])
+const router = useRouter()
 
 const backPath = computed(() => {
   const map: Record<string, string> = {
@@ -548,11 +557,25 @@ const decisionOptions = {
   REJECTED: statuses.REJECTED
 }
 
+const ROLE_IDS = {
+  OWNER: import.meta.env.VITE_OWNER_ROLE_ID,
+  WITCHER: import.meta.env.VITE_WITCHER_ROLE_ID
+}
+
+function hasRole(roleId?: string) {
+  return roleId ? roles.value.includes(roleId) : false
+}
+
+const canDelete = computed(
+  () => hasRole(ROLE_IDS.OWNER) || hasRole(ROLE_IDS.WITCHER)
+)
+
 onMounted(async () => {
   const userRes = await fetch('/api/user', { credentials: 'include' })
   if (userRes.ok) {
     const userData = await userRes.json()
     currentUser.value = userData.user
+    roles.value = userData.roles || []
   }
 
   const res = await fetch(`/api/admin/applications/${route.params.id}`, { credentials: 'include' })
@@ -699,6 +722,16 @@ async function unarchive() {
   }
 }
 
+async function deleteApplication() {
+  if (!app.value) return
+  if (!window.confirm('Czy na pewno chcesz usunąć to podanie?')) return
+  await fetch(`/api/admin/applications/${app.value.id}`, {
+    method: 'DELETE',
+    credentials: 'include'
+  })
+  router.push(backPath.value)
+}
+
 const decisionInfo = computed(() => {
   if (!app.value?.history) return ''
   const latest = [...app.value.history].reverse()
@@ -842,6 +875,17 @@ const decisionInfo = computed(() => {
   color: #fff;
   cursor: pointer;
   border-radius: 4px;
+}
+.delete-btn {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid transparent;
+  background: rgba(255, 80, 80, 0.3);
+  color: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.delete-btn:hover {
+  background: rgba(255, 80, 80, 0.5);
 }
 .archive-btn.top-right {
   position: absolute;
