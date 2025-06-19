@@ -4,18 +4,21 @@
       <i class="fa-solid fa-arrow-left"></i> Powrót
     </RouterLink>
     <h1 class="section-title"><span class="accent">Pytania</span></h1>
-    <select v-model="activeType" class="type-select">
-      <option v-for="(label, type) in labels" :key="type" :value="type">
-        {{ label }}
-      </option>
-    </select>
-    <div class="actions">
-      <button v-if="!editing" class="edit-btn" @click="editing = true">Edytuj</button>
-      <button v-else class="save-btn" @click="saveQuestions">Zapisz</button>
-    </div>
-    <div class="questions-frame" :class="{ editing }">
-      <div v-for="(_, i) in displayedQuestions" :key="i" class="item">
-        <textarea v-model="questions[activeType][i]" :disabled="!editing"></textarea>
+    <div class="question-manager">
+      <h2 class="manager-title">Zarządzaj pulą pytań</h2>
+      <select v-model="activeType" class="type-select">
+        <option v-for="(label, type) in labels" :key="type" :value="type">
+          {{ label }}
+        </option>
+      </select>
+      <div class="actions">
+        <button v-if="!editing" class="edit-btn" @click="editing = true">Edytuj</button>
+        <button v-else class="save-btn" @click="saveQuestions">Zapisz</button>
+      </div>
+      <div class="questions-frame" :class="{ editing }">
+        <div v-for="(_, i) in displayedQuestions" :key="i" class="item">
+          <textarea v-model="questions[activeType][i]" :disabled="!editing"></textarea>
+        </div>
       </div>
     </div>
     <p v-if="message" class="save-message">{{ message }}</p>
@@ -111,6 +114,25 @@ async function saveQuestions() {
   background: var(--gradient-accent);
   border-radius: 4px;
   text-decoration: none;
+}
+
+.question-manager {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 2rem;
+  padding: 1.5rem;
+  border-radius: 16px;
+  background: rgba(30, 30, 30, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+
+.manager-title {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
 }
 
 .actions {
