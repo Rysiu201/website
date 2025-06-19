@@ -509,6 +509,16 @@ app.post('/api/apply', async (req, res) => {
           by: req.user.username
         });
       }
+      // Archive the previous rejected application
+      if (!latest.archived) {
+        latest.archived = { timestamp: Date.now(), by: req.user.username };
+        latest.history = latest.history || [];
+        latest.history.push({
+          status: STATUS.ARCHIVED,
+          timestamp: Date.now(),
+          by: req.user.username
+        });
+      }
     }
 
     const newApp = {
