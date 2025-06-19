@@ -831,6 +831,46 @@ app.post('/api/admin/unarchive/:id', async (req, res) => {
   res.json({ success: true });
 });
 
+// Permanently delete an application
+app.delete('/api/admin/applications/:id', async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ success: false });
+  }
+
+  let canDelete = false;
+  if (process.env.DISCORD_BOT_TOKEN && process.env.DISCORD_GUILD_ID) {
+    try {
+      const response = await fetch(
+        `https://discord.com/api/guilds/${process.env.DISCORD_GUILD_ID}/members/${req.user.id}`,
+        { headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        const roles = data.roles || [];
+        canDelete =
+          roles.includes(process.env.OWNER_ROLE_ID || '') ||
+          roles.includes(process.env.WITCHER_ROLE_ID || '');
+      }
+    } catch (err) {
+      console.error('Failed to check delete roles', err);
+    }
+  }
+
+  if (!canDelete) {
+    return res.status(403).json({ success: false });
+  }
+
+  const db = loadDb();
+  const idx = db.applications.findIndex(a => a.id === req.params.id);
+  if (idx === -1) {
+    return res.status(404).json({ success: false });
+  }
+
+  db.applications.splice(idx, 1);
+  saveDb(db);
+  res.json({ success: true });
+});
+
 // Update or fetch notes about players
 app.post('/api/admin/player-notes', async (req, res) => {
   if (!req.user) return res.status(401).json({ success: false });
