@@ -1,256 +1,6 @@
 {
   "applications": [
     {
-      "id": "1750238097600",
-      "userId": "296362977349730305",
-      "data": {
-        "discord": "rysiu201#296362977349730305",
-        "steamId": "asd",
-        "serverNick": "asd",
-        "banDate": "2025-06-01",
-        "bannedBy": "asd",
-        "banReason": "ads",
-        "banDurationDays": 25,
-        "events": "ad",
-        "admit": "das",
-        "change": "asd",
-        "evidence": "asd",
-        "notes": "asd",
-        "consentTruth": true,
-        "consentRules": true,
-        "type": "unban"
-      },
-      "type": "unban",
-      "status": "Negatywnie",
-      "history": [
-        {
-          "status": "Wysłane",
-          "timestamp": 1750238097600,
-          "by": "rysiu201"
-        },
-        {
-          "status": "Przyjęte, oczekuje na rozpatrzenie",
-          "timestamp": 1750238109072,
-          "by": "rysiu201"
-        },
-        {
-          "status": "Negatywnie",
-          "timestamp": 1750238119041,
-          "by": "rysiu201"
-        }
-      ],
-      "rejectionReason": "dsad",
-      "adminNotes": "",
-      "interviewNotes": "",
-      "archived": null,
-      "reapplyAfter": 1750562119041
-    },
-    {
-      "id": "1750238407513",
-      "userId": "296362977349730305",
-      "data": {
-        "ic": {
-          "name": "das",
-          "age": 25,
-          "story": "das",
-          "personality": "ads",
-          "skills": "das",
-          "motivation": "asd"
-        },
-        "ooc": {
-          "discord": "rysiu201#296362977349730305",
-          "experience": "ads",
-          "knowsRules": false
-        },
-        "scenarios": [
-          "asd",
-          "asd",
-          "asd",
-          "asd",
-          "das"
-        ],
-        "questions": [
-          "Co oznacza skrót NVL i jak rozumiesz jego zastosowanie?",
-          "Gracz używa voice chatu, by przekazać coś spoza gry – jak powinieneś zareagować?",
-          "Czy można stosować szantaż OOC? Jeśli nie – co robić, gdy się to zdarzy?",
-          "Gracz ucieka z miejsca zdarzenia po wypadku – jak powinieneś się zachować jako świadek?",
-          "Kto podejmuje decyzję w sytuacji konfliktowej – IC czy administracja OOC?"
-        ],
-        "consents": {
-          "data": true,
-          "rules": true,
-          "truth": true
-        },
-        "extra": {
-          "portfolio": "",
-          "faction": ""
-        },
-        "type": "whitelist"
-      },
-      "type": "whitelist",
-      "status": "Negatywnie",
-      "history": [
-        {
-          "status": "Wysłane",
-          "timestamp": 1750238407513,
-          "by": "rysiu201"
-        },
-        {
-          "status": "Przyjęte, oczekuje na rozpatrzenie",
-          "timestamp": 1750238433783,
-          "by": "rysiu201"
-        },
-        {
-          "status": "Pozytywnie",
-          "timestamp": 1750240816813,
-          "by": "rysiu201"
-        },
-        {
-          "status": "Negatywnie",
-          "timestamp": 1750296941385,
-          "by": "rysiu201"
-        }
-      ],
-      "rejectionReason": "dasd",
-      "adminNotes": "",
-      "interviewNotes": "",
-      "archived": null,
-      "reapplyAfter": 1750296941385
-    },
-    {
-      "id": "1750238531885",
-      "userId": "296362977349730305",
-      "data": {
-        "discord": "rysiu201#296362977349730305",
-        "languages": "weq",
-        "fivemExp": "qwe",
-        "workOrg": "qwe",
-        "proudProject": "qwe",
-        "bugResponse": "qwe",
-        "requirements": "qw",
-        "interests": "eqw",
-        "testing": "qwe",
-        "portfolio": "qwe",
-        "consentData": true,
-        "consentDuties": true,
-        "consentTruth": true,
-        "type": "developer"
-      },
-      "type": "developer",
-      "status": "Pozytywnie",
-      "history": [
-        {
-          "status": "Wysłane",
-          "timestamp": 1750238531885,
-          "by": "rysiu201"
-        },
-        {
-          "status": "Przyjęte, oczekuje na rozpatrzenie",
-          "timestamp": 1750238540506,
-          "by": "rysiu201"
-        },
-        {
-          "status": "Pozytywnie",
-          "timestamp": 1750240868622,
-          "by": "rysiu201"
-        }
-      ],
-      "rejectionReason": "",
-      "adminNotes": "",
-      "interviewNotes": "",
-      "archived": null
-    },
-    {
-      "id": "1750240332656",
-      "userId": "296362977349730305",
-      "data": {
-        "discord": "rysiu201#296362977349730305",
-        "serverTime": "asd",
-        "verificationExp": "asd",
-        "differentiate": "asd",
-        "reviewFocus": "asd",
-        "goodRp": "asd",
-        "workload": "asd",
-        "doubts": "asd",
-        "teamwork": "asd",
-        "consentData": true,
-        "consentDuties": true,
-        "consentTruth": true,
-        "type": "checker"
-      },
-      "type": "checker",
-      "status": "Pozytywnie",
-      "history": [
-        {
-          "status": "Wysłane",
-          "timestamp": 1750240332656,
-          "by": "rysiu201"
-        },
-        {
-          "status": "Przyjęte, oczekuje na rozpatrzenie",
-          "timestamp": 1750240825190,
-          "by": "rysiu201"
-        },
-        {
-          "status": "Pozytywnie",
-          "timestamp": 1750240829473,
-          "by": "rysiu201"
-        }
-      ],
-      "rejectionReason": "",
-      "adminNotes": "",
-      "interviewNotes": "",
-      "archived": null
-    },
-    {
-      "id": "1750240359581",
-      "userId": "296362977349730305",
-      "data": {
-        "discord": "rysiu201#296362977349730305",
-        "age": 12,
-        "serverTime": "asd",
-        "activeTime": "das",
-        "moderatorExp": "asd",
-        "motivation": "asd",
-        "strengths": "asd",
-        "provocation": "asd",
-        "lolReport": "asd",
-        "realProblem": "asd",
-        "randomAnswer": "asd",
-        "teamwork": "asd",
-        "escalation": "asd",
-        "neutrality": "asd",
-        "consentData": true,
-        "consentDuties": true,
-        "consentTruth": true,
-        "scenario": "Gracz trolluje tickety pisząc o „duchach w systemie” – nic konkretnego.",
-        "type": "moderator"
-      },
-      "type": "moderator",
-      "status": "Pozytywnie",
-      "history": [
-        {
-          "status": "Wysłane",
-          "timestamp": 1750240359581,
-          "by": "rysiu201"
-        },
-        {
-          "status": "Przyjęte, oczekuje na rozpatrzenie",
-          "timestamp": 1750240837727,
-          "by": "rysiu201"
-        },
-        {
-          "status": "Pozytywnie",
-          "timestamp": 1750240843451,
-          "by": "rysiu201"
-        }
-      ],
-      "rejectionReason": "",
-      "adminNotes": "",
-      "interviewNotes": "",
-      "archived": null
-    },
-    {
       "id": "1750240371271",
       "userId": "296362977349730305",
       "data": {
@@ -297,13 +47,18 @@
           "status": "Negatywnie",
           "timestamp": 1750248027931,
           "by": "rysiu201"
+        },
+        {
+          "status": "Zarchiwizowane",
+          "timestamp": 1750379783667,
+          "by": "rysiu201"
         }
       ],
       "rejectionReason": "asd",
       "adminNotes": "",
       "interviewNotes": "",
       "archived": null,
-      "reapplyAfter": 1750852827931
+      "reapplyAfter": 1750248027931
     },
     {
       "id": "1750244504162",
@@ -486,7 +241,7 @@
       "adminNotes": "asdasd",
       "interviewNotes": "asdasd",
       "archived": null,
-      "reapplyAfter": 1750849721764
+      "reapplyAfter": 1750244921764
     },
     {
       "id": "1750244663176",
@@ -571,35 +326,35 @@
       "archived": null
     },
     {
-      "id": "1750297075657",
+      "id": "1750379650488",
       "userId": "296362977349730305",
       "data": {
         "ic": {
-          "name": "das",
-          "age": 123,
-          "story": "asd",
-          "personality": "das",
-          "skills": "asd",
-          "motivation": "asd"
+          "name": "dsad",
+          "age": 12,
+          "story": "as",
+          "personality": "asd",
+          "skills": "das",
+          "motivation": "das"
         },
         "ooc": {
           "discord": "rysiu201#296362977349730305",
-          "experience": "das",
+          "experience": "asd",
           "knowsRules": false
         },
         "scenarios": [
+          "das",
           "asd",
           "asd",
-          "asd",
-          "asd",
+          "sda",
           "asd"
         ],
         "questions": [
-          "W jaki sposób zgłaszasz łamanie zasad, jeśli nie chcesz eskalować konfliktu?",
-          "Masz 3 osoby celujące do Ciebie z broni – co robisz i jak to odgrywasz?",
-          "Czy możesz przywrócić swoją postać po permie, jeśli „umarła przypadkiem”?",
-          "Podaj przykład łamania zasady Fail RP.",
-          "Podaj przykład zachowania, które uznajesz za powergaming."
+          "Podaj przykład metagamingu w rozmowie głosowej.",
+          "Twoja postać została pobita, ale nie zgłosiła tego – czy może później się mścić IC?",
+          "Czy Twoja postać może znać lokalizację kogoś, kogo nie widziała od kilku dni? Wyjaśnij.",
+          "Co zrobisz, jeśli zobaczysz gracza łamiącego zasady roleplayu (np. powergaming)?",
+          "Jaki wpływ ma realność RP na immersję graczy?"
         ],
         "consents": {
           "data": true,
@@ -608,21 +363,26 @@
         },
         "extra": {
           "portfolio": "",
-          "faction": "dsa"
+          "faction": ""
         },
         "type": "whitelist"
       },
       "type": "whitelist",
-      "status": "Przyjęte, oczekuje na rozpatrzenie",
+      "status": "Pozytywnie",
       "history": [
         {
           "status": "Wysłane",
-          "timestamp": 1750297075657,
+          "timestamp": 1750379650488,
           "by": "rysiu201"
         },
         {
           "status": "Przyjęte, oczekuje na rozpatrzenie",
-          "timestamp": 1750297115479,
+          "timestamp": 1750379673302,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Pozytywnie",
+          "timestamp": 1750379677947,
           "by": "rysiu201"
         }
       ],
@@ -630,6 +390,218 @@
       "adminNotes": "",
       "interviewNotes": "",
       "archived": null
+    },
+    {
+      "id": "1750379731062",
+      "userId": "296362977349730305",
+      "data": {
+        "discord": "rysiu201#296362977349730305",
+        "serverTime": "12",
+        "verificationExp": "asd",
+        "differentiate": "asd",
+        "reviewFocus": "asd",
+        "goodRp": "das",
+        "workload": "sda",
+        "doubts": "asd",
+        "teamwork": "asd",
+        "consentData": true,
+        "consentDuties": true,
+        "consentTruth": true,
+        "type": "checker"
+      },
+      "type": "checker",
+      "status": "Pozytywnie",
+      "history": [
+        {
+          "status": "Wysłane",
+          "timestamp": 1750379731062,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Przyjęte, oczekuje na rozpatrzenie",
+          "timestamp": 1750379738891,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Pozytywnie",
+          "timestamp": 1750379744080,
+          "by": "rysiu201"
+        }
+      ],
+      "rejectionReason": "",
+      "adminNotes": "",
+      "interviewNotes": "",
+      "archived": null
+    },
+    {
+      "id": "1750379771719",
+      "userId": "296362977349730305",
+      "data": {
+        "discord": "rysiu201#296362977349730305",
+        "age": 12,
+        "serverTime": "asd",
+        "activeTime": "asd",
+        "moderatorExp": "asd",
+        "motivation": "asd",
+        "strengths": "sda",
+        "provocation": "sadas",
+        "lolReport": "asd",
+        "realProblem": "asd",
+        "randomAnswer": "das",
+        "teamwork": "saf",
+        "escalation": "sda",
+        "neutrality": "asd",
+        "consentData": true,
+        "consentDuties": true,
+        "consentTruth": true,
+        "scenario": "Grupa graczy spamuje jednocześnie w kilku kanałach (np. @everyone, .gif).",
+        "type": "moderator"
+      },
+      "type": "moderator",
+      "status": "Pozytywnie",
+      "history": [
+        {
+          "status": "Wysłane",
+          "timestamp": 1750379771719,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Przyjęte, oczekuje na rozpatrzenie",
+          "timestamp": 1750379802581,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Pozytywnie",
+          "timestamp": 1750379807016,
+          "by": "rysiu201"
+        }
+      ],
+      "rejectionReason": "",
+      "adminNotes": "",
+      "interviewNotes": "",
+      "archived": null
+    },
+    {
+      "id": "1750379783667",
+      "userId": "296362977349730305",
+      "data": {
+        "discord": "rysiu201#296362977349730305",
+        "previousAdmin": "dassd",
+        "adminAreas": "asd",
+        "scenarios": [
+          "asd",
+          "asd",
+          "asd"
+        ],
+        "healthyStructure": "asd",
+        "cooperation": "asd",
+        "improvements": "asd",
+        "consentData": true,
+        "consentDuties": true,
+        "consentTruth": true,
+        "type": "administrator",
+        "questions": [
+          "Developer wypuścił niedziałający skrypt i nie odbiera wiadomości.",
+          "Gracze IC wynoszą OOC dramy – jak jako admin reagujesz?",
+          "System whitelist się zapchał – 50 podań w 1 dzień, tylko 2 osoby do sprawdzania."
+        ]
+      },
+      "type": "administrator",
+      "status": "Pozytywnie",
+      "history": [
+        {
+          "status": "Wysłane",
+          "timestamp": 1750379783667,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Przyjęte, oczekuje na rozpatrzenie",
+          "timestamp": 1750379816206,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Pozytywnie",
+          "timestamp": 1750379820082,
+          "by": "rysiu201"
+        }
+      ],
+      "rejectionReason": "",
+      "adminNotes": "",
+      "interviewNotes": "",
+      "archived": null
+    },
+    {
+      "id": "1750379795630",
+      "userId": "296362977349730305",
+      "data": {
+        "discord": "rysiu201#296362977349730305",
+        "languages": "asdasd",
+        "fivemExp": "asd",
+        "workOrg": "asd",
+        "proudProject": "asd",
+        "bugResponse": "asd",
+        "requirements": "asd",
+        "interests": "sda",
+        "testing": "asd",
+        "portfolio": "asd",
+        "consentData": true,
+        "consentDuties": true,
+        "consentTruth": true,
+        "type": "developer"
+      },
+      "type": "developer",
+      "status": "Pozytywnie",
+      "history": [
+        {
+          "status": "Wysłane",
+          "timestamp": 1750379795630,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Przyjęte, oczekuje na rozpatrzenie",
+          "timestamp": 1750379828206,
+          "by": "rysiu201"
+        },
+        {
+          "status": "Pozytywnie",
+          "timestamp": 1750379832697,
+          "by": "rysiu201"
+        }
+      ],
+      "rejectionReason": "",
+      "adminNotes": "",
+      "interviewNotes": "",
+      "archived": null
+    },
+    {
+      "id": "1750379995637",
+      "userId": "296362977349730305",
+      "data": {
+        "discord": "rysiu201#296362977349730305",
+        "steamId": "12421",
+        "serverNick": "das",
+        "banDate": "2025-06-21",
+        "bannedBy": "asd",
+        "banReason": "asd",
+        "banDurationDays": 7,
+        "events": "sda",
+        "admit": "asd",
+        "change": "sda",
+        "evidence": "as",
+        "notes": "asd",
+        "consentTruth": true,
+        "consentRules": true,
+        "type": "unban"
+      },
+      "type": "unban",
+      "status": "Wysłane",
+      "history": [
+        {
+          "status": "Wysłane",
+          "timestamp": 1750379995637,
+          "by": "rysiu201"
+        }
+      ]
     }
   ],
   "playerNotes": {}

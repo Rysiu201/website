@@ -8,7 +8,7 @@
       <RouterLink to="/apply" class="card main-card">
         <span class="card-title">
           <span class="emoji">🧾</span>
-          <span class="gradient-text">Podanie na WhiteListe</span>
+          <span class="gradient-text">Podanie na WhiteListę</span>
         </span>
         <p class="card-desc">Pierwszy krok, aby dołączyć do gry.</p>
       </RouterLink>
@@ -58,12 +58,14 @@
       </section>
     </div>
   </main>
+  <Footer />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import backgroundImage from '../assets/background.jpg'
+import Footer from '../components/Footer.vue';
 
 const backgroundImageUrl = ref(backgroundImage)
 

@@ -39,24 +39,12 @@ onMounted(() => {
       <div class="footer-content">
         <!-- Logo and brand info -->
         <div class="footer-brand" data-aos="fade-up" data-aos-delay="100">
-          <h2 class="footer-logo">Aether<span>RP</span></h2>
+          <h2 class="footer-logo">Aether<span> RP</span></h2>
           <p class="footer-tagline">Serwer FiveM RolePlay</p>
           <div class="footer-social">
-            <a href="#" class="social-link" aria-label="Discord">
+            <a href="https://discord.gg/DHGnYvvsEt" class="social-link" aria-label="Discord">
               <i class="fa-brands fa-discord"></i>
               <span class="social-hover">Discord</span>
-            </a>
-            <a href="#" class="social-link" aria-label="TikTok">
-              <i class="fa-brands fa-tiktok"></i>
-              <span class="social-hover">TikTok</span>
-            </a>
-            <a href="#" class="social-link" aria-label="Instagram">
-              <i class="fa-brands fa-instagram"></i>
-              <span class="social-hover">Instagram</span>
-            </a>
-            <a href="#" class="social-link" aria-label="YouTube">
-              <i class="fa-brands fa-youtube"></i>
-              <span class="social-hover">YouTube</span>
             </a>
           </div>
         </div>
@@ -93,7 +81,7 @@ onMounted(() => {
               </div>
               <div class="contact-details">
                 <span>E-mail</span>
-                <a href="mailto:contact@aetherrp.com">kontakt@aetherrp.com</a>
+                <a href="mailto:kontaktaetherrp@gmail.com">kontaktaetherrp@gmail.com</a>
               </div>
             </li>
             <li>
@@ -102,7 +90,7 @@ onMounted(() => {
               </div>
               <div class="contact-details">
                 <span>Serwer Discord</span>
-                <a href="#">Dołącz do naszego community</a>
+                <a href="https://discord.gg/DHGnYvvsEt">Dołącz do naszego community</a>
               </div>
             </li>
             <li>

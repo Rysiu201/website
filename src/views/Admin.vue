@@ -69,11 +69,13 @@
       </div>
     </div>
   </main>
+  <Footer />
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
 import { RouterLink } from 'vue-router'
+import Footer from '../components/Footer.vue';
 
 const roles = ref<string[]>([])
 

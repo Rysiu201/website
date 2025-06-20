@@ -52,7 +52,7 @@
             Ponowny wniosek o odbanowanie możesz złożyć za:
           </template>
           <template v-else>
-            W ciągu {{ cooldownText }} możesz ponownie złożyć podanie.
+            Ponowne podanie możesz złożyć za: {{ cooldownText }}
           </template>
         </p>
         <button
@@ -78,12 +78,14 @@
       </div>
     </div>
   </main>
+  <Footer />
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import backgroundImage from '../assets/background.jpg'
+import Footer from '../components/Footer.vue';
 
 const backgroundImageUrl = backgroundImage
 
