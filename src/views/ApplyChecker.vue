@@ -11,39 +11,71 @@
         </label>
         <label>
           Od jak dawna jesteś na naszym serwerze?
-          <input v-model="form.serverTime" required />
+          <input
+            v-model="form.serverTime"
+            required
+            placeholder="Np. od 3 miesięcy"
+          />
         </label>
 
         <h2>2. Doświadczenie i podejście</h2>
         <label>
           Czy miałeś styczność z weryfikacją lub selekcją graczy?
-          <textarea v-model="form.verificationExp" required></textarea>
+          <textarea
+            v-model="form.verificationExp"
+            required
+            placeholder="Opisz swoje wcześniejsze doświadczenia"
+          ></textarea>
         </label>
         <label>
           Jak rozpoznać gracza, który "tylko wypełnił, żeby wejść", od gracza z potencjałem?
-          <textarea v-model="form.differentiate" required></textarea>
+          <textarea
+            v-model="form.differentiate"
+            required
+            placeholder="Wyjaśnij swoje kryteria oceny"
+          ></textarea>
         </label>
         <label>
           Na co zwracasz uwagę przy czytaniu podania na WL?
-          <textarea v-model="form.reviewFocus" required></textarea>
+          <textarea
+            v-model="form.reviewFocus"
+            required
+            placeholder="Wymień najważniejsze elementy"
+          ></textarea>
         </label>
         <label>
           Co Twoim zdaniem oznacza dobre RP i jakbyś je promował?
-          <textarea v-model="form.goodRp" required></textarea>
+          <textarea
+            v-model="form.goodRp"
+            required
+            placeholder="Twoja definicja dobrego RP"
+          ></textarea>
         </label>
 
         <h2>3. Praca</h2>
         <label>
           Ile podań jesteś w stanie realnie sprawdzić dziennie / tygodniowo?
-          <input v-model="form.workload" required />
+          <input
+            v-model="form.workload"
+            required
+            placeholder="Np. 5 dziennie lub 20 tygodniowo"
+          />
         </label>
         <label>
           Co robisz, jeśli masz wątpliwości co do kandydata?
-          <textarea v-model="form.doubts" required></textarea>
+          <textarea
+            v-model="form.doubts"
+            required
+            placeholder="Opisz swoje działania w takiej sytuacji"
+          ></textarea>
         </label>
         <label>
           Wolisz działać samodzielnie czy w parze z innym Checkerem?
-          <input v-model="form.teamwork" required />
+          <input
+            v-model="form.teamwork"
+            required
+            placeholder="Opisz preferowany styl pracy"
+          />
         </label>
 
         <h2>4. Zgody</h2>

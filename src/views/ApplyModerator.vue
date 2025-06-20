@@ -11,62 +11,115 @@
         </label>
         <label>
           Wiek
-          <input type="number" v-model.number="form.age" required />
+          <input
+            type="number"
+            v-model.number="form.age"
+            required
+            placeholder="Podaj swój wiek"
+          />
         </label>
         <label>
           Od jak dawna jesteś na serwerze?
-          <input v-model="form.serverTime" required />
+          <input
+            v-model="form.serverTime"
+            required
+            placeholder="Np. od pół roku"
+          />
         </label>
         <label>
           Ile czasu dziennie jesteś aktywny/a na Discordzie?
-          <input v-model="form.activeTime" required />
+          <input
+            v-model="form.activeTime"
+            required
+            placeholder="Przykład: 3-4h dziennie"
+          />
         </label>
 
         <h2>2. Doświadczenie i podejście</h2>
         <label>
           Czy pełniłaś/eś wcześniej funkcję moderatora? Gdzie i jak wyglądała ta rola?
-          <textarea v-model="form.moderatorExp" required></textarea>
+          <textarea
+            v-model="form.moderatorExp"
+            required
+            placeholder="Opisz swoje wcześniejsze doświadczenie"
+          ></textarea>
         </label>
         <label>
           Dlaczego chcesz zostać Moderatorem u nas?
-          <textarea v-model="form.motivation" required></textarea>
+          <textarea
+            v-model="form.motivation"
+            required
+            placeholder="Napisz co Cię motywuje"
+          ></textarea>
         </label>
         <label>
           Jakie są Twoje mocne strony w kontakcie z ludźmi?
-          <textarea v-model="form.strengths" required></textarea>
+          <textarea
+            v-model="form.strengths"
+            required
+            placeholder="Wymień swoje atuty"
+          ></textarea>
         </label>
 
         <h2>3. Sytuacje i zachowanie</h2>
         <label>
           Jak reagujesz, gdy użytkownik prowokuje innych, ale nie łamie regulaminu bezpośrednio?
-          <textarea v-model="form.provocation" required></textarea>
+          <textarea
+            v-model="form.provocation"
+            required
+            placeholder="Opisz swoje podejście do takiej sytuacji"
+          ></textarea>
         </label>
         <label>
           Co robisz, jeśli ktoś wysyła zgłoszenie w stylu \"XD lol\" – bez konkretów?
-          <textarea v-model="form.lolReport" required></textarea>
+          <textarea
+            v-model="form.lolReport"
+            required
+            placeholder="Twój sposób postępowania"
+          ></textarea>
         </label>
         <label>
           Jak rozpoznać, że zgłoszenie nie jest trollowaniem, tylko realnym problemem?
-          <textarea v-model="form.realProblem" required></textarea>
+          <textarea
+            v-model="form.realProblem"
+            required
+            placeholder="Na co zwracasz uwagę?"
+          ></textarea>
         </label>
         <div class="question-block">
           <p class="question">🎲 PYTANIE LOSOWE</p>
           <p>{{ randomScenario }}</p>
-          <textarea v-model="form.randomAnswer" required></textarea>
+          <textarea
+            v-model="form.randomAnswer"
+            required
+            placeholder="Twoja reakcja na opisany scenariusz"
+          ></textarea>
         </div>
 
         <h2>4. Praca w zespole</h2>
         <label>
           Jak widzisz współpracę z innymi członkami zespołu, takimi jak Community Manager, Admin czy Developer?
-          <textarea v-model="form.teamwork" required></textarea>
+          <textarea
+            v-model="form.teamwork"
+            required
+            placeholder="Opisz swoje podejście do pracy w zespole"
+          ></textarea>
         </label>
         <label>
           Jak rozumiesz swoją rolę w przekazywaniu zgłoszeń dalej? Kiedy decydujesz się rozwiązać coś samodzielnie, a kiedy informujesz innych członków zespołu?
-          <textarea v-model="form.escalation" required></textarea>
+          <textarea
+            v-model="form.escalation"
+            required
+            placeholder="Wyjaśnij swoją strategię"
+          ></textarea>
         </label>
         <label>
           Czy potrafisz pozostać neutralny, nawet gdy temat dotyczy znajomej osoby?
-          <textarea v-model="form.neutrality" required></textarea>
+          <textarea
+            v-model="form.neutrality"
+            required
+            placeholder="Opisz jak zachowujesz bezstronność"
+          ></textarea>
         </label>
 
         <h2>5. Zgody</h2>

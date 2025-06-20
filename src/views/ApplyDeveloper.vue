@@ -13,39 +13,75 @@
         <h2>2. Doświadczenie i umiejętności</h2>
         <label>
           Jakie języki programowania znasz?
-          <textarea v-model="form.languages" required></textarea>
+          <textarea
+            v-model="form.languages"
+            required
+            placeholder="Wypisz języki, w których się czujesz najlepiej"
+          ></textarea>
         </label>
         <label>
           Czy pracowałeś wcześniej z zasobami FiveM? Jakimi?
-          <textarea v-model="form.fivemExp" required></textarea>
+          <textarea
+            v-model="form.fivemExp"
+            required
+            placeholder="Opisz swoje doświadczenie z FiveM"
+          ></textarea>
         </label>
         <label>
           Jak wygląda Twoja organizacja pracy przy większych zadaniach?
-          <textarea v-model="form.workOrg" required></textarea>
+          <textarea
+            v-model="form.workOrg"
+            required
+            placeholder="Przedstaw swój sposób planowania"
+          ></textarea>
         </label>
         <label>
           Opisz projekt/skrypt, z którego jesteś najbardziej dumny/a.
-          <textarea v-model="form.proudProject" required></textarea>
+          <textarea
+            v-model="form.proudProject"
+            required
+            placeholder="Krótki opis najciekawszego projektu"
+          ></textarea>
         </label>
         <label>
           Jak reagujesz, gdy ktoś zgłasza błąd w Twoim kodzie?
-          <textarea v-model="form.bugResponse" required></textarea>
+          <textarea
+            v-model="form.bugResponse"
+            required
+            placeholder="Opisz swoje podejście do poprawek"
+          ></textarea>
         </label>
         <label>
           Czy potrafisz kodować pod cudze wymagania?
-          <textarea v-model="form.requirements" required></textarea>
+          <textarea
+            v-model="form.requirements"
+            required
+            placeholder="Jak pracujesz według specyfikacji?"
+          ></textarea>
         </label>
         <label>
           Jakie obszary Cię najbardziej interesują? (UI, systemy RP, joby, zasoby)
-          <textarea v-model="form.interests" required></textarea>
+          <textarea
+            v-model="form.interests"
+            required
+            placeholder="Wymień preferowane dziedziny"
+          ></textarea>
         </label>
         <label>
           Czy potrafisz przeprowadzać testy jednostkowe i techniczne?
-          <textarea v-model="form.testing" required></textarea>
+          <textarea
+            v-model="form.testing"
+            required
+            placeholder="Opisz swoje doświadczenia z testowaniem"
+          ></textarea>
         </label>
         <label>
           🔗 Link do portfolio (GitHub, Discord bot, skrypt, demo)
-          <input v-model="form.portfolio" required />
+          <input
+            v-model="form.portfolio"
+            required
+            placeholder="https://github.com/twoj_projekt"
+          />
         </label>
 
         <h2>3. Zgody</h2>
