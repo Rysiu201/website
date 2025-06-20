@@ -13,31 +13,55 @@
         <h2>2. Doświadczenie i obowiązki</h2>
         <label>
           Czy byłeś wcześniej adminem na serwerze RP lub społecznościowym?
-          <textarea v-model="form.previousAdmin" required></textarea>
+          <textarea
+            v-model="form.previousAdmin"
+            required
+            placeholder="Opisz swoje wcześniejsze doświadczenia"
+          ></textarea>
         </label>
         <label>
           Jakie obszary administracyjne Cię interesują?
-          <textarea v-model="form.adminAreas" required></textarea>
+          <textarea
+            v-model="form.adminAreas"
+            required
+            placeholder="Napisz czym chciałbyś się zajmować"
+          ></textarea>
         </label>
 
         <h2>3. 🎲 Sytuacje organizacyjne</h2>
         <div v-for="(q, i) in scenarioQuestions" :key="i" class="question-block">
           <p class="question">{{ q }}</p>
-          <textarea v-model="form.scenarios[i]" required></textarea>
+          <textarea
+            v-model="form.scenarios[i]"
+            required
+            placeholder="Twoja odpowiedź na pytanie"
+          ></textarea>
         </div>
 
         <h2>4. Zarządzanie</h2>
         <label>
           Co to jest zdrowa struktura administracyjna?
-          <textarea v-model="form.healthyStructure" required></textarea>
+          <textarea
+            v-model="form.healthyStructure"
+            required
+            placeholder="Jak rozumiesz dobrą organizację?"
+          ></textarea>
         </label>
         <label>
           Czy jesteś skory do współpracy z rolami wyżej? Jak to sobie wyobrażasz?
-          <textarea v-model="form.cooperation" required></textarea>
+          <textarea
+            v-model="form.cooperation"
+            required
+            placeholder="Opisz swoją gotowość do współpracy"
+          ></textarea>
         </label>
         <label>
           Co Twoim zdaniem warto byłoby usprawnić w administracji?
-          <textarea v-model="form.improvements" required></textarea>
+          <textarea
+            v-model="form.improvements"
+            required
+            placeholder="Twoje pomysły na ulepszenia"
+          ></textarea>
         </label>
 
         <h2>5. Zgody</h2>
