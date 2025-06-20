@@ -214,8 +214,9 @@ const router = createRouter({
       component: Admin,
       meta: {
         title: 'Panel Administracyjny - AetherRP',
-        description: 'Panel do zarządzania serwerem.',
-        keywords: 'admin, panel'
+        keywords: 'admin, panel',
+        requiresAuth: true,
+        requiresAdmin: true
       }
     },
     {
@@ -225,6 +226,7 @@ const router = createRouter({
       meta: {
         title: 'Lista Podań - AetherRP',
         requiresAuth: true,
+        requiresAdmin: true,
         type: 'whitelist'
       }
     },
@@ -235,6 +237,7 @@ const router = createRouter({
       meta: {
         title: 'Lista Podań Checkerów - AetherRP',
         requiresAuth: true,
+        requiresAdmin: true,
         type: 'checker'
       }
     },
@@ -245,6 +248,7 @@ const router = createRouter({
       meta: {
         title: 'Lista Podań Moderatorów - AetherRP',
         requiresAuth: true,
+        requiresAdmin: true,
         type: 'moderator'
       }
     },
@@ -255,6 +259,7 @@ const router = createRouter({
       meta: {
         title: 'Lista Podań Administratorów - AetherRP',
         requiresAuth: true,
+        requiresAdmin: true,
         type: 'administrator'
       }
     },
@@ -265,6 +270,7 @@ const router = createRouter({
       meta: {
         title: 'Lista Podań Developerów - AetherRP',
         requiresAuth: true,
+        requiresAdmin: true,
         type: 'developer'
       }
     },
@@ -275,6 +281,7 @@ const router = createRouter({
       meta: {
         title: 'Wnioski o Odbanowanie - AetherRP',
         requiresAuth: true,
+        requiresAdmin: true,
         type: 'unban'
       }
     },
@@ -285,6 +292,7 @@ const router = createRouter({
       meta: {
         title: 'Zaarchiwizowane Podania - AetherRP',
         requiresAuth: true,
+        requiresAdmin: true,
         type: 'all'
       }
     },
@@ -295,6 +303,7 @@ const router = createRouter({
       meta: {
         title: 'Podgląd Podania - AetherRP',
         requiresAuth: true,
+        requiresAdmin: true,
         type: 'whitelist'
       }
     },
@@ -305,6 +314,7 @@ const router = createRouter({
       meta: {
         title: 'Podgląd Podania Checkera - AetherRP',
         requiresAuth: true,
+        requiresAdmin: true,
         type: 'checker'
       }
     },
@@ -315,6 +325,7 @@ const router = createRouter({
       meta: {
         title: 'Podgląd Podania Moderatora - AetherRP',
         requiresAuth: true,
+        requiresAdmin: true,
         type: 'moderator'
       }
     },
@@ -325,6 +336,7 @@ const router = createRouter({
       meta: {
         title: 'Podgląd Podania Administratora - AetherRP',
         requiresAuth: true,
+        requiresAdmin: true,
         type: 'administrator'
       }
     },
@@ -335,6 +347,7 @@ const router = createRouter({
       meta: {
         title: 'Podgląd Podania Developera - AetherRP',
         requiresAuth: true,
+        requiresAdmin: true,
         type: 'developer'
       }
     },
@@ -345,6 +358,7 @@ const router = createRouter({
       meta: {
         title: 'Wniosek o odbanowanie - AetherRP',
         requiresAuth: true,
+        requiresAdmin: true,
         type: 'unban'
       }
     },
@@ -354,7 +368,8 @@ const router = createRouter({
       component: AdminWitcher,
       meta: {
         title: 'The Witcher - AetherRP',
-        requiresAuth: true
+        requiresAuth: true,
+        requiresAdmin: true
       }
     },
     {
@@ -363,7 +378,8 @@ const router = createRouter({
       component: AdminWitcherSettings,
       meta: {
         title: 'Ustawienia Witcher - AetherRP',
-        requiresAuth: true
+        requiresAuth: true,
+        requiresAdmin: true
       }
     },
     {
@@ -372,7 +388,8 @@ const router = createRouter({
       component: AdminWitcherQuestions,
       meta: {
         title: 'Pytania Witcher - AetherRP',
-        requiresAuth: true
+        requiresAuth: true,
+        requiresAdmin: true
       }
     },
     {
@@ -381,7 +398,8 @@ const router = createRouter({
       component: AdminPlayerNotes,
       meta: {
         title: 'Notatki o Graczach - AetherRP',
-        requiresAuth: true
+        requiresAuth: true,
+        requiresAdmin: true
       }
     }
   ]
@@ -404,12 +422,16 @@ router.beforeEach(async (to, _from, next) => {
   }
 
   let userData: any = null;
-  if (to.meta.requiresAuth) {
+  if (to.meta.requiresAuth || to.meta.requiresAdmin) {
     const res = await fetch('/api/user', { credentials: 'include' });
     userData = await res.json();
   }
 
   if (to.meta.requiresAuth && (!userData || !userData.user)) {
+    window.location.href = '/auth/discord';
+    return;
+  }
+  if (to.meta.requiresAdmin && (!userData || !userData.isAdmin)) {
     return next('/');
   }
 

@@ -104,12 +104,12 @@ function typeSubtitle(text: string, speed: number) {
       <div class="hero-cta-container">
         <button href="https://discord.gg/DHGnYvvsEt" class="cta-button primary">
           <a href="/applications">
-          <i class="fa-solid fa-play"> </i>Złóż podanie na Whitelistę
+          <i class="fa-solid fa-play"> </i> Złóż podanie na Whitelistę
           </a>
         </button>
         <button href="https://discord.gg/DHGnYvvsEt" class="cta-button secondary">
           <a href="https://discord.gg/DHGnYvvsEt">
-          <i class="fa-brands fa-discord"> </i>Dołącz do discorda
+          <i class="fa-brands fa-discord"> </i> Dołącz do discorda
           </a>
         </button>
       </div>

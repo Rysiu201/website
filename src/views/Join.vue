@@ -13,10 +13,14 @@
         
         <div class="cta-buttons" data-aos="fade-up" data-aos-delay="300">
           <button class="cta-button primary" data-aos="zoom-in-right" data-aos-delay="400">
-            <i class="fa-solid fa-play"></i> Dołącz do serwera
+            <a href="/applications">
+            <i class="fa-solid fa-play"></i> Złóż podanie na Whitelistę
+            </a>
           </button>
           <button class="cta-button outline" data-aos="zoom-in-left" data-aos-delay="450">
+            <a href="https://discord.gg/DHGnYvvsEt">
             <i class="fa-brands fa-discord"></i> Dołącz do discorda
+            </a>
           </button>
         </div>
       </div>
@@ -136,26 +140,10 @@
         <div class="more-questions" data-aos="fade-up" data-aos-delay="500">
           <p>Nadal masz pytania? Dołącz na naszego Discorda i otrzymaj odpowiedź!</p>
           <button class="cta-button secondary" data-aos="zoom-in" data-aos-delay="600">
+            <a href="https://discord.gg/DHGnYvvsEt">
             <i class="fa-brands fa-discord"></i> Dołącz do naszego Discorda
+            </a>
           </button>
-        </div>
-      </div>
-    </div>
-    
-    <!-- 加入社区部分 -->
-    <div class="community-section">
-      <div class="container">
-        <div class="community-content" data-aos="fade-up">
-          <h2 data-aos="fade-up">Gotowy, by rozpocząć <span class="accent">przygodę z RP?</span></h2>
-          <p data-aos="fade-up" data-aos-delay="100">Dołącz do setek graczy cieszących się naszą unikalną rozgrywką FiveM</p>
-          <div class="cta-buttons" data-aos="fade-up" data-aos-delay="200">
-            <button class="cta-button primary" data-aos="zoom-in-right" data-aos-delay="300">
-              <i class="fa-solid fa-play"></i> Dołącz Teraz
-            </button>
-            <button class="cta-button outline" data-aos="zoom-in-left" data-aos-delay="350">
-              <i class="fa-solid fa-book"></i> Przeczytaj Poradnik
-            </button>
-          </div>
         </div>
       </div>
     </div>

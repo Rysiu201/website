@@ -1,5 +1,5 @@
 <template>
-  <main class="admin-page">
+  <main class="admin-page" v-if="canViewWhitelist">
     <h1 class="section-title"><span class="accent">Panel Administracyjny</span></h1>
     <div class="admin-layout">
       <!-- Rekrutacja -->
@@ -52,7 +52,11 @@
         >
           <span class="emoji-witcher">🐺</span> The Witcher
         </RouterLink>
-        <RouterLink class="admin-section" to="/admin/archived">
+        <RouterLink
+          class="admin-section"
+          v-if="canViewWhitelist"
+          to="/admin/archived"
+        >
           <span class="emoji-file">📜</span> Zaarchiwizowane podania
         </RouterLink>
       </div>
@@ -60,10 +64,18 @@
       <!-- Zarządzanie -->
       <div class="admin-column">
         <h2 class="column-title"><span class="accent">Zarządzanie</span></h2>
-        <RouterLink class="admin-section" to="/admin/player-notes">
+        <RouterLink
+          class="admin-section"
+          v-if="canViewWhitelist"
+          to="/admin/playernotes"
+        >
           <span class="emoji-index">📇</span> Notatki o graczach
         </RouterLink>
-        <RouterLink class="admin-section" to="/admin/unban">
+        <RouterLink
+          class="admin-section"
+          v-if="canViewWhitelist"
+          to="/admin/unban"
+        >
           <span class="emoji-postbox">📮</span> Wnioski o odbanowanie
         </RouterLink>
       </div>

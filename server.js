@@ -188,6 +188,15 @@ const PORT = process.env.PORT || 8080;
 // Parse JSON bodies
 app.use(express.json());
 
+// Basic security headers
+app.use((_, res, next) => {
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'no-referrer');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  next();
+});
+
 // Session and authentication setup
 app.use(
   session({

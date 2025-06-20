@@ -121,7 +121,7 @@ const teamMembers = ref([
         <p class="staff-subtitle" data-aos="fade-up" data-aos-delay="200">Zespół pasjonatów stojący za AetherRP, który codziennie pracuje nad tym, żeby serwer był wyjątkowym miejscem do gry i wspólnej zabawy.</p>
         <div class="hero-stats" data-aos="fade-up" data-aos-delay="300">
           <div class="stat" data-aos="zoom-in" data-aos-delay="400">
-            <div class="stat-value">3</div>
+            <div class="stat-value">4</div>
             <div class="stat-label">Ekipa AetherRP</div>
           </div>
           <div class="stat" data-aos="zoom-in" data-aos-delay="500">
@@ -143,7 +143,7 @@ const teamMembers = ref([
         <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Poznaj osobowości zajmujące się serwerem</p>
         
         <div class="team-slider-container">
-          <button class="slider-arrow left" @click="scrollSlider(-1)">◀</button>
+          <button class="slider-arrow left" @click="scrollSlider(-3)">◀</button>
           <div class="team-grid" ref="teamSlider">
             <div
               v-for="(member, index) in teamMembers"
@@ -178,7 +178,7 @@ const teamMembers = ref([
             </div>
             </div>
           </div>
-          <button class="slider-arrow right" @click="scrollSlider(1)">▶</button>
+          <button class="slider-arrow right" @click="scrollSlider(3)">▶</button>
         </div>
       </div>
     </div>

@@ -174,9 +174,6 @@ const filteredProducts = computed(() => {
           <div class="showcase-image" data-aos="fade-right">
             <img src="../assets/Banner.jpg" alt="Prezentacja funkcji">
             <div class="image-overlay">
-              <div class="play-button">
-                <i class="fa-solid fa-play"></i>
-              </div>
             </div>
           </div>
           <div class="showcase-info" data-aos="fade-left" data-aos-delay="100">
@@ -188,9 +185,6 @@ const filteredProducts = computed(() => {
               <li data-aos="fade-left" data-aos-delay="250"><i class="fa-solid fa-check"></i> Regularne eventy i aktywności</li>
               <li data-aos="fade-left" data-aos-delay="300"><i class="fa-solid fa-check"></i> Ciągłe aktualizacje i usprawnienia</li>
             </ul>
-            <button class="cta-button secondary" data-aos="zoom-in" data-aos-delay="350">
-              <i class="fa-solid fa-play"></i> Zobacz Zwiastun Serwera
-            </button>
           </div>
         </div>
       </div>
@@ -204,10 +198,14 @@ const filteredProducts = computed(() => {
           <p data-aos="fade-up" data-aos-delay="100">Poznaj wszystkie funkcje i zostań częścią naszej rozwijającej się społeczności!</p>
           <div class="join-buttons" data-aos="fade-up" data-aos-delay="200">
             <button class="cta-button primary" data-aos="zoom-in-right" data-aos-delay="250">
+              <a href="/applications">
               <i class="fa-solid fa-play"></i> Dołącz teraz
+              </a>
             </button>
             <button class="cta-button outline" data-aos="zoom-in-left" data-aos-delay="300">
+              <a href="https://discord.gg/DHGnYvvsEt">
               <i class="fa-brands fa-discord"></i> Dołącz na Discorda
+              </a>
             </button>
           </div>
         </div>

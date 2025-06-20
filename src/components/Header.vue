@@ -19,7 +19,7 @@
             <router-link to="/applications" class="nav-link" active-class="active"><i class="fa-solid fa-file-signature"></i> Złóż podanie</router-link>
             <ul class="dropdown">
               <li>
-                <router-link to="/apply-unban" class="dropdown-link"><span class="emoji">📝</span> Odwołanie od bana</router-link>
+                <router-link to="/apply-unban" class="dropdown-link"><i class="fa-solid fa-file-signature"></i> Odwołanie od bana</router-link>
               </li>
             </ul>
           </li>
@@ -310,17 +310,20 @@ onMounted(() => {
 }
 
 .dropdown-link {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0.4rem;
   padding: 0.4rem 0.8rem;
   color: #e0e0e0;
-  white-space: nowrap;
-  position: relative;
+  white-space: normal;
+  word-break: break-word;
+  min-width: 200px;
+  overflow: hidden; /* ⛔ KLUCZOWE */
+  border-radius: 8px;
 }
 
 .dropdown-link:hover {
-  background: rgba(138, 43, 226, 0.2);
   color: #fff;
 }
 
@@ -329,8 +332,8 @@ onMounted(() => {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 0;
   height: 2px;
+  width: 0;
   background: linear-gradient(90deg, #8A2BE2, #00FFFF);
   transition: width 0.3s ease;
 }
